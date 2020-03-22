@@ -1,0 +1,55 @@
+<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+    <a href="#" class="btn btn-default btn-sm"><i class="fa fa-chevron-left"></i></a>
+    <span class="m-0">Card #{{cards_count}}</span>
+    <div class="dropdown no-arrow">
+      <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+      </a>
+      <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+        <a class="dropdown-item" href="#">Modify Card</a>
+        <a class="dropdown-item" href="#">Skip Card</a>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="#">Something else</a>
+      </div>
+    </div>
+  </div>
+  <!-- Card Body -->
+  <div class="card-body text-center">
+
+    <!-- Accordion Header -->
+    <div class="card-body">
+        <div></div>
+        <div>{% block question %}{% endblock %}</div>
+        <div></div>
+    </div>
+    <a id="answerButton" href="#answerArea" class="btn btn-primary" data-toggle="collapse" role="button" 
+        aria-expanded="true" aria-controls="collapseCardExample" onclick="getElementById('answerButton').style.display = 'none';">
+        Click to show answer
+    </a>
+    <!-- Accordion Content - Collapse -->
+    <div class="collapse hide" id="answerArea">
+        <div class="card-body">
+            <div></div>
+            <div>{% block answer %}{% endblock %}</div>
+            <div></div>
+            <hr />
+            
+            <form method="POST">
+                <button type="submit" name="test_result" value=0 class="btn btn-danger" type="button">
+                    <i class="fas fa-fw fa-times d-md-none"></i>
+                    <span class="d-none d-sm-inline-block">I forgot :(</span>
+                </button>
+                <button type="submit" name="test_result" value=1 class="btn btn-success" type="button">
+                    <i class="fas fa-fw fa-times d-md-none"></i>
+                    <span class="d-none d-sm-inline-block">I remember!</span>
+                </button>
+            </form>
+
+        </div>
+    </div>
+
+  </div>
+
+
+
+

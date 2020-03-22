@@ -16,8 +16,10 @@ with (HERE / 'README.md').open('rt') as fh:
 
 REQUIREMENTS: dict = {
     'core': [
-        "ebisu"
-        "flask"
+        "ebisu",
+        "flask",
+        "Flask-Session",
+        "redis",
     ],
     'test': [
         "pytest",
