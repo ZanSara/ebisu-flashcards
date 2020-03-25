@@ -1,3 +1,61 @@
 id;question;answer;alpha;beta;half_life;last_review
-1;more exciting;izgalmasabb;2.842707173674126;3.0977705442808627;22.648972959722222;2020-03-25 19:20:08
-2;at the edge of the zone;a zóna szélén;2.8847294938576087;3.0958595656577286;22.648972959722222;2020-03-25 19:20:06
+1;more exciting;izgalmasabb;3.0;3.0;1.0;2020-03-25 20:53:32
+2;at the edge of the zone;a zóna szélén;3.0;3.0;1.0;2020-03-25 20:53:34
+3;The schools closed;Az iskolák bezártak;3.0;3.0;1.0;2020-03-25 20:56:55
+4;They haven’t registered any cases yet;Még nem regisztráltak eseteket;3.0;3.0;1.0;2020-03-25 20:58:18
+5;The schools were already closed;Már bezártak az iskolák;3.0;3.0;1.0;2020-03-25 20:58:47
+6;It is very moving;Nagyon megható;3.0;3.0;1.0;2020-03-25 20:59:08
+7;outside;kívül;3.0;3.0;1.0;2020-03-25 20:59:21
+8;People are of afraid to gather;Az emberek félnek összejönni;3.0;3.0;1.0;2020-03-25 20:59:34
+9;overreaction;túlreagálás;3.0;3.0;1.0;2020-03-25 20:59:45
+10;It didn’t take long;Nem tartott sokáig;3.0;3.0;1.0;2020-03-25 20:59:57
+11;The kitchen is not ready yet;A konyha még nincs kész;3.0;3.0;1.0;2020-03-25 21:00:08
+12;L’abbiamo invitato da noi;Meghívtuk (őt) hozzánk;3.0;3.0;1.0;2020-03-25 21:00:20
+13;This friend of ours moved to Switzerland 2 weeks ago;Ez a barátunk két hete költözött Svájcba;3.0;3.0;1.0;2020-03-25 21:01:30
+14;We helped him moving the piano;Segítettünk neki átvinni a zongorát;3.0;3.0;1.0;2020-03-25 21:03:46
+15;He moved to an old flat temporarely;Átmenetileg beköltözött egy régi lakásba;3.0;3.0;1.0;2020-03-25 21:04:08
+16;Have you improved the flat?;Felújítottátok a lakást?;3.0;3.0;1.0;2020-03-25 21:04:18
+17;bookshelf;könyvespolc;3.0;3.0;1.0;2020-03-25 21:04:28
+18;When we moved in, we bought some second-hand furniture.;Amikor beköltöztünk,vettünk néhány használt bútort.;3.0;3.0;1.0;2020-03-25 21:04:39
+19;This sofa was free of charge.;Ez a kanapé ingyen volt.;3.0;3.0;1.0;2020-03-25 21:04:54
+20;A girl tried to sell it, but she couldn’t.;Egy lány próbálta eladni, de nem tudta.;3.0;3.0;1.0;2020-03-25 21:05:05
+21;We have got an entrance hall too.;Van egy előszobánk is.;3.0;3.0;1.0;2020-03-25 21:05:14
+22;We have got a balcony too.;Van egy erkélyünk is.;3.0;3.0;1.0;2020-03-25 21:05:24
+23;We live in a block of flats on the 5th floor;Egy emeletes házban lakunk az 5. emeleten ;3.0;3.0;1.0;2020-03-25 21:05:42
+24;There is a nice view from the window.;Szép a kilátás az ablakból.;3.0;3.0;1.0;2020-03-25 21:06:22
+25;On the other side there is an airport.;A másik oldalon van egy reptér;3.0;3.0;1.0;2020-03-25 21:06:32
+26;On this side;Ezen az oldalon;3.0;3.0;1.0;2020-03-25 21:06:47
+27;This is not a skyscraper.;Ez nem egy felhőkarcoló.;3.0;3.0;1.0;2020-03-25 21:07:04
+28;There are a lot of international organisations here.;Sok nemzetközi szervezet van itt.;3.0;3.0;1.0;2020-03-25 21:07:10
+29;It is much cheaper to live here than in Geneve.;Itt sokkal olcsóbb lakni, mint Genfben.;3.0;3.0;1.0;2020-03-25 21:07:22
+30;UN (United nations);ENSZ;3.0;3.0;1.0;2020-03-25 21:07:43
+31;We young people cannot afford to rent a flat in Geneve.;Mi, fiatalok nem engedhetjük meg magunknak, hogy Genfben béreljünk lakást.;3.0;3.0;1.0;2020-03-25 21:07:54
+32;The French save money by renting a flat rather here.;A franciák úgy spórolnak, hogy inkább itt bérelnek lakást.;3.0;3.0;1.0;2020-03-25 21:08:05
+33;Il fratello di Bálint voleva venire da Ungheria da noi. ;Bálint testvére el akart jönni hozzánk Magyarországról.;3.0;3.0;1.0;2020-03-25 21:08:16
+34;But he said he had better not come here.;De azt mondta, jobb, ha nem jön ide.;3.0;3.0;1.0;2020-03-25 21:08:27
+35;perhaps another time;talán máskor;3.0;3.0;1.0;2020-03-25 21:08:42
+36;We hope it will be over by the beginning of summer.;Reméljük, nyár elejére vége lesz.;3.0;3.0;1.0;2020-03-25 21:09:15
+37;I have heard that …;Hallottam, hogy …;3.0;3.0;1.0;2020-03-25 21:09:24
+38;next week;a következő héten;3.0;3.0;1.0;2020-03-25 21:09:33
+39;It is better to work from home.;Jobb otthonról dolgozni.;3.0;3.0;1.0;2020-03-25 21:09:48
+40;they will postpone it;elhalasztják;3.0;3.0;1.0;2020-03-25 21:10:10
+41;It is not visible. You cannot know it.;Nem látható. Nem tudhatod.;3.0;3.0;1.0;2020-03-25 21:10:20
+42;They chat once or twice a month.;Havonta egyszer-kétszer csetelnek.;3.0;3.0;1.0;2020-03-25 21:10:32
+43;They cancelled the events two weeks ago.;A rendezvényeket lemondták egy héttel ezelőtt.;3.0;3.0;1.0;2020-03-25 21:10:46
+44;We must survive.;Túl kell élnünk.;3.0;3.0;1.0;2020-03-25 21:10:59
+45;Today I haven’t done many things;Ma nem sok dolgot csináltam.;3.0;3.0;1.0;2020-03-25 21:11:49
+46;I got up only at half past 8.;Csak fél 9-kor keltem fel;3.0;3.0;1.0;2020-03-25 21:11:56
+47;I never drink coffee.;Nem szoktam kávét inni;3.0;3.0;1.0;2020-03-25 21:12:05
+48;He makes himself an espresso.;A reggelihez főz magának egy presszó kávét;3.0;3.0;1.0;2020-03-25 21:12:18
+49;I  usually drink tea;Teát szoktam inni.;3.0;3.0;1.0;2020-03-25 21:12:28
+50;It depends.;Ez attól függ.;3.0;3.0;1.0;2020-03-25 21:12:42
+51;Then it became 10 o’clock.;Aztán 10:00 óra lett;3.0;3.0;1.0;2020-03-25 21:12:53
+52;At the edge of the city;a város szélén;3.0;3.0;1.0;2020-03-25 21:13:21
+53;Outside the city;a városon kívűl;3.0;3.0;1.0;2020-03-25 21:13:32
+54;Two weeks ago;két héttel ezelőtt / két hete;3.0;3.0;1.0;2020-03-25 21:13:46
+55;Our friend rents a flat;A barátunk bérel egy lakást;3.0;3.0;1.0;2020-03-25 21:13:58
+56;Do you rent a flat?;Bérelsz lakást?;3.0;3.0;1.0;2020-03-25 21:14:14
+57;interrogation;kikérdezés;3.0;3.0;1.0;2020-03-25 21:14:40
+58;He has an online-exam next week;Neki jövő héten van egy online-vizsgája;3.0;3.0;1.0;2020-03-25 21:14:52
+59;We are continuing learning French at home.;Otthon folytatjuk a franciatanulást.;3.0;3.0;1.0;2020-03-25 21:15:03
+60;Nowadays the internet is a big help in language learning.;Mostanában nagy segítség az internet a nyelvtanulásban.;3.0;3.0;1.0;2020-03-25 21:15:14

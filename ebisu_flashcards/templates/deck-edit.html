@@ -41,7 +41,7 @@
                             <td><button class="btn btn-primary" type="submit" name="card_id" value={{card_to_edit.id}}>Save</button></td>
                         </tr>
                         {% endif %}
-                        {% for card in cards %}
+                        {% for card in cards | reverse %}
                         <!-- View all other cards -->
                         <tr>
                             {% for value in card.values() %}

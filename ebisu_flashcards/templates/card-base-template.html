@@ -1,6 +1,6 @@
 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
     <a href="#" class="btn btn-default btn-sm"><i class="fa fa-chevron-left"></i></a>
-    <span class="m-0">Card #{{cards_count}}</span>
+    <span class="m-0">Card #{{cards_count}} - Recall probability {{ "%.0f"|format(card.recall_probability()*100) }}% - Half Life: {{ "%.0f"|format(card.versions[-1].half_life) }} hours</span>
     <div class="dropdown no-arrow">
       <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
@@ -40,7 +40,7 @@
                     <span class="d-none d-sm-inline-block">I forgot :(</span>
                 </button>
                 <button type="submit" name="test_result" value=1 class="btn btn-success" type="button">
-                    <i class="fas fa-fw fa-times d-md-none"></i>
+                    <i class="fas fa-fw fa-check d-md-none"></i>
                     <span class="d-none d-sm-inline-block">I remember!</span>
                 </button>
             </form>
