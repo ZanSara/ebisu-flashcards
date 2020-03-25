@@ -1,8 +1,11 @@
-from typing import Union, Mapping
+from typing import Union, List, Mapping
 
+import os
 import csv
+import json
 from collections import OrderedDict
 from datetime import datetime, timedelta
+
 import ebisu
 
 
@@ -58,21 +61,21 @@ class Card:
                                                         successes=test_result, 
                                                         total=reviews_in_this_session, 
                                                         tnow=time_from_last_review)
+            new_version = CardModel(alpha, beta, half_life, datetime.now())
+            self.versions.append(new_version)  
+            print("Card n.", self.id, " - versions: ", self.versions)   
+            
         except AssertionError as ae:
             print("Card was not updated: Failed too many times!")
+            
 
-        new_version = CardModel(alpha, beta, half_life, datetime.now())
-        self.versions.append(new_version)  
-        print("Card n.", self.id, " - new version: ", new_version)      
-        return
-
-    def recall_probability(self) -> float:
+    def recall_probability(self, exact=True) -> float:
         card_model = self.versions[-1]
         time_from_last_review = datetime.now() - card_model.last_review_as_time()
          # The exact flag normalizes the output to a real probability. Useful for debugging but not in production.
         recall_probability = ebisu.predictRecall(prior=card_model.to_ebisu_model(), 
                                                  tnow=time_from_last_review, 
-                                                 exact=True)
+                                                 exact=exact)
         print("Card n.", self.id, " - recall prob: {:.2f}".format(recall_probability*100))
         return recall_probability
 
@@ -95,8 +98,11 @@ class Card:
 
 class Deck:
 
-    def __init__(self, name):
-        self.name: str = name
+    def __init__(self, row: OrderedDict):
+        self.id: int = int(row["id"])
+        self.name: str = row["name"]
+        self.short_desc: str = row["short_desc"]
+        self.filename: str = os.path.join("resources", "decks", row["filename"])
         self.cards: Mapping[int, Card] = None
         self.cards_studied_count: int = 0
         self.card_being_tested: Card = None
@@ -104,13 +110,16 @@ class Deck:
         self.load()
 
     def __repr__(self):
-        return "Deck object (name:{} - n. cards:{})".format(self.name, len(self.cards)) 
+        return str(self.__dict__.keys())
+    #     return "Deck object (name:{} - file: {} - n. cards:{})".format(self.name, self.filename, len(self.cards)) 
 
     def load(self) -> None:
-        with open('{}.csv'.format(self.name)) as csvfile:
+        with open(self.filename) as csvfile:
             reader = csv.DictReader(csvfile, delimiter=";")
             self.cards = [Card(row) for row in reader]
-        print("Loaded cards: ", self.cards)
+        print("Loaded cards from file: ")
+        for card in self.cards:
+            print("  - ", card.to_dict())
 
     def save(self) -> None:
         if len(self.cards) < 1:
@@ -118,12 +127,23 @@ class Deck:
             return
 
         self.cards = sorted(self.cards, key=lambda card: card.id )
-        with open('{}.csv'.format(self.name), 'w') as csvfile:
+        with open(self.filename, 'w') as csvfile:
             writer = csv.DictWriter(csvfile, delimiter=";", fieldnames=self.cards[0].to_dict().keys())
             writer.writeheader()
             for card in self.cards:
                 writer.writerow(card.to_dict())
-                print("Writing ", card.to_dict())
+                # print("Writing ", card.to_dict())
+
+    def get_card_by_id(self, card_id):
+        for card in self.cards:
+            if card_id == card.id:
+                return card
+
+    def update_card(self, card_id, test_result):
+        for card in self.cards:
+            if card_id == card.id:
+                card.store_test_result(test_result)
+                break
 
     def next_card_to_review(self) -> int:
         self.cards = sorted(self.cards, key=lambda card: card.recall_probability() )
@@ -135,3 +155,33 @@ class Deck:
 
     def last_reviewed_card(self) -> int:
         return self.last_reviewed_card
+
+    def to_dict(self):
+        dic = {}
+        dic["id"] = str(self.id)
+        dic["name"] = self.name
+        dic["short_desc"] = self.short_desc
+        dic["filename"] = self.filename
+
+        all_probs = [card.recall_probability(exact=True) for card in self.cards]
+        dic["cards_to_review"] = len([1 for prob in all_probs if prob < 50 and prob > 5]) 
+        dic["unknown_cards"] = len([1 for prob in all_probs if prob < 5])
+        return dic
+
+
+def load_decks_data() -> List[OrderedDict]:
+    with open('resources/decks.csv') as csvfile:
+        reader = csv.DictReader(csvfile, delimiter=";")
+        decks_data = [Deck(row).to_dict() for row in reader]
+    
+    print("Available decks: ", decks_data)
+    return decks_data
+
+
+def load_deck_by_id(deck_id) -> Deck:
+    with open('resources/decks.csv') as csvfile:
+        reader = csv.DictReader(csvfile, delimiter=";")
+        for row in reader:
+            if int(row["id"]) == int(deck_id):
+                return Deck(row)
+    print("No decks found for this ID! {}".format(deck_id))

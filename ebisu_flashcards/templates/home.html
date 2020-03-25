@@ -3,26 +3,25 @@
 {% block content %}
 <!-- Page Heading -->
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-  <h1 class="h1 mb-0 text-gray-800">Welcome Back!</h1>
+  <h1 class="h1 mb-0 text-gray-800">Welcome Back! Choose your deck:</h1>
 </div>
 
 <div class="row">
 
+  {% for deck in decks %}
   <div class="col-xl-3 col-md-6 mb-4">
-    <div class="card border-bottom-success shadow h-100 py-2">
-      <div class="card-body">
-        <a href="/study" class="btn btn-success btn-lg"> Study </a>
-      </div>
+    <div class="card border-bottom-primary shadow h-100 py-2">
+      <a href="/deck_{{ deck.id }}/study" class="card-body" style="text-decoration: none;">
+        <h1 class="h1">{{ deck.name }}</h1>
+        <span>{{ deck.short_desc }}</span>
+        <hr />
+        Cards to review: {{ deck.cards_to_review }}
+        <br>
+        Unknown cards: {{ deck.unknown_cards}}
+      </a>
     </div>
   </div>
-
-  <div class="col-xl-3 col-md-6 mb-4">
-    <div class="card border-bottom-warning shadow h-100 py-2">
-      <div class="card-body">
-        <a href="/settings" class="btn btn-warning btn-lg"> Settings </a>
-      </div>
-    </div>
-  </div>
+  {% endfor %}
 
 </div>
 <!-- End of row -->
