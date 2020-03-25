@@ -45,7 +45,11 @@ class Card:
         self.question: str = row["question"]
         self.answer: str = row["answer"]
         self.successful_reviews: int = 0
-        self.versions: List[CardModel] = [CardModel(row["alpha"], row["beta"], row["half_life"], row["last_review"])]
+        try:
+            first_model = CardModel(row["alpha"], row["beta"], row["half_life"], row["last_review"])
+        except KeyError:
+            first_model = CardModel(3.0, 3.0, 1)
+        self.versions: List[CardModel] = [first_model]
 
     def __repr__(self):
         return "Card object (id:{} - question:{} - answer:{} - versions:{})".format(self.id, self.question, self.answer, len(self.versions)) 
@@ -82,6 +86,12 @@ class Card:
     def amend_last_update(self, new_test_result) -> None:
         self.versions = self.versions[-1]  # Delete version to amend
         self.store_test_result(new_test_result)  # Recompute and store the new result
+
+    def update_from_dict(self, values):
+        self.question = values["question"]
+        self.answer = values["answer"]
+        new_version = CardModel(values["alpha"], values["beta"], values["half_life"], values["last_review"])
+        self.versions.append(new_version)
 
     def to_dict(self) -> Mapping[str, str]:
         last_version = self.versions[-1]
@@ -138,6 +148,7 @@ class Deck:
         for card in self.cards:
             if card_id == card.id:
                 return card
+        raise ValueError("No card with this ID exist in the deck: {}".format(card_id))
 
     def update_card(self, card_id, test_result):
         for card in self.cards:
