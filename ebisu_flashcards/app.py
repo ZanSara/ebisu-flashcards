@@ -30,7 +30,7 @@ def study(deck_id, card_id=None):
     # Update model and save
     if request.method == 'POST':
         print("####################################### TEST RESULT: ", bool(int(request.form["test_result"])))
-        deck.update_card(card_id, bool(request.form["test_result"]))
+        deck.update_card(card_id, bool(int(request.form["test_result"])))
         deck.save()
 
     # Load next card
