@@ -1,0 +1,11 @@
+{% extends "card-base-template.html" %}
+
+{% block question %}
+<h1>{{card.question}}</h1>
+<br />
+<input type="text" placeholder="Your answer..." style="width:100%;"/>
+{% endblock %}
+
+{% block answer %}
+<h1>{{card.answer}}</h1>
+{% endblock %}

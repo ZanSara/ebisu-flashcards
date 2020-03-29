@@ -17,9 +17,8 @@ with (HERE / 'README.md').open('rt') as fh:
 REQUIREMENTS: dict = {
     'core': [
         "ebisu",
-        "flask",
-        "Flask-Session",
-        "redis",
+        "django",
+        "psycopg2-binary",
     ],
     'test': [
         "pytest",
@@ -27,7 +26,7 @@ REQUIREMENTS: dict = {
         "pytest-random-order",
     ],
     'dev': [
-        
+        "flask",
     ],
     'doc': [
         'sphinx',
