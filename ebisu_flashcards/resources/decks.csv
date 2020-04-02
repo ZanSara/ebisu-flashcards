@@ -2,3 +2,5 @@ id;name;short_desc;filename
 1;Test Deck Original;A test deck to debug Ebisu-Flashcards;test_deck.csv
 2;Full Hungarian Deck;Classes with Timi;test_deck_hu_full.csv
 3;Small Hungarian Deck;New words from the classes with Timi;test_deck_hu_small.csv
+4;Last class deck;last class deck;test_deck_last_class_hu.csv
+

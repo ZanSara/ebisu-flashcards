@@ -17,7 +17,7 @@ class CardModel:
     def __init__(self, alpha: float=3.0, beta: float=3.0, half_life: Union[float, timedelta] = 1.0, last_review: Union[str, datetime]=None):
         self.alpha: float = float(alpha)
         self.beta: float = float(beta)
-        
+
         if isinstance(half_life, timedelta):
             self.half_life: float = half_life / HALF_LIFE_UNIT
         else:
@@ -41,6 +41,7 @@ class CardModel:
 class Card:
 
     def __init__(self, row: OrderedDict):
+        print(row)
         self.id: int = int(row["id"])
         self.question: str = row["question"]
         self.answer: str = row["answer"]
