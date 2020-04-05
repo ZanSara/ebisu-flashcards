@@ -34,6 +34,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'app.apps.AppConfig',
+    'polymorphic',
     'admin_reorder',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -139,6 +140,22 @@ ADMIN_REORDER = (
         'models': (
             'app.Tag', 
             'app.CardLayout',
+        )
+    },
+    {   'app': 'app', 
+        'label': 'Ebisu', 
+        'models': (
+            'app.EbisuDeck', 
+            'app.EbisuCard',
+            'app.EbisuCardModel',
+        )
+    },
+    {   'app': 'app', 
+        'label': 'Random Order', 
+        'models': (
+            'app.RandomOrderDeck', 
+            'app.RandomOrderCard',
+            'app.RandomOrderCardModel',
         )
     },
     {'app': 'auth', 'label': 'Authorisation'},

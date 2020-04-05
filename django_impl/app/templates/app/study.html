@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "app/base.html" %}
 
 {% block content %}
 <!-- Content Row -->
@@ -6,9 +6,14 @@
 
   <!-- Card Block -->
   <div class="col-xl-6 col-lg-5 mx-auto">
+
     <div class="card shadow mb-4">
       <!-- Card Header - Dropdown -->
-      {% include "card-template.html" %}
+      {% if card.layout.filename %}
+        {% include card.layout.filename %}
+      {% else %}
+        {% include "app/card_templates/default-card-template.html" with card=card %}
+      {% endif %}
     </div>
   </div>
 

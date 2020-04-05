@@ -1,97 +1,75 @@
 from django.http import HttpResponse
+from django.shortcuts import get_object_or_404, render, redirect
 from django.template import loader
 
+from app.models.mappings import CARD_TYPE_BY_DECK
+from app.models.abc import AbstractDeck, AbstractCard
 
-def index(request):
-    # latest_question_list = Question.objects.order_by('-pub_date')[:5]
-    decks = []
-    template = loader.get_template('app/home.html')
+
+def home(request):
+    decks = AbstractDeck.objects.all()
     context = {
         'navbar_title': "Home",
         'decks': decks,
     }
-    return HttpResponse(template.render(context, request))
+    return render(request, 'app/home.html', context)
 
 
-def study(deck_id, card_id=None):
-    pass
-
-
-# @app.route('/')
-# def home():
-#     decks = load_decks_data()
-#     return render_template( 'home.html', 
-#                             navbar_title="Home",
-#                             decks=decks,
-#                         )
-
-# @app.route('/deck_<int:deck_id>/study', methods=["GET", "POST"])
-# @app.route('/deck_<int:deck_id>/study/<int:card_id>', methods=["GET", "POST"])
-# def study(deck_id, card_id=None):
-#     deck = load_deck_by_id(deck_id)
+def study(request, deck_id, card_id=None):
+    deck = get_object_or_404(AbstractDeck, id=deck_id)
     
-#     # Update model and save
-#     if request.method == 'POST':
-#         print("####################################### TEST RESULT: ", bool(int(request.form["test_result"])))
-#         deck.update_card(card_id, bool(int(request.form["test_result"])))
-#         deck.save()
+    # Update model and save
+    if request.method == 'POST':
+        deck.update_card(card_id, bool(int(request.POST.get("test_result"))))
 
-#     # Load next card
-#     if request.method == 'POST' or card_id is None:
-#         next_card_id = deck.next_card_to_review().id
-#         return redirect("/deck_{}/study/{}".format(deck_id, next_card_id))
+    # Load next card
+    if request.method == 'POST' or card_id is None:
+        next_card_id = deck.next_card_to_review().id
+        return redirect("study", deck_id=deck_id, card_id=next_card_id)
 
-#     # Load the card data
-#     card = deck.get_card_by_id(card_id)
-#     return render_template('study.html', 
-#                             navbar_title=deck.name, 
-#                             navbar_right="{} cards studied in this session".format(deck.cards_studied_count),
-#                             card=card,
-#                             cards_count=deck.cards_studied_count
-#                         )
+    # Load the card data
+    card = get_object_or_404(AbstractCard, id=card_id)
+    context = {
+        'navbar_title': deck.name,
+        'navbar_right': "## cards studied in this session",
+        'card': card,
+    }
+    return render(request, 'app/study.html', context)
 
-# @app.route('/decks')
-# def decks():
-#     decks = load_decks_data()
-#     return render_template( 'decks.html', 
-#                             navbar_title="Decks",
-#                             decks=decks,
-#                         )
 
-# @app.route('/deck_<int:deck_id>/edit', methods=["GET", "POST"])
-# def edit(deck_id):
-#     deck = load_deck_by_id(deck_id)
-#     card_to_edit = None
+def edit(request, deck_id):
+    deck = get_object_or_404(AbstractDeck, id=deck_id)
+    cardtype = CARD_TYPE_BY_DECK[deck.__class__]
+    card_dict = None
     
-#     if request.method == 'POST':
-#         card_id = int(request.form["card_id"])
-#         if card_id == -1:
-#             # It's a new card
-#             new_id = deck.cards[-1].id  + 1
-#             question = request.form["question"]
-#             answer = request.form["answer"]
-#             new_card = Card(OrderedDict({"id":new_id, "question":question, "answer":answer}))
-#             deck.cards.append(new_card)
-#             deck.save()
-#         else:
-#             # It's an edited card
-#             original_card = deck.get_card_by_id(card_id)
-#             if "question" in request.form.keys() and request.form["question"] != "":
-#                 # New data already arrived
-#                 original_card.update_from_dict(request.form)
-#                 deck.save()
-#             else:
-#                 # This is a loading request:
-#                 card_to_edit = deck.get_card_by_id(card_id).to_dict()
+    if request.method == 'POST':
+        card_id = int(request.POST.get("card_id"))
+        if card_id == -1:
+            # It's a new card
+            question = request.POST.get("question")
+            answer = request.POST.get("answer")
+            new_card = cardtype.objects.create(question=question, answer=answer, deck_id=deck.id)
+        else:
+            # It's an edited card
+            original_card = get_object_or_404(cardtype, id=card_id)
+            if request.POST.get("question"):
+                # New data already arrived
+                original_card.update_from_dict(request.POST)
+            else:
+                # This is a loading request
+                card_dict = original_card.to_dict()
 
-#     cards = [card.to_dict() for card in deck.cards]
-#     return render_template('deck-edit.html',
-#                             navbar_title='Edit "{}"'.format(deck.name),
-#                             deck_id=deck_id,
-#                             card_to_edit=card_to_edit,
-#                             cards=cards)
+    # Load the cards list as dicts & process where necessary
+    cards = [card.to_dict() for card in deck.cards.all()]
+    for card in cards:
+        card["layout"] = "app/card_templates/{}".format(card["layout"]["name"])
+        card["tags"] = [tag.name for tag in card["tags"]]
 
-# # TODO
-# @app.route('/settings')
-# def settings():
-#     return render_template('base.html', navbar_title="Settings")
+    # Render
+    context = {
+        'navbar_title': 'Edit "{}"'.format(deck.name),
+        'deck_id': deck_id,
+        'card_to_edit': card_dict,
+        'cards': cards,
+    }
+    return render(request, 'app/deck-edit.html', context)

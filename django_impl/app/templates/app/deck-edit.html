@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "app/base.html" %}
 
 {% block content %}
     <!-- DataTales Example -->
@@ -9,12 +9,15 @@
         <div class="card-body">
             <!-- Cards list-->
             <form action="/deck_{{deck_id}}/edit" method="POST">
+                {% csrf_token %}
                 <div class="table-responsive">
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                         <tr>
-                            {% for column in cards[0].keys() %}
-                            <th>{{ column }}</th>
+                            {% for column in cards.0.keys %}
+                                {% if column != "id" %}
+                                  <th>{{ column }}</th>
+                                {% endif %}
                             {% endfor %}
                             <th></th> <!-- Column for the Edit button -->
                         </tr>
@@ -23,29 +26,33 @@
                         {% if not card_to_edit %}
                         <!-- Row for new card -->
                         <tr>
-                            <td>--</td> 
                             <td><input type="text" name="question"></td>
                             <td><input type="text" name="answer"></td>
-                            {% for key in cards[0].keys() if key.lower() != "id" and key.lower() != "question" and key.lower() != "answer" %}
-                            <td></td>
+                            {% for key in cards.0.keys %}
+                              {% if key != "id" and key != "question" and key != "answer" %}
+                                <td></td>
+                              {% endif %}
                             {% endfor %}
                             <td><button class="btn btn-primary" type="submit" name="card_id" value=-1>Add</button></td>
                         </tr>
                         {% else %}
                         <!-- Row for editing card -->
                         <tr>
-                            <td>{{ card_to_edit.id }}</td>
-                            {% for key, value in card_to_edit.items() if key.lower() != "id" %}
-                            <td><input type="text" name="{{key}}" value="{{value}}"></td>
+                            {% for key, value in card_to_edit.items %}
+                              {% if key != "id" %}
+                                <td><input type="text" name="{{key}}" value="{{value}}"></td>
+                              {% endif %}
                             {% endfor %}
                             <td><button class="btn btn-primary" type="submit" name="card_id" value={{card_to_edit.id}}>Save</button></td>
                         </tr>
                         {% endif %}
-                        {% for card in cards | reverse %}
+                        {% for card in cards reversed %}
                         <!-- View all other cards -->
                         <tr>
-                            {% for value in card.values() %}
-                            <td>{{ value }}</td>
+                            {% for key, value in card.items %}
+                              {% if key != "id" %}
+                                <td>{{ value }}</td>
+                              {% endif %}
                             {% endfor %}
                             <td><button class="btn btn-primary" type="submit" name="card_id" value={{card.id}}>Edit</button></td>
                         </tr>
