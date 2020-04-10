@@ -1,7 +1,8 @@
 from django import forms
 from django.contrib import admin
 
-from app.models.base import CardLayout, Tag
+from app.models.base import FactLayout, Tag
+from app.models.facts import TextCardFact, HtmlCardFact, ImageCardFact
 from app.models.ebisu import EbisuDeck, EbisuCard, EbisuCardModel
 from app.models.random_order import RandomOrderDeck, RandomOrderCard, RandomOrderCardModel
 
@@ -9,8 +10,12 @@ admin.site.site_header = "Ebisu Flashcards Admin"
 admin.site.site_title = "Ebisu Flashcards Admin Page"
 admin.site.index_title = "Database Management Page"
 
-admin.site.register(CardLayout)
+admin.site.register(FactLayout)
 admin.site.register(Tag)
+
+admin.site.register(TextCardFact)
+admin.site.register(HtmlCardFact)
+admin.site.register(ImageCardFact)
 
 
 class EbisuCardAdmin(admin.ModelAdmin):

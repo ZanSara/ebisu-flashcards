@@ -2,7 +2,7 @@ import os
 from django.db import models
 
 
-class CardLayout(models.Model):
+class FactLayout(models.Model):
     name = models.CharField(max_length=200, unique=True)
     description = models.CharField(max_length=2000)
     filename = models.FilePathField(max_length=500,
@@ -10,13 +10,13 @@ class CardLayout(models.Model):
                 "app", 
                 "templates",
                 "app",
-                "card_templates"))
+                "fact_templates"))
 
     def __str__(self):
         return "{}".format(self.name)
 
     def __repr__(self):
-        return "Card Layout #{}: '{}'".format(self.id, self.name)
+        return "Fact Layout #{}: '{}'".format(self.id, self.name)
 
     def to_dict(self):
         return {

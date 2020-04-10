@@ -139,7 +139,15 @@ ADMIN_REORDER = (
         'label': 'Base Entities', 
         'models': (
             'app.Tag', 
-            'app.CardLayout',
+            'app.FactLayout',
+        )
+    },
+    {   'app': 'app', 
+        'label': 'Fact Templates', 
+        'models': (
+            'app.TextCardFact', 
+            'app.HtmlCardFact',
+            'app.ImageCardFact',
         )
     },
     {   'app': 'app', 

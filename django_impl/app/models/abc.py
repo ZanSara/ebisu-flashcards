@@ -6,9 +6,7 @@ from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import User
 
-from .base import Tag, CardLayout
-
-DEFAULT_CARD_LAYOUT = CardLayout.objects.get(id=1)
+from .base import Tag, FactLayout
 
 
 class AbstractModel(PolymorphicModel):
@@ -19,7 +17,6 @@ class AbstractModel(PolymorphicModel):
 class AbstractDeck(AbstractModel):
     name = models.CharField(max_length=200)
     description = models.CharField(max_length=2000)
-    default_layout = models.ForeignKey(CardLayout, on_delete=models.SET_NULL, null=True, blank=True)
     tags = models.ManyToManyField(Tag, blank=True)
 
     @abc.abstractmethod
@@ -35,14 +32,10 @@ class AbstractDeck(AbstractModel):
     @abc.abstractmethod
     def to_dict(self):
         """ Returns a dictionary to be used in the views. """
-        default_layout = DEFAULT_CARD_LAYOUT
-        if self.default_layout:
-            default_layout = self.default_layout
         return {
             'id': self.id,
             'name': self.name,
             'description': self.description,
-            'default_layout': default_layout.to_dict(),
             'tags': self.tags,
         }
 
@@ -81,11 +74,20 @@ class AbstractDeck(AbstractModel):
         pass
 
 
+
+class AbstractCardFact(AbstractModel):
+    layout = models.ForeignKey(FactLayout, on_delete=models.PROTECT, related_name='facts')
+
+    @abc.abstractmethod
+    def get_content(self):
+        """ Returns a meaningful HTML representation of the content """
+        pass
+
+
 class AbstractCard(AbstractModel):
-    question = models.CharField(max_length=2000)
-    answer = models.CharField(max_length=2000)
+    question = models.ForeignKey(AbstractCardFact, on_delete=models.CASCADE, related_name='as_question')
+    answer = models.ForeignKey(AbstractCardFact, on_delete=models.CASCADE, related_name='as_answer')
     deck = models.ForeignKey(AbstractDeck, on_delete=models.CASCADE, related_name='cards')
-    layout = models.ForeignKey(CardLayout, on_delete=models.SET_NULL, null=True, blank=True)
     tags = models.ManyToManyField(Tag, blank=True)
     marked = models.BooleanField(default=False)
     hidden = models.BooleanField(default=False)
@@ -93,18 +95,11 @@ class AbstractCard(AbstractModel):
     @abc.abstractmethod
     def to_dict(self):
         """ Returns a dictionary to be used in the views """
-        if self.layout:
-            default_layout = self.layout
-        elif self.deck.default_layout:
-            default_layout = self.deck.default_layout
-        else:
-            default_layout = DEFAULT_CARD_LAYOUT
         return {
             # No deck info for now
             'id': self.id,
             'question': self.question,
             'answer': self.answer,
-            'layout': default_layout.to_dict(),
             'tags': self.tags.all(),
             'marked': self.marked,
             'hidden': self.hidden,
@@ -153,4 +148,5 @@ class AbstractCardModel(AbstractModel):
     card = models.ForeignKey(AbstractCard, on_delete=models.CASCADE, related_name="reviews")
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="reviews")
     review_time = models.DateTimeField(default=timezone.now)
+
 

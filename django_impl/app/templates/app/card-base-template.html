@@ -19,7 +19,7 @@
     <!-- Accordion Header -->
     <div class="card-body">
         <div></div>
-        <div>{% block question %}{% endblock %}</div>
+        <div>{{ card.question.get_content() }}</div>
         <div></div>
     </div>
     <a id="answerButton" href="#answerArea" class="btn btn-primary" data-toggle="collapse" role="button" 
@@ -30,8 +30,9 @@
     <div class="collapse hide" id="answerArea">
         <div class="card-body">
             <div></div>
-            <div>{% block answer %}{% endblock %}</div>
+            <div>{{ card.answer.get_content() }}</div>
             <div></div>
+            <input type="text" placeholder="Your answer..." style="width:100%;"/>
             <hr />
             
             <form method="POST">

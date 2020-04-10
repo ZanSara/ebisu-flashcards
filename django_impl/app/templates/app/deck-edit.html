@@ -20,6 +20,7 @@
                                 {% endif %}
                             {% endfor %}
                             <th></th> <!-- Column for the Edit button -->
+                            <th></th> <!-- Column for the Delete button -->
                         </tr>
                         </thead>
                         <tbody>
@@ -33,7 +34,9 @@
                                 <td></td>
                               {% endif %}
                             {% endfor %}
-                            <td><button class="btn btn-primary" type="submit" name="card_id" value=-1>Add</button></td>
+                            <td><button class="btn btn-success" type="submit" name="card_id" value=-1
+                              formaction="/deck_{{deck_id}}/add">Add</button></td>
+                            <th></th>
                         </tr>
                         {% else %}
                         <!-- Row for editing card -->
@@ -43,7 +46,8 @@
                                 <td><input type="text" name="{{key}}" value="{{value}}"></td>
                               {% endif %}
                             {% endfor %}
-                            <td><button class="btn btn-primary" type="submit" name="card_id" value={{card_to_edit.id}}>Save</button></td>
+                            <td><button class="btn btn-primary" type="submit" name="card_id" value={{card_to_edit.id}}
+                              formaction="/deck_{{deck_id}}/card_{{card_to_edit.id}}/edit">Save</button></td>
                         </tr>
                         {% endif %}
                         {% for card in cards reversed %}
@@ -54,7 +58,9 @@
                                 <td>{{ value }}</td>
                               {% endif %}
                             {% endfor %}
-                            <td><button class="btn btn-primary" type="submit" name="card_id" value={{card.id}}>Edit</button></td>
+                            <td><a class="btn btn-primary" href="/deck_{{deck_id}}/card_{{card.id}}/edit">Edit</a></td>
+                            <td><button class="btn btn-danger" type="submit" name="card_id" value={{card.id}}
+                              formaction="/deck_{{deck_id}}/card_{{card.id}}/delete">Delete</button></td>
                         </tr>
                         {% endfor %}
                         </tbody>

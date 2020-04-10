@@ -9,11 +9,7 @@
 
     <div class="card shadow mb-4">
       <!-- Card Header - Dropdown -->
-      {% if card.layout.filename %}
-        {% include card.layout.filename %}
-      {% else %}
-        {% include "app/card_templates/default-card-template.html" with card=card %}
-      {% endif %}
+      {% include "app/card_templates/default-card-template.html" with card=card %}
     </div>
   </div>
 
