@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-import psycopg2
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -34,9 +33,8 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'app.apps.AppConfig',
-    'polymorphic',
-    'admin_reorder',
-    'django.contrib.admin',
+    # 'admin_reorder',
+    # 'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -45,7 +43,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'admin_reorder.middleware.ModelAdminReorder',
+    # 'admin_reorder.middleware.ModelAdminReorder',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -80,16 +78,15 @@ WSGI_APPLICATION = 'project.wsgi.application'
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ebisu-db',
-        'USER': 'ebisu',
-        'PASSWORD': 'randompassword',  # FIXME pick pwd from os.environ
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
-        'OPTIONS': {
-            'isolation_level': psycopg2.extensions.ISOLATION_LEVEL_SERIALIZABLE,
-        },
+    'default': {'ENGINE': 'django.db.backends.dummy'}
+}
+MONGODB_DATABASES = {
+    "default": {
+        "name": 'ebisu-db',
+#        "host": database_host,
+#        "password": database_password,
+#        "username": database_user,
+        "tz_aware": True, # if you using timezones in django (USE_TZ = True)
     },
 }
 
@@ -97,21 +94,20 @@ DATABASES = {
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
-]
-
+# AUTH_PASSWORD_VALIDATORS = [
+#     {
+#         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+#     },
+#     {
+#         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+#     },
+#     {
+#         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+#     },
+#     {
+#         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+#     },
+# ]
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
@@ -133,39 +129,23 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 
-ADMIN_REORDER = (
-    'sites',
-    {   'app': 'app', 
-        'label': 'Base Entities', 
-        'models': (
-            'app.Tag', 
-            'app.FactLayout',
-        )
-    },
-    {   'app': 'app', 
-        'label': 'Fact Templates', 
-        'models': (
-            'app.TextCardFact', 
-            'app.HtmlCardFact',
-            'app.ImageCardFact',
-        )
-    },
-    {   'app': 'app', 
-        'label': 'Ebisu', 
-        'models': (
-            'app.EbisuDeck', 
-            'app.EbisuCard',
-            'app.EbisuCardModel',
-        )
-    },
-    {   'app': 'app', 
-        'label': 'Random Order', 
-        'models': (
-            'app.RandomOrderDeck', 
-            'app.RandomOrderCard',
-            'app.RandomOrderCardModel',
-        )
-    },
-    {'app': 'auth', 'label': 'Authorisation'},
+# ADMIN_REORDER = (
+#     'sites',
+#     {   'app': 'app', 
+#         'label': 'Base Entities', 
+#         'models': (
+#             'app.Tag', 
+#             'app.Renderer',
+#         )
+#     },
+#     {   'app': 'app', 
+#         'label': 'Entities', 
+#         'models': (
+#             'app.Deck', 
+#             'app.Card',
+#             'app.Fact',
+#         )
+#     },
+#     {'app': 'auth', 'label': 'Authorisation'},
     
-)
+# )

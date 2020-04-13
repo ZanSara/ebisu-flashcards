@@ -5,15 +5,20 @@ from . import views
 urlpatterns = [
     # Home
     path('', views.home, name='home'),
+    path('login', views.login, name='login'),
+    path('register', views.register, name='register'),
+    path('reset-password', views.reset_password, name='reset_password'),
 
     # Study cards
-    path('deck_<int:deck_id>/study', views.study, name='study'),
-    path('deck_<int:deck_id>/card_<int:card_id>/study', views.study, name='study'),
+    path('study/deck_<str:deck_id>', views.study, name='study'),
+    path('study/deck_<str:deck_id>/card_<str:card_id>', views.study, name='study'),
 
     # Edit decks and cards
-    path('deck_<int:deck_id>/edit', views.edit_deck, name='edit_deck'),
-    path('deck_<int:deck_id>/card_<int:card_id>/edit', views.edit_card, name='edit_card'),
-    path('deck_<int:deck_id>/add', views.add_card, name='add_card'),
-    path('deck_<int:deck_id>/card_<int:card_id>/delete', views.delete_card, name='delete_card'),
+    path('edit/new_deck', views.edit_deck, name='edit_deck'),
+    path('edit/deck_<str:deck_id>', views.edit_deck, name='edit_deck'),
+    path('edit/deck_<str:deck_id>/delete', views.delete_deck, name='delete_deck'),
+    path('edit/deck_<str:deck_id>/card_<str:card_id>', views.edit_card, name='edit_card'),
+    path('edit/deck_<str:deck_id>/new_card', views.add_card, name='add_card'),
+    path('edit/deck_<str:deck_id>/card_<str:card_id>/delete', views.delete_card, name='delete_card'),
     
 ]
