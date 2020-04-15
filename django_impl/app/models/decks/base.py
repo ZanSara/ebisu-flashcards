@@ -1,10 +1,10 @@
 from typing import Any, Callable, List, Mapping, Tuple
 
 import abc
-import bson
 import mongoengine as mongo
 
-from ..base import Tag, Card
+from ..base import Tag
+from ..cards import Card
 
 
 class Deck(mongo.Document):
@@ -19,14 +19,13 @@ class Deck(mongo.Document):
     meta = {'allow_inheritance': True}
 
     @staticmethod
-    def populate_fields_from_postdata(deck_subclass: 'Deck', postdata: Mapping[str, Any]) -> 'Deck' :
-        """ Returns the ID of the deck created from the info contained into the POSTDATA dict. """
-        print(postdata)
-        deck_subclass.name = postdata.get('deck_name')
-        deck_subclass.description = postdata.get('deck_description')
+    def populate_fields_from_postdata(deck_instance: 'Deck', postdata: Mapping[str, Any]) -> 'Deck' :
+        """ Returns the deck instance populated from the info contained into the POSTDATA dict. """
+        deck_instance.name = postdata.get('deck_name')
+        deck_instance.description = postdata.get('deck_description')
         # process tags
         # deck_subclass.tags = []
-        return deck_subclass
+        return deck_instance
 
     @abc.abstractmethod
     def import_from_file(self, packaged_file, private=False):
@@ -53,6 +52,11 @@ class Deck(mongo.Document):
             'tags': self.tags,
         }
         return dict_form
+
+    @abc.abstractmethod
+    def add_card(self, postdata: Mapping[str, Any]):
+        """ Creates a new card of the right type and adds it to its own collection. """
+        raise NotImplementedError("Can't use Deck base class: use one of the subclasses")
 
     @abc.abstractmethod
     def process_result(self, card_id: int, user_id: int, test_results: Any) -> None:

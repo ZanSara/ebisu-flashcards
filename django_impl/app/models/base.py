@@ -25,29 +25,22 @@ class Tag(mongo.EmbeddedDocument):
 class Renderer(mongo.Document):
     name = mongo.StringField(max_length=200, unique=True)
     description = mongo.StringField(max_length=2000)
-    filename = mongo.StringField()
+    path = mongo.StringField()
 
 
 class Fact(mongo.Document):
-    # fact = mongo.StringField(max_length=200, unique=True)  # Defined by the subclasses 
+    fact = mongo.StringField(max_length=200)
     renderer = mongo.ReferenceField(Renderer, reverse_delete_rule=mongo.CASCADE)
+    is_file = mongo.BooleanField(default=False)
 
-    meta = {'allow_inheritance': True}
+    @property
+    def value(self):
+        return self.fact
 
-class Review(mongo.EmbeddedDocument):
-    user = mongo.ReferenceField(User)
-    test_results = mongo.StringField()  # Can store more complex objects as JSON in case, I guess...
-    review_time = mongo.DateTimeField(default=timezone.now)
+    @property
+    def widget(self):
+        if self.renderer:
+            return self.renderer.path
+        else:
+            return None
 
-    meta = {'allow_inheritance': True}
-
-
-class Card(mongo.Document):
-    question = mongo.ReferenceField(Fact)
-    answer = mongo.ReferenceField(Fact)
-    tags = mongo.ListField(Tag, blank=True)
-    marked = mongo.BooleanField(default=False)
-    hidden = mongo.BooleanField(default=False)
-    reviews = mongo.ListField(mongo.EmbeddedDocumentField(Review))
-
-    meta = {'allow_inheritance': True}

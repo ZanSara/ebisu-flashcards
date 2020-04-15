@@ -27,8 +27,7 @@ def reset_password(request):
 
 
 def home(request):
-    decks = [deck.to_dict() for deck in Deck.objects.all()]
-    print(decks)
+    decks = Deck.objects.all()
     context = {
         'navbar_title': "Home",
         'decks': decks,
@@ -57,21 +56,19 @@ def edit_deck(request, deck_id=None):
 
     # Save deck data and go to edit page
     if request.method == 'POST':
-        deck.update_from_request(request.POST)
+        deck.update_from_postdata(request.POST)
         return redirect("edit_deck", deck_id)
 
     # Load the cards list as dicts & process where necessary
-    cards = [card.to_dict() for card in deck.cards]
-    print(cards)
-    for card in cards:
-        card["layout"] = "app/card_templates/{}".format(card["layout"]["name"])
-        card["tags"] = [tag.name for tag in card["tags"]]
+    cards = [card.to_widgets() for card in deck.cards]
+    card_fields = deck.CARD_TYPE().to_widgets()
 
     # Render
     context = {
         'navbar_title': 'Edit "{}"'.format(deck.name),
         'algorithms': list(decks.DECK_CLASSES.keys()),
-        'deck': deck.to_dict(),
+        'deck': deck,
+        'card_fields': card_fields,
         'cards': cards,
     }
     return render(request, 'app/deck-edit.html', context)
@@ -83,55 +80,53 @@ def delete_deck(request, deck_id):
     return redirect("home")
 
 
-def edit_card(request, deck_id, card_id):
+def edit_card(request, deck_id, card_id=None):
     deck = get_object_or_404(Deck, id=deck_id)
-    cardtype = CARD_TYPE_BY_DECK[deck.__class__]
-    original_card = get_object_or_404(cardtype, id=card_id)
+
+    # Add new card
+    if not card_id:
+
+        # Save and return to same page
+        if request.method == 'POST':
+            deck.add_card(request.POST)
+            return redirect("edit_deck", deck_id)
+        
+    card = get_object_or_404(Card, id=card_id)
 
     # New data already arrived
     if request.method == 'POST':
         # Update model and redirect back
-        original_card.update_from_dict(request.POST)
-        return redirect("/deck_{}/edit".format(deck_id))
+        card.update_from_postdata(request.POST)
+        return redirect("/edit/deck_{}".format(deck_id))
 
     # Load card data
-    card_dict = original_card.to_dict()
+    card_to_edit = card.to_widgets()
 
     # Load the cards list as dicts & process where necessary
-    cards = [card.to_dict() for card in deck.cards.all()]
-    for card in cards:
-        card["layout"] = "app/card_templates/{}".format(card["layout"]["name"])
-        card["tags"] = [tag.name for tag in card["tags"]]
-
+    cards = [card.to_widgets() for card in deck.cards]
+    card_fields = deck.CARD_TYPE().to_widgets()
+    
     # Render
     context = {
         'navbar_title': 'Edit "{}"'.format(deck.name),
-        'deck_id': deck_id,
+        'deck': deck,
         'cards': cards,
-        'card_to_edit': card_dict,
+        'card_fields': card_fields,
+        'card_to_edit': card_to_edit,
     }
     return render(request, 'app/deck-edit.html', context)
 
 
-def add_card(request, deck_id):
-    deck = get_object_or_404(Deck, id=deck_id)
-    cardtype = CARD_TYPE_BY_DECK[deck.__class__]
-    card_dict = None
-    
-    if request.method == 'POST':
-        card_form = FORM_TYPE_BY_CARD[cardtype](request)
-        question = request.POST.get("question")
-        answer = request.POST.get("answer")
-        new_card = cardtype.objects.create(question=question, answer=answer, deck_id=deck.id)
-
-    return redirect("/deck_{}/edit".format(deck_id))
-
 
 def delete_card(request, deck_id, card_id):
-    card = get_object_or_404(Card, id=card_id, deck=deck_id)    
-    card.delete()
-    return redirect("/deck_{}/edit".format(deck_id))
-
+    deck = get_object_or_404(Deck, id=deck_id) 
+    card = get_object_or_404(Card, id=card_id) 
+    if card in deck.cards:
+        deck.cards.pull(id=card.id)
+        card.delete()
+    else:
+        raise ValueError("Card does not belong to deck")
+    return redirect("edit/deck_{}".format(deck_id))
 
 
 def study(request, deck_id, card_id=None):

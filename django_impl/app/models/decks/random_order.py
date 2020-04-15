@@ -1,13 +1,15 @@
-from typing import Any, Callable
+from typing import Any, Callable, Mapping
 
 import mongoengine as mongo
 
 from .base import Deck
-from ..base import Tag, Card
+from ..base import Tag
+from ..cards import RandomOrderCard
 
 
 class RandomOrderDeck(Deck):
     ALGORITHM_NAME = "Random Order"
+    CARD_TYPE = RandomOrderCard
 
     @staticmethod
     def create_from_request(postdata) -> int:
@@ -21,13 +23,13 @@ class RandomOrderDeck(Deck):
         self.save()
     
     def import_from_file(self, packaged_file, private=False):
-        raise NotImplementedError("Can't use Deck base class: use one of the subclasses")
+        raise NotImplementedError("TODO in RandomOrderDeck")
 
     def export_to_file(self):
-        raise NotImplementedError("Can't use Deck base class: use one of the subclasses")
+        raise NotImplementedError("TODO in RandomOrderDeck")
     
     def filter_cards(self, filter: Callable):
-        raise NotImplementedError("Can't use Deck base class: use one of the subclasses")
+        raise NotImplementedError("TODO in RandomOrderDeck")
 
     def to_dict(self):
         base_fields = super().to_dict()
@@ -39,19 +41,25 @@ class RandomOrderDeck(Deck):
         all_fields.update(base_fields)
         return all_fields
 
+    def add_card(self, postdata: Mapping[str, Any]):
+        new_card = self.CARD_TYPE()
+        new_card.populate_fields_from_postdata(postdata)
+        new_card.save()
+        self.update(add_to_set__cards=[new_card])
+
     def process_result(self, card_id: int, user_id: int, test_results: Any) -> None:
-        raise NotImplementedError("Can't use Deck base class: use one of the subclasses")
+        raise NotImplementedError("TODO in RandomOrderDeck")
 
 
     def next_card_to_review(self) -> 'Card':
-        raise NotImplementedError("Can't use Deck base class: use one of the subclasses")
+        raise NotImplementedError("TODO in RandomOrderDeck")
 
 
     def last_reviewed_card(self) -> 'Card':
-        raise NotImplementedError("Can't use Deck base class: use one of the subclasses")
+        raise NotImplementedError("TODO in RandomOrderDeck")
 
     def filter_cards(self, filter: Callable):
-        raise NotImplementedError("Can't use Deck base class: use one of the subclasses")
+        raise NotImplementedError("TODO in RandomOrderDeck")
 
     @property
     def cards_to_review(self) -> int:
