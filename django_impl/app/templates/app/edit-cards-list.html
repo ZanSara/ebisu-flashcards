@@ -1,88 +1,92 @@
-<div class="card shadow mb-4">
+  <div class="card shadow mb-4 col-12">
     <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold text-primary">Cards List</h6>
     </div>
     <div class="card-body">
-
-        {% if not deck %}
-        <div>
-          <i>Please save the deck before adding cards to it</i>
-        </div>
-        {% else %}
-        <!-- Cards list-->
-        <form method="POST">
-            {% csrf_token %}
-            <div class="table-responsive">
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                    <thead>
-                    <tr>
-                        {% for field in card_fields %}
-                            {% if field != "id" %}
-                              <th>{{ field }}</th>
-                            {% endif %}
-                        {% endfor %}
-                        <th></th> <!-- Column for the Edit button -->
-                        <th></th> <!-- Column for the Delete button -->
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% if not card_to_edit %}
-                    <!-- Row for new card -->
-                    <tr>
-                      {% for name, field in card_fields.items %}
-                        {% if name != "id" %}
-                        <td>
-                          {% if field.widget %}
-                            {% include "app/renderers/input/"|add:field.widget with name=name value=field.value %}
-                          {% else %}
-                            {% include "app/renderers/input/text-fact.html" with name=name value=field.value %}
-                          {% endif %}
-                          {% if name == 'question' or name == "answer" %}
-                            {% include "app/renderers/selector.html" with name=name value=field.value %}
-                          {% endif %}
-                        </td>
-                        {% endif %}
-                      {% endfor %}
-                        <td><button class="btn btn-success" type="submit" name="card_id" value=-1
-                          formaction="/edit/deck_{{deck.id}}/new_card">Add</button></td>
-                        <th></th>
-                    </tr>
-                    {% else %}
-                    <!-- Row for editing card -->
-                    <tr>
-                        {% for name, field in card_to_edit.items %}
-                          {% if name != "id" %}
-                            <td>
-                              {% include "app/renderers/input/"|add:field.widget with name=name value=field.value %}
-                              {% if name == 'question' or name == "answer" %}
-                                {% include "app/renderers/selector.html" with name=name value=field.value %}
-                              {% endif %}
-                            </td>
-                          {% endif %}
-                        {% endfor %}
-                        <td><button class="btn btn-primary" type="submit" name="card_id" value={{card_to_edit.id}}
-                          formaction="/edit/deck_{{deck.id}}/card_{{card_to_edit.id}}">Save</button></td>
-                    </tr>
+      {% if not deck %}
+      <div>
+        <i>Please save the deck before adding cards to it</i>
+      </div>
+      {% else %}
+      <!-- Cards list-->
+      <form method="POST">
+        {% csrf_token %}
+        <div class="table-responsive">
+          <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <thead>
+            <tr>
+                {% for field in card_fields %}
+                    {% if field != "id" %}
+                      <th>{{ field }}</th>
                     {% endif %}
-                    {% for card in cards reversed %}
-                    <!-- View all other cards -->
-                    <tr>
-                        {% for name, field in card.items %}
-                          {% if name != "id" %}
-                          <td>
-                            {% include "app/renderers/display/"|add:field.widget with name=name content=field.value %}
-                          </td>
-                          {% endif %}
-                        {% endfor %}
-                        <td><a class="btn btn-primary" href="/edit/deck_{{deck.id}}/card_{{card.id}}">Edit</a></td>
-                        <td><button class="btn btn-danger" type="submit" name="card_id" value={{card.id}}
-                          formaction="/edit/deck_{{deck.id}}/card_{{card.id}}/delete">Delete</button></td>
-                    </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </form>
-        {% endif %}
+                {% endfor %}
+                <th></th> <!-- Column for the Edit button -->
+                <th></th> <!-- Column for the Delete button -->
+            </tr>
+            </thead>
+            <tbody>
+            {% if not card_to_edit %}
+            <!-- Row for new card -->
+            <tr>
+              {% for name, field in card_fields.items %}
+                {% if name != "id" %}
+                <td>
+                  <!-- This if statement will go: renderer.html should manage the input
+                        widget and change it when its value changes -->
+                  {% if field.widget %}
+                    {% include "app/renderers/input/"|add:field.widget with name=name value=field.value %}
+                  {% else %}
+                    {% include "app/renderers/input/text-fact.html" with name=name value=field.value %}
+                  {% endif %}
+                  
+                  {% if name == 'question' or name == "answer" %}
+                    {% include "app/renderers/selector.html" with name=name value=field.value %}
+                  {% endif %}
+                </td>
+                {% endif %}
+              {% endfor %}
+                <td><button class="btn btn-success" type="submit" formaction="/edit/deck_{{deck.id}}/new_card">Add</button></td>
+                <th></th>
+            </tr>
+            {% else %}
+            <!-- Row for editing card -->
+            <tr>
+                {% for name, field in card_to_edit.items %}
+                  {% if name != "id" %}
+                    <td>
+                      <!-- This include will go: renderer.html should manage the input
+                            widget and change it when its value changes -->
+                      {% include "app/renderers/input/"|add:field.widget with name=name value=field.value %}
+                      
+                      {% if name == 'question' or name == "answer" %}
+                        {% include "app/renderers/selector.html" with name=name value=field.value %}
+                      {% endif %}
+                    </td>
+                  {% endif %}
+                {% endfor %}
+                <td><button class="btn btn-primary" type="submit" name="card_id" value={{card_to_edit.id}}
+                  formaction="/edit/deck_{{deck.id}}/card_{{card_to_edit.id}}">Save</button></td>
+            </tr>
+            {% endif %}
+            {% for card in cards reversed %}
+            <!-- View all other cards -->
+            <tr>
+                {% for name, field in card.items %}
+                  {% if name != "id" %}
+                  <td>
+                    {% include "app/renderers/display/"|add:field.widget with name=name content=field.value %}
+                  </td>
+                  {% endif %}
+                {% endfor %}
+                <td><a class="btn btn-primary" href="/edit/deck_{{deck.id}}/card_{{card.id}}">Edit</a></td>
+                <td><button class="btn btn-danger" type="submit" name="card_id" value={{card.id}}
+                  formaction="/edit/deck_{{deck.id}}/card_{{card.id}}/delete">Delete</button></td>
+            </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </form>
+      {% endif %}
     </div>
-</div>
+  </div>

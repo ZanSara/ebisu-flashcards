@@ -51,7 +51,7 @@ class Card(mongo.Document):
         #     answer_renderer = Renderer("Text Renderer", "A renderer for text", "text-fact.html")
         #     answer_renderer.save()
 
-        # Renderer(name="Text Renderer", description="A renderer for text", path="text-fact.html").save()
+        # Renderer(name="HTML Renderer", description="A renderer for HTML", path="html-fact.html").save()
         default_renderer = Renderer.objects.get(name="Text Renderer")
 
         question = Fact(fact=postdata.get('question'), renderer=default_renderer)

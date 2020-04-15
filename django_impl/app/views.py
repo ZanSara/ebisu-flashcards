@@ -3,7 +3,7 @@ from django.http import Http404
 from django.shortcuts import render, redirect
 from django.template import loader
 
-from app.models import Deck, Card, decks
+from app.models import Deck, Card, Renderer, decks
 
 
 def get_object_or_404(model_class: Type, id: str) -> Optional[Any]:
@@ -68,6 +68,7 @@ def edit_deck(request, deck_id=None):
         'navbar_title': 'Edit "{}"'.format(deck.name),
         'algorithms': list(decks.DECK_CLASSES.keys()),
         'deck': deck,
+        'renderers': list(Renderer.objects.all()),
         'card_fields': card_fields,
         'cards': cards,
     }
