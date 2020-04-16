@@ -25,7 +25,7 @@ class Card(mongo.Document):
     tags = mongo.ListField(Tag, blank=True)
     marked = mongo.BooleanField(default=False)
     hidden = mongo.BooleanField(default=False)
-    reviews = mongo.ListField(mongo.EmbeddedDocumentField(Review))
+    reviews = mongo.EmbeddedDocumentListField(Review)
 
     meta = {'allow_inheritance': True}
 

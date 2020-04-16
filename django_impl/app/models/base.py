@@ -11,9 +11,9 @@ class User(mongo.Document):
     username = mongo.StringField(max_length=200, required=True, unique=True)
     email = mongo.EmailField(required=True, unique=True)
     password = mongo.BinaryField(required=True)
-    icon = mongo.ImageField()
+    icon = mongo.ImageField(blank=True)
     signed_in = mongo.BooleanField(default=False)
-    last_sign_in = mongo.DateTimeField()
+    last_sign_in = mongo.DateTimeField(default=timezone.now)
     date_created = mongo.DateTimeField(default=timezone.now)
 
 

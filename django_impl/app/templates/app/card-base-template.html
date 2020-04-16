@@ -15,24 +15,26 @@
   </div>
   <!-- Card Body -->
   <div class="card-body text-center">
-
-    <!-- Accordion Header -->
-    <div class="card-body">
-        <div></div>
-        <div>{{ card.question.get_content() }}</div>
-        <div></div>
+    <div class="row justify-content-center py-3" >
+      <div class="col-12 text-center py-3">
+        {% include "app/renderers/display/"|add:card.question.renderer.path with content=card.question.fact %}
+      </div>
+      <div class="col-6 py-3">
+        <input type="text form-control-lg" placeholder="Your answer..." style="width:100%;"/>
+      </div>
     </div>
+
+    <!-- Accordion Header -->            
     <a id="answerButton" href="#answerArea" class="btn btn-primary" data-toggle="collapse" role="button" 
         aria-expanded="true" aria-controls="collapseCardExample" onclick="getElementById('answerButton').style.display = 'none';">
         Click to show answer
     </a>
+
     <!-- Accordion Content - Collapse -->
     <div class="collapse hide" id="answerArea">
         <div class="card-body">
             <div></div>
-            <div>{{ card.answer.get_content() }}</div>
-            <div></div>
-            <input type="text" placeholder="Your answer..." style="width:100%;"/>
+            <div>{% include "app/renderers/display/"|add:card.answer.renderer.path with content=card.answer.fact %}</div>
             <hr />
             
             <form method="POST">

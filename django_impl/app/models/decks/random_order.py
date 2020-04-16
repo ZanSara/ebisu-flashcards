@@ -1,10 +1,12 @@
 from typing import Any, Callable, Mapping
 
+import random
 import mongoengine as mongo
+from django.utils import timezone
 
 from .base import Deck
-from ..base import Tag
-from ..cards import RandomOrderCard
+from ..base import Tag, User
+from ..cards import RandomOrderCard, RandomOrderReview
 
 
 class RandomOrderDeck(Deck):
@@ -47,12 +49,15 @@ class RandomOrderDeck(Deck):
         new_card.save()
         self.update(add_to_set__cards=[new_card])
 
-    def process_result(self, card_id: int, user_id: int, test_results: Any) -> None:
-        raise NotImplementedError("TODO in RandomOrderDeck")
-
+    def process_result(self, card: 'RandomOrderCard', user: User, test_results: Any) -> None:
+        card.reviews.create(
+            user=user, 
+            test_results=test_results, 
+            review_time=timezone.now
+        )
 
     def next_card_to_review(self) -> 'Card':
-        raise NotImplementedError("TODO in RandomOrderDeck")
+        return random.choice(self.cards)
 
 
     def last_reviewed_card(self) -> 'Card':

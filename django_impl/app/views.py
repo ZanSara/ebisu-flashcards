@@ -3,7 +3,14 @@ from django.http import Http404
 from django.shortcuts import render, redirect
 from django.template import loader
 
-from app.models import Deck, Card, Renderer, decks as decks_module
+from app.models import Deck, Card, Renderer, User, decks as decks_module
+
+
+def get_default_user_or_create() -> User:
+    try:
+        return User.objects.get(username="tester")
+    except Exception as e:
+        User(username="tester", password=b"fakepassword", email="me@email.com").save()
 
 
 def get_object_or_404(model_class: Type, id: str) -> Optional[Any]:
@@ -33,6 +40,32 @@ def home(request):
         'decks': decks,
     }
     return render(request, 'app/home.html', context)
+
+
+def study(request, deck_id, card_id=None):
+    deck = Deck.objects.get(id=deck_id)
+
+    # Load next card
+    if card_id is None:
+        next_card_id = deck.next_card_to_review().id
+        return redirect("study", deck_id=deck_id, card_id=next_card_id)
+
+    # Update model, save and load next card
+    if request.method == 'POST':
+        card = Card.objects.get(id=card_id)
+        deck.process_result(card, get_default_user_or_create(), bool(int(request.POST.get("test_result"))))
+        next_card_id = deck.next_card_to_review().id
+        return redirect("study", deck_id=deck_id, card_id=next_card_id)
+
+    # Load the card data
+    card = Card.objects.get(id=card_id)
+
+    context = {
+        'navbar_title': deck.name,
+        'navbar_right': "## cards studied in this session",
+        'card': card,
+    }
+    return render(request, 'app/study.html', context)
 
 
 def new_deck(request):
@@ -71,6 +104,13 @@ def edit_deck_properties(request, deck_id):
     return render(request, 'app/home.html', context)
 
 
+
+def delete_deck(request, deck_id):
+    deck = get_object_or_404(Deck, id=deck_id)
+    deck.delete()
+    return redirect("home")
+
+
 def edit_deck_cards(request, deck_id):
     deck = get_object_or_404(Deck, id=deck_id)
     cards = [card.to_widgets() for card in deck.cards]
@@ -85,13 +125,8 @@ def edit_deck_cards(request, deck_id):
         'card_fields': card_fields,
         'cards': cards,
     }
-    return render(request, 'app/deck-edit.html', context)
+    return render(request, 'app/cards-list.html', context)
 
-
-def delete_deck(request, deck_id):
-    deck = get_object_or_404(Deck, id=deck_id)
-    deck.delete()
-    return redirect("home")
 
 
 def edit_card(request, deck_id, card_id=None):
@@ -111,10 +146,11 @@ def edit_card(request, deck_id, card_id=None):
     if request.method == 'POST':
         # Update model and redirect back
         card.update_from_postdata(request.POST)
-        return redirect("/edit/deck_{}".format(deck_id))
+        return redirect("edit_deck_cards", deck_id)
 
     # Load card data
     card_to_edit = card.to_widgets()
+
 
     # Load the cards list as dicts & process where necessary
     cards = [card.to_widgets() for card in deck.cards]
@@ -128,7 +164,7 @@ def edit_card(request, deck_id, card_id=None):
         'card_fields': card_fields,
         'card_to_edit': card_to_edit,
     }
-    return render(request, 'app/deck-edit.html', context)
+    return render(request, 'app/cards-list.html', context)
 
 
 
@@ -143,31 +179,5 @@ def delete_card(request, deck_id, card_id):
     return redirect("edit/deck_{}".format(deck_id))
 
 
-def study(request, deck_id, card_id=None):
-    deck = Deck.objects.get(id=deck_id)
-    algorithm = Algorithm.resolve(deck.algorithm)
-
-    # Load next card
-    if card_id is None:
-        next_card_id = algorithm.next_card_to_review().id
-        return redirect("study", deck_id=deck_id, card_id=next_card_id)
-
-    # Update model, save and load next card
-    if request.method == 'POST':
-        card = Card.objects.get(id=card_id)
-        algorithm.process_result(deck, card, DUMMY_USER, bool(int(request.POST.get("test_result"))))
-        next_card_id = algorithm.next_card_to_review().id
-        return redirect("study", deck_id=deck_id, card_id=next_card_id)
-
-    # Load the card data
-    card = Card.objects.get(id=card_id)
-
-    context = {
-        'navbar_title': deck.name,
-        'navbar_right': "## cards studied in this session",
-        'question': card.question.get_content(),
-        'answer': card.answer.get_content(),
-    }
-    return render(request, 'app/study.html', context)
 
 

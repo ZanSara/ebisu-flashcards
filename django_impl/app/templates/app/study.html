@@ -9,18 +9,10 @@
 
     <div class="card shadow mb-4">
       <!-- Card Header - Dropdown -->
-      {% include "app/card_templates/default-card-template.html" with card=card %}
+      {% include "app/card-base-template.html" with card=card %}
     </div>
   </div>
 
 </div>
-<!-- End of row -->
-
-<!-- Confirm leave
-<script>
-window.onbeforeunload = function(){
-  return 'Are you sure you want to leave?';
-};
-</script> -->
 
 {% endblock %}
