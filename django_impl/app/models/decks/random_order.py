@@ -12,13 +12,13 @@ class RandomOrderDeck(Deck):
     CARD_TYPE = RandomOrderCard
 
     @staticmethod
-    def create_from_request(postdata) -> int:
+    def create_from_postdata(postdata) -> int:
         new_deck = RandomOrderDeck()
         new_deck = Deck.populate_fields_from_postdata(new_deck, postdata)
         new_deck.save()
         return new_deck.id
 
-    def update_from_request(self, postdata) -> None:
+    def update_from_postdata(self, postdata) -> None:
         Deck.populate_fields_from_postdata(self, postdata)
         self.save()
     

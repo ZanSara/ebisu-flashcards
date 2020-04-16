@@ -28,6 +28,11 @@ class Deck(mongo.Document):
         return deck_instance
 
     @abc.abstractmethod
+    def update_from_postdata(self, postdata: Mapping[str, Any]) -> None:
+        """ Updates its own fields taking the values from a POST request """
+        raise NotImplementedError("Can't use Deck base class: use one of the subclasses")
+
+    @abc.abstractmethod
     def import_from_file(self, packaged_file, private=False):
         """ Loads a new deck from a .zip file and adds it to the decks list. """
         raise NotImplementedError("Can't use Deck base class: use one of the subclasses")

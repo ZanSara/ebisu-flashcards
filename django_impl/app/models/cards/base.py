@@ -33,24 +33,6 @@ class Card(mongo.Document):
     @abc.abstractmethod
     def populate_fields_from_postdata(self, postdata: Mapping[str, Any]) -> None :
         """ Returns the card instance populated from the info contained into the POSTDATA dict. """
-        # question_renderer = None
-        # try:
-        #     # if postdata.get('question_renderer'): 
-        #     #     raise mongo.DoesNotExist()
-        #     question_renderer = Renderer.objects.get(name=postdata.get('question_renderer'))
-        # except mongo.DoesNotExist:
-        #     question_renderer = Renderer(name="Text Renderer", description="A renderer for text", renderer="text-fact.html")
-        #     question_renderer.save()
-            
-        # answer_renderer = None
-        # try:
-        #     # if postdata.get('answer_renderer'): 
-        #     #     raise mongo.DoesNotExist()
-        #     answer_renderer = Renderer.objects.get(name=postdata.get('answer_renderer'))
-        # except mongo.DoesNotExist:
-        #     answer_renderer = Renderer("Text Renderer", "A renderer for text", "text-fact.html")
-        #     answer_renderer.save()
-
         # Renderer(name="HTML Renderer", description="A renderer for HTML", path="html-fact.html").save()
         default_renderer = Renderer.objects.get(name="Text Renderer")
 

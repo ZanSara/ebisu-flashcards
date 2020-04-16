@@ -7,6 +7,6 @@ DECK_CLASSES = {
 }
 
 
-def create_deck_from_request(postdata) -> int:
+def create_deck_from_postdata(postdata) -> int:
     deck_class = DECK_CLASSES[postdata.get("algorithm")]
-    return deck_class.create_from_request(postdata)
+    return deck_class.create_from_postdata(postdata)

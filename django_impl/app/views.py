@@ -3,7 +3,7 @@ from django.http import Http404
 from django.shortcuts import render, redirect
 from django.template import loader
 
-from app.models import Deck, Card, Renderer, decks
+from app.models import Deck, Card, Renderer, decks as decks_module
 
 
 def get_object_or_404(model_class: Type, id: str) -> Optional[Any]:
@@ -35,38 +35,51 @@ def home(request):
     return render(request, 'app/home.html', context)
 
 
-def edit_deck(request, deck_id=None):
-    # Deck creation
-    if not deck_id:
-    
-        # Save new deck and go to edit page
-        if request.method == 'POST':
-            deck_id = decks.create_deck_from_request(request.POST)
-            return redirect("edit_deck", deck_id)
-        
-        # Just render the empty deck_edit page
-        context = {
-            'navbar_title': 'Create Deck',
-            'algorithms': list(decks.DECK_CLASSES.keys()),
-        }
-        return render(request, 'app/deck-edit.html', context)
+def new_deck(request):
+    # Save new deck and go back to home
+    if request.method == 'POST':
+        deck_id = decks_module.create_deck_from_postdata(request.POST)
+        return redirect("home")
 
-    # Deck editing
+    # Just render the empty deck_edit page
+    context = {
+        'navbar_title': 'Home',
+        'decks': decks_list,
+        'edit': True,
+        'algorithms': list(decks_module.DECK_CLASSES.keys()),
+    }
+    return render(request, 'app/home.html', context)
+
+
+def edit_deck_properties(request, deck_id):
+    decks_list = Deck.objects.all()
     deck = get_object_or_404(Deck, id=deck_id)
 
     # Save deck data and go to edit page
     if request.method == 'POST':
         deck.update_from_postdata(request.POST)
-        return redirect("edit_deck", deck_id)
+        return redirect("home")
 
-    # Load the cards list as dicts & process where necessary
+    # Render
+    context = {
+        'navbar_title': 'Home',
+        'decks': decks_list,
+        'edit': True,
+        'algorithms': list(decks_module.DECK_CLASSES.keys()),
+        'deck_to_edit': deck,
+    }
+    return render(request, 'app/home.html', context)
+
+
+def edit_deck_cards(request, deck_id):
+    deck = get_object_or_404(Deck, id=deck_id)
     cards = [card.to_widgets() for card in deck.cards]
     card_fields = deck.CARD_TYPE().to_widgets()
 
     # Render
     context = {
         'navbar_title': 'Edit "{}"'.format(deck.name),
-        'algorithms': list(decks.DECK_CLASSES.keys()),
+        'algorithms': list(decks_module.DECK_CLASSES.keys()),
         'deck': deck,
         'renderers': list(Renderer.objects.all()),
         'card_fields': card_fields,
