@@ -1,10 +1,16 @@
-from typing import Any, Callable, List, Mapping, Tuple
+from typing import Any, Callable, List, Mapping, Optional, Tuple
 
 import abc
 import os
 
 import mongoengine as mongo
 from django.utils import timezone
+
+
+BOOLEAN_WIDGET = 'boolean-fact.html'
+TEXT_WIDGET = 'text-fact.html'
+HTML_WIDGET = 'html-fact.html'
+IMAGE_WIDGET = 'image-fact.html'
 
 
 class User(mongo.Document):
@@ -45,12 +51,6 @@ class Fact(mongo.Document):
             return None
 
 
-BOOLEAN_WIDGET = 'boolean-fact.html'
-TEXT_WIDGET = 'text-fact.html'
-HTML_WIDGET = 'html-fact.html'
-IMAGE_WIDGET = 'image-fact.html'
-
-
 class Review(mongo.EmbeddedDocument):
     user = mongo.ReferenceField(User)
     test_results = mongo.StringField()  # Can store more complex objects as JSON in case, I guess...
@@ -69,6 +69,12 @@ class Card(mongo.Document):
     reviews = mongo.EmbeddedDocumentListField(Review)
 
     meta = {'allow_inheritance': True}
+
+    @property
+    def last_review(self) -> Optional[Review]:
+        if len(self.reviews):
+            return max(self.reviews, key=lambda r: r.review_time)
+        return None
 
 
     def __str__(self):
@@ -97,21 +103,6 @@ class Card(mongo.Document):
         self.marked = postdata.get('marked')
         self.hidden = postdata.get('hidden')
 
-
-    @abc.abstractmethod
-    def to_dict(self):
-        question = Fact.objects.get(id=self.question)
-        answer = Fact.objects.get(id=self.answer)
-        own_dict = {
-            'id': self.id,
-            'question': question,
-            'answer': answer,
-            'tags': self.tags,
-            'marked': self.marked,
-            'hidden': self.hidden,
-        }
-        return own_dict
-
     @abc.abstractmethod
     def to_widgets(self):
         own_form = {
@@ -130,6 +121,7 @@ class Card(mongo.Document):
                 'value': self.hidden, 
                 'widget': BOOLEAN_WIDGET
             },
+            'last_review': self.last_review, 
         }
         return own_form
 
@@ -150,6 +142,12 @@ class Deck(mongo.Document):
             return Card.objects.filter(deck=self.id).all()
         except mongo.DoesNotExist:
             return []
+
+    @property
+    @abc.abstractmethod
+    def settings(self):
+        """ Method for the subclasses' settings """
+        return {}
             
     @property
     @abc.abstractmethod

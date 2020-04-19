@@ -1,9 +1,11 @@
 from .base import *
 from .random_order import *
+from .ebisu import *
 
 
 DECK_CLASSES = {
     RandomOrderDeck.ALGORITHM_NAME: RandomOrderDeck,
+    EbisuDeck.ALGORITHM_NAME: EbisuDeck,
 }
 
 

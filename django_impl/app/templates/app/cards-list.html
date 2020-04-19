@@ -4,20 +4,38 @@
 <!-- Content Row -->
 <div class="row">
 
-  <!-- Search box -->
-  <div class="col-12">
-    <div class="card border-bottom-primary shadow mb-4">
+  {% if not edit %}
+  <!-- Add Card -->
+  <div class="col-2">
+    <div class="card border-left-success shadow mb-4" onclick="location.href='/edit/deck_{{deck.id}}/new_card'">
       <div class="card-body text-center">
-        Search Box
+        <h3>Add Card</h3>
       </div>
     </div>
   </div>
+  <!-- import Card -->
+  <div class="col-2">
+    <div class="card border-left-warning shadow mb-4">
+      <div class="card-body text-center">
+        <h3>Import Cards</h3>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+   <!-- Search box -->
+   <div class="col-8">
+    <div class="card border-left-primary shadow mb-4">
+      <div class="card-body text-center">
+        <h3>Future Search&Filter Box</h3>
+      </div>
+    </div>
+  </div>
+</div>
 
-
+<div class="row">
   <!-- Add Card -->
+  {% if edit and not card_to_edit %}
   <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-xs-12">
-    {% if edit and not card_to_edit %}
-
     <div class="card border-bottom-primary shadow mb-4">
       <form action="/edit/deck_{{deck.id}}/new_card" method="POST">
         {% csrf_token %}
@@ -45,7 +63,7 @@
         </div>
         <div class="card-footer">
           <div class="d-flex flex-row align-items-center justify-content-between">
-            <a href="/" class="btn btn-warning" style="margin-right:1em;">
+            <a href="/edit/deck_{{deck.id}}/cards" class="btn btn-warning" style="margin-right:1em;">
               <i class="fas fa-fw fa-undo"></i>
               Cancel
             </a>
@@ -58,18 +76,8 @@
 
       </form>
     </div>
-
-    {% else %}
-    <div class="card border-bottom-secondary shadow mb-4" 
-    {% if not card_to_edit %} onclick="location.href='/edit/deck_{{deck.id}}/new_card'"{% endif %}>
-      <!-- Card Body -->
-      <div class="card-body text-center">
-        <h1><b>+</b></h1>
-        <h3>Add Card</h3>
-      </div>
-    </div>
-    {% endif %}
   </div>
+  {% endif %}
 
 
   <!-- Card Block -->
@@ -87,12 +95,10 @@
             <div class="form-group col-12">
               Question:
               {% include "app/renderers/selector.html" with name="question" value=card.question.fact renderers=renderers %}
-              <hr>
             </div>
             <div class="form-group col-12">
               Answer:
               {% include "app/renderers/selector.html" with name="answer" value=card.answer.fact renderers=renderers %}
-              <hr>
             </div>
             <div class="form-group col-12">
               <select id="tags" name="tags" class="form-control custom-select" multiple>
@@ -120,12 +126,13 @@
     </div>
 
     {% else %}
-    <div class="card border-bottom-{% if edit %}secondary{% else %}primary{% endif%} shadow mb-4 bg-gradient-primary" style="flex-direction:row;">
+    <div class="card border-bottom-{% if edit %}secondary{% else %}primary{% endif%} shadow mb-4 bg-gradient-{% if edit %}secondary{% else %}primary{% endif%}" 
+      style="flex-direction:row;">
       <div class="card-body text-center" style="width:3em;max-width:3em;min-width:3em;padding:1rem;line-height:2rem;">
-        <a href="/edit/deck_{{deck.id}}/card_{{card.id}}" style="color:#fff;">
+        <a href="{% if edit %}#{% else %}/edit/deck_{{deck.id}}/card_{{card.id}}{% endif%}" style="color:#fff;">
           <i class="fas fa-fw fa-pen"></i>
         </a>
-        <a href="/edit/deck_{{deck.id}}/card_{{card.id}}/delete" onclick="return confirm('Are you sure you want to delete this card?')" style="color:#fff;">
+        <a href="{% if edit %}#"{% else %}/edit/deck_{{deck.id}}/card_{{card.id}}/delete" onclick="return confirm('Are you sure you want to delete this card?')"{%endif%} style="color:#fff;">
           <i class="fas fa-fw fa-trash"></i>
         </a>
       </div>
@@ -136,12 +143,18 @@
           <div class="row justify-content-center" >
             <div class="col-12 text-center">
               {% include "app/renderers/display/"|add:card.question.renderer.path with content=card.question.fact %}
-            <hr>
             </div>
             <div class="col-12 text-center">
               {% include "app/renderers/display/"|add:card.answer.renderer.path with content=card.answer.fact %}
             </div>
           </div>
+        </div>
+        <div class="card-footer">
+          Last Review: {{card.last_review.review_time}}
+          {% for label, info in card.extra_info.items %}
+          <br>
+          {{label}}: {{info}}
+          {% endfor %}
         </div>
       </div>
     </div>
@@ -150,107 +163,4 @@
   {% endfor %}
 
 </div>
-{% endblock %}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-{% block oldversion %}
-    
-    <!-- Cards list-->
-    <form method="POST">
-      {% csrf_token %}
-      <div class="table-responsive">
-        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-          <thead>
-          <tr>
-              {% for field in card_fields %}
-                  {% if field != "id" %}
-                    <th>{{ field }}</th>
-                  {% endif %}
-              {% endfor %}
-              <th></th> <!-- Column for the Edit button -->
-              <th></th> <!-- Column for the Delete button -->
-          </tr>
-          </thead>
-          <tbody>
-          {% if not card_to_edit %}
-          <!-- Row for new card -->
-          <tr>
-            {% for name, field in card_fields.items %}
-              {% if name != "id" %}
-              <td>
-                <!-- This if statement will go: renderer.html should manage the input
-                      widget and change it when its value changes -->
-                {% if field.widget %}
-                  {% include "app/renderers/input/"|add:field.widget with name=name value=field.value %}
-                {% else %}
-                  {% include "app/renderers/input/text-fact.html" with name=name value=field.value %}
-                {% endif %}
-                
-                {% if name == 'question' or name == "answer" %}
-                  {% include "app/renderers/selector.html" with name=name value=field.value %}
-                {% endif %}
-              </td>
-              {% endif %}
-            {% endfor %}
-              <td><button class="btn btn-success" type="submit" formaction="/edit/deck_{{deck.id}}/new_card">Add</button></td>
-              <th></th>
-          </tr>
-          {% else %}
-          <!-- Row for editing card -->
-          <tr>
-              {% for name, field in card_to_edit.items %}
-                {% if name != "id" %}
-                  <td>
-                    <!-- This include will go: renderer.html should manage the input
-                          widget and change it when its value changes -->
-                    {% include "app/renderers/input/"|add:field.widget with name=name value=field.value %}
-                    
-                    {% if name == 'question' or name == "answer" %}
-                      {% include "app/renderers/selector.html" with name=name value=field.value %}
-                    {% endif %}
-                  </td>
-                {% endif %}
-              {% endfor %}
-              <td><button class="btn btn-primary" type="submit" name="card_id" value={{card_to_edit.id}}
-                formaction="/edit/deck_{{deck.id}}/card_{{card_to_edit.id}}">Save</button></td>
-          </tr>
-          {% endif %}
-          {% for card in cards reversed %}
-          <!-- View all other cards -->
-          <tr>
-              {% for name, field in card.items %}
-                {% if name != "id" %}
-                <td>
-                  {% include "app/renderers/table/"|add:field.widget with name=name content=field.value %}
-                </td>
-                {% endif %}
-              {% endfor %}
-              <td><a class="btn btn-primary" href="/edit/deck_{{deck.id}}/card_{{card.id}}">Edit</a></td>
-              <td><button class="btn btn-danger" type="submit" name="card_id" value={{card.id}}
-                formaction="/edit/deck_{{deck.id}}/card_{{card.id}}/delete">Delete</button></td>
-          </tr>
-          {% endfor %}
-          </tbody>
-        </table>
-      </div>
-    </form>
-    
-
-  </div>
-</div>
-
 {% endblock %}

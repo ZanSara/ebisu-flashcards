@@ -39,6 +39,15 @@
               </select>
             </div>
           </div>
+          <hr>
+          <div class="form-row">
+            {% for setting, settings_values in deck.settings.items %}
+            <div class="form-check">
+              {% include "app/renderers/input/"|add:settings_values.widget with name=setting label=setting value=settings_values.value %}
+            </div>
+            {% endfor %}
+          </div>
+
         </div>
         <div class="card-footer">
           <div class="d-flex flex-row align-items-center justify-content-between">

@@ -53,7 +53,7 @@ def study(request, deck_id, card_id=None):
     # Update model, save and load next card
     if request.method == 'POST':
         card = Card.objects.get(id=card_id)
-        deck.process_result(card, get_default_user_or_create(), bool(int(request.POST.get("test_result"))))
+        deck.process_result(card=card, user=get_default_user_or_create(), test_results=request.POST.get("test_result"))
         next_card_id = deck.next_card_to_review().id
         return redirect("study", deck_id=deck_id, card_id=next_card_id)
 
