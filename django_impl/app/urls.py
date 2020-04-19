@@ -16,11 +16,11 @@ urlpatterns = [
     # Edit decks
     path('edit/new_deck', views.new_deck, name='new_deck'),
     path('edit/deck_<str:deck_id>/properties', views.edit_deck_properties, name='edit_deck_properties'),
-    path('edit/deck_<str:deck_id>/cards', views.edit_deck_cards, name='edit_deck_cards'),
+    path('edit/deck_<str:deck_id>/cards', views.list_cards, name='list_cards'),
     path('edit/deck_<str:deck_id>/delete', views.delete_deck, name='delete_deck'),
 
     # Edit cards
-    path('edit/deck_<str:deck_id>/new_card', views.edit_card, name='edit_card'),
+    path('edit/deck_<str:deck_id>/new_card', views.new_card, name='new_card'),
     path('edit/deck_<str:deck_id>/card_<str:card_id>', views.edit_card, name='edit_card'),
     path('edit/deck_<str:deck_id>/card_<str:card_id>/delete', views.delete_card, name='delete_card'),
 

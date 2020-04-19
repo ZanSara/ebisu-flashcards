@@ -4,9 +4,29 @@ import random
 import mongoengine as mongo
 from django.utils import timezone
 
-from .base import Deck
-from ..base import Tag, User
-from ..cards import RandomOrderCard, RandomOrderReview
+from .base import Deck, Tag, User, Review, Card
+
+
+class RandomOrderReview(Review):
+    pass
+
+
+class RandomOrderCard(Card):
+
+    def load_from_postdata(self, postdata: Mapping[str, Any]) -> None :
+        super().load_from_postdata(postdata)
+
+    def to_dict(self):
+        parent_dict = super().to_dict()
+        own_dict = {}
+        own_dict.update(parent_dict)
+        return own_dict
+
+    def to_widgets(self):
+        parent_form = super().to_widgets()
+        own_form = {}
+        own_form.update(parent_form)
+        return own_form
 
 
 class RandomOrderDeck(Deck):
@@ -42,12 +62,6 @@ class RandomOrderDeck(Deck):
         }
         all_fields.update(base_fields)
         return all_fields
-
-    def add_card(self, postdata: Mapping[str, Any]):
-        new_card = self.CARD_TYPE()
-        new_card.populate_fields_from_postdata(postdata)
-        new_card.save()
-        self.update(add_to_set__cards=[new_card])
 
     def process_result(self, card: 'RandomOrderCard', user: User, test_results: Any) -> None:
         card.reviews.create(
