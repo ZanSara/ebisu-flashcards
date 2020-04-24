@@ -16,17 +16,17 @@ with (HERE / 'README.md').open('rt') as fh:
 
 REQUIREMENTS: dict = {
     'core': [
+        "flask",
+        "marshmallow",
+        "flask_restful",
+        "mongoengine",
+        "Pillow",
         "ebisu",
-        "django",
-        "psycopg2-binary",
     ],
     'test': [
         "pytest",
         "pytest-cov",
         "pytest-random-order",
-    ],
-    'dev': [
-        "flask",
     ],
     'doc': [
         'sphinx',

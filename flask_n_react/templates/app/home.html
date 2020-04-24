@@ -1,0 +1,185 @@
+{% extends "app/logged-base.html" %}
+
+{% block content %}
+<div class="row">
+
+  {% for deck in decks %}
+  <div class="col-xl-3 col-md-6 mb-4">
+      {% if edit and deck.id == deck_to_edit.id %}
+    <div class="card border-bottom-primary shadow h-100 py-2">
+      <form action="/edit/deck_{{deck.id}}/properties" method="POST">
+        {% csrf_token %}
+
+        <div class="card-body">
+          <div class="form-group">
+            <input type="text" class="form-control form-control-lg text-primary h1" name="deck_name" value="{{deck.name}}" required>
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-control" name="deck_description" value="{{deck.description}}" required>
+          </div>
+          <div class="form-group">
+            <select id="algorithm" name="algorithm" class="form-control custom-select">
+              {% for algorithm in algorithms %}
+              <option {% if deck.algorithm == algorithm %}selected{% endif %}>{{algorithm}}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-10">
+              <input type='text' name="new_tag" placeholder="New tag..." class="form-control">
+            </div>
+            <div class="form-group col-2">
+              <input type='submit' value="Add" class="btn btn-success">
+            </div>
+            <div class="form-group col-12">
+              <select id="tags" name="tags" class="form-control custom-select" multiple>
+                {% for tag in tags %}
+                <option {% if tag in deck.tags %}selected{% endif %}>{{tag}}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <hr>
+          <div class="form-row">
+            {% for setting, settings_values in deck.settings.items %}
+            <div class="form-check">
+              {% include "app/renderers/input/"|add:settings_values.widget with name=setting label=setting value=settings_values.value %}
+            </div>
+            {% endfor %}
+          </div>
+
+        </div>
+        <div class="card-footer">
+          <div class="d-flex flex-row align-items-center justify-content-between">
+            <a href="/" class="btn btn-warning">
+              <i class="fas fa-fw fa-undo"></i>
+              Cancel
+            </a>
+            <button type="submit" class="btn btn-success">
+              <i class="fas fa-fw fa-check"></i>
+              Save
+            </button>
+            <!--a href="/edit/deck_{{deck.id}}/cards" class="btn btn-primary">
+              <i class="fas fa-fw fa-file-alt"></i>
+              Cards
+            </a-->
+            <button type="submit" class="btn btn-danger" formaction="/edit/deck_{{deck.id}}/delete">
+              <i class="fas fa-fw fa-trash-alt"></i>
+              Delete
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    {% else %}
+    {% if not edit %}
+    <div class="card border-bottom-primary shadow h-100 py-2">
+    {% else %}
+    <div class="card border-bottom-secondary shadow h-100 py-2">
+    {% endif %}
+      <div class="card-body">
+        <div class="d-flex flex-row align-items-center justify-content-between">
+          
+          {% if edit %}
+          <h1 class="text-secondary">
+            {{ deck.name }}
+          </h1>
+          {% else %}
+          <h1 class="text-primary">
+            <a href="study/deck_{{ deck.id }}">{{ deck.name }}</a>
+          </h1>
+          <div class="dropdown no-arrow">
+            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <h3 class="text-secondary"><i class="fas fa-fw fa-pen text-gray-500"></i></h3>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+              <a href="edit/deck_{{ deck.id }}/properties" class="dropdown-item btn" href="#">Edit Deck</a>
+              <a href="edit/deck_{{ deck.id }}/cards" class="dropdown-item btn" href="#">Cards List</a>
+            </div>
+          </div>
+          {% endif %}
+        </div>
+        <span>{{ deck.description }}</span>
+      </div>
+      <div class="card-footer">
+        Cards to review: {{ deck.cards_to_review }}
+        <br>
+        Unknown cards: {{ deck.new_cards}}
+      </div>
+    </div>
+    {% endif %}
+    
+  </div>
+  {% endfor %}
+
+  <div class="col-xl-3 col-md-6 mb-4">
+
+    {% if edit and not deck_to_edit %}
+    <div class="card border-bottom-primary shadow h-100 py-2">
+      <form action="/edit/new_deck" method="POST">
+        {% csrf_token %}
+
+        <div class="card-body">
+          <div class="form-row align-baseline">
+            <div class="form-group col-7">
+              <input type="text" class="form-control form-control-lg text-primary h1" name="deck_name" placeholder="Deck Name..." required>
+            </div>
+            <div class="form-group col-5">
+              <select id="algorithm" name="algorithm" class="form-control custom-select">
+                {% for algorithm in algorithms %}
+                <option>{{algorithm}}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-control" name="deck_description" placeholder="The deck's description" required>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-10">
+              <input type='text' name="new_tag" placeholder="New tag..." class="form-control">
+            </div>
+            <div class="form-group col-2">
+              <input type='submit' value="Add" class="btn btn-success">
+            </div>
+            <div class="form-group col-12">
+              <select id="tags" name="tags" class="form-control custom-select" multiple>
+                {% for tag in tags %}
+                <option>{{tag}}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div class="d-flex flex-row align-items-center justify-content-between">
+            <a href="/" class="btn btn-warning" style="margin-right:1em;">
+              <i class="fas fa-fw fa-undo"></i>
+              Cancel
+            </a>
+            <button type="submit" class="btn btn-success" style="margin-right:1em;">
+              <i class="fas fa-fw fa-check"></i>
+              Save
+            </button>
+          </div>
+        </div>
+
+      </form>
+    </div>
+
+    {% else %}
+    <div class="card border-bottom-secondary shadow h-100 py-2" 
+          {% if not deck_to_edit%} onclick="location.href='/edit/new_deck'"{% endif %}>
+      <div class="card-body">
+        <div class="d-flex flex-row align-items-center justify-content-between">
+          <h3><i>Add Deck...</i></h3>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+<!-- End of row -->
+
+{% endblock %}

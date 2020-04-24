@@ -1,0 +1,14 @@
+<div>
+    <!-- There will be a list of all renderers, to toggle the proper one in view -->
+    <input type='text' class="form-group col-12" name="{{name}}" value="{{value}}">
+
+    <select name="{{name}}_renderer" class="form-control">
+        {% for renderer in renderers %}
+        <option value="{{renderer.id}}">{{renderer.name}}</option>
+        {% endfor %}
+    </select>
+    <script>
+
+    </script>
+</div>
+  
