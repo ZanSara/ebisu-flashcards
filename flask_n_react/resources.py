@@ -65,8 +65,7 @@ class HomeApi(Resource):
         decks = Deck.objects.all()
 
         # make a decorator for this
-        Schema = mongo_to_marsh(Deck)
-        schema = Schema(many=True)
+        schema = Deck.JsonSchema(many=True)
         marshalled_decks = schema.dump(decks)
         return marshalled_decks
 
