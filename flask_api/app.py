@@ -16,8 +16,8 @@ bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
 
 # imports requiring app and mail
-import database
+import database.models
 import resources
 
 resources.initialize_routes(api)
-database.initialize_db(app)
+database.models.initialize_db(app)
