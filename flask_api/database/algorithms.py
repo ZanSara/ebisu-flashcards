@@ -42,11 +42,22 @@ class Algorithm:
 
 
 class RandomOrder(Algorithm):
-    
+
+    dynamic_fields = ["prioritize_unseen", "consecutive_never_identical"]
+
     def __init__(self, deck: models.Deck):
+
+        # Validate
+        if deck.algorithm != "Random Order":
+            raise ValueError("Deck algorithm does not match Random Order: {}".format(deck.algorithm))
+
+        for field in self.dynamic_fields:
+            if field not in deck._dynamic_fields:
+                raise ValueError("Deck is missing Random Order's dynamic field: {}".format(field))
+
         super(Algorithm, self).__init__()
         self.deck = deck
-
+        
     def export_to_file(self) -> str:
         """ Returns the path to a zipped file containing all the information needed to recreate a deck. """
         raise NotImplementedError("TODO in Random Order")
@@ -65,7 +76,7 @@ class RandomOrder(Algorithm):
         """
         if not str(test_results).lower() == "true" and not str(test_results).lower() == "false":
             raise ValueError("Invalid test result for Random Order: {}".format(rest_results))
-        #cards = models.Card.objects.get(id=card_id)
+       
         user = models.User.objects.get(id=user_id)
         review = models.Review(
             user=user, 
@@ -86,7 +97,10 @@ class RandomOrder(Algorithm):
             self.deck.last_reviewed_card = self.deck.reviewing_card
 
             # To avoid asking twice the same card in a row
-            while self.deck.reviewing_card == self.deck.last_reviewed_card:
+            if self.deck.consecutive_never_identical:
+                while self.deck.reviewing_card == self.deck.last_reviewed_card:
+                    self.deck.reviewing_card = random.choice(cards)
+            else:
                 self.deck.reviewing_card = random.choice(cards)
 
         except models.Card.DoesNotExist:

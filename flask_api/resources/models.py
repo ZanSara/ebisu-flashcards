@@ -64,7 +64,7 @@ class DeckApi(Resource):
         user_id = get_jwt_identity()
         deck = models.Deck.objects.get(id=deck_id, author=user_id)
         body = request.get_json()
-        deck.get(id=id).update(**body)
+        deck.update(**body)
         return '', 200      
     
     @jwt_required
@@ -170,3 +170,4 @@ class AlgorithmsApi(Resource):
     def get(self):
         names = json.dumps(list(algorithms.ALGORITHM_MAPPING.keys()))
         return Response(names, mimetype="application/json", status=200)
+
