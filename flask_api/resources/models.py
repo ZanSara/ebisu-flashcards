@@ -1,11 +1,32 @@
+import json 
+
 from flask import Response, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_restful import Resource
 import mongoengine as mongo
 
-import json  # For lists of objects, somehow .to_json() doesn't work ...?
+from database import models, algorithms
 
-from database import models as models
+
+class StudyApi(Resource):
+    @jwt_required
+    def get(self, deck_id):
+        user_id = get_jwt_identity()
+        deck = models.Deck.objects.get(id=deck_id, author=user_id)
+        algorithm = algorithms.algorithm_engine(deck)
+        next_card = algorithm.next_card_to_review().to_json()
+        return Response(next_card, mimetype="application/json", status=200)
+
+    @jwt_required
+    def post(self, deck_id):
+        user_id = get_jwt_identity()
+        body = request.get_json()
+        deck = models.Deck.objects.get(id=deck_id, author=user_id)
+        algorithm = algorithms.algorithm_engine(deck)
+        algorithm.process_result(**body, user_id=user_id)
+        # Return directly the next card to review
+        next_card = algorithm.next_card_to_review().to_json()
+        return Response(next_card, mimetype="application/json", status=200)
 
 
 class DecksApi(Resource):
@@ -71,7 +92,7 @@ class CardsApi(Resource):
         user_id = get_jwt_identity()
         deck = models.Deck.objects.get(id=deck_id, author=user_id)
         body = request.get_json()
-        card = models.Card(**body, deck=deck_id)
+        card = models.Card(**body, deck=deck.id)
         card.save()
         # deck.update(push__cards=card)
         # deck.save()
@@ -92,7 +113,7 @@ class CardApi(Resource):
         body = request.get_json()
         deck = models.Deck.objects.get(id=deck_id, author=user_id)
         card = models.Card.objects.get(id=card_id)
-        if card in deck.cards:
+        if deck.id == card.deck:
             card.update(**body)
             return '', 200   
         else:
@@ -105,6 +126,7 @@ class CardApi(Resource):
         card = models.Card.objects.get(id=card_id, deck=deck_id)
         card.delete()
         return '', 200
+
 
 class TemplatesApi(Resource):
     @jwt_required
@@ -141,3 +163,10 @@ class TemplateApi(Resource):
         card = models.Template.objects.get(id=template_id)
         card.delete()
         return '', 200
+
+
+class AlgorithmsApi(Resource):
+    @jwt_required
+    def get(self):
+        names = json.dumps(list(algorithms.ALGORITHM_MAPPING.keys()))
+        return Response(names, mimetype="application/json", status=200)

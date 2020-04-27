@@ -4,14 +4,8 @@ import abc
 import os
 from datetime import datetime
 from flask_bcrypt import generate_password_hash, check_password_hash
-from flask_mongoengine import MongoEngine
 
-
-db = MongoEngine()
-
-
-def initialize_db(app):
-    db.init_app(app)
+from . import db
 
 
 class Tag(db.EmbeddedDocument):
@@ -30,7 +24,7 @@ class Template(db.Document):
         return self.name
 
 
-class Review(db.EmbeddedDocument):
+class Review(db.DynamicEmbeddedDocument):
     user = db.ReferenceField('User', required=True)
     test_results = db.StringField(required=True)  # Can store more complex objects as JSON in case, I guess...
     review_time = db.DateTimeField(default=datetime.utcnow(), required=True)
@@ -39,7 +33,7 @@ class Review(db.EmbeddedDocument):
         return "{} ({}): {}".format(self.review_time, self.user, self.test_results)
 
 
-class Card(db.Document):
+class Card(db.DynamicDocument):
     deck = db.ReferenceField('Deck', required=True)
     question = db.StringField(required=True, unique=True)
     question_template = db.ReferenceField(Template, required=True)
@@ -60,14 +54,14 @@ class Card(db.Document):
         return "{} -> {}".format(self.question, self.answer)
 
 
-class Deck(db.Document):
+class Deck(db.DynamicDocument):
     name = db.StringField(max_length=200, unique=True)
     description = db.StringField(max_length=2000, required=True)
     algorithm = db.StringField(max_length=50, required=True)  # FIXME make this a Choice field at least
     author = db.ReferenceField('User', required=True)
     tags = db.ListField(Tag, blank=True)
     last_reviewed_card =  db.ReferenceField(Card)
-    currently_reviewing_card =  db.ReferenceField(Card)
+    reviewing_card =  db.ReferenceField(Card)
 
 
 class User(db.Document):
