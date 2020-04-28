@@ -5,7 +5,7 @@ import os
 from datetime import datetime
 from flask_bcrypt import generate_password_hash, check_password_hash
 
-from . import db
+from . import db, algorithms
 
 
 class Tag(db.EmbeddedDocument):
@@ -50,6 +50,12 @@ class Card(db.DynamicDocument):
             return max(self.reviews, key=lambda r: r.review_time)
         return None
 
+    def to_mongo(self, *args, **kwargs):
+        value = super().to_mongo(*args, **kwargs)
+        engine = algorithms.algorithm_engine(self.deck)
+        value = engine.add_fields_to_card(self, value)
+        return value
+
     def __str__(self):
         return "{} -> {}".format(self.question, self.answer)
 
@@ -62,6 +68,12 @@ class Deck(db.DynamicDocument):
     tags = db.ListField(Tag, blank=True)
     last_reviewed_card =  db.ReferenceField(Card)
     reviewing_card =  db.ReferenceField(Card)
+
+    def to_mongo(self, *args, **kwargs):
+        value = super().to_mongo(*args, **kwargs)
+        engine = algorithms.algorithm_engine(self)
+        value = engine.add_fields_to_deck(value)
+        return value
 
 
 class User(db.Document):

@@ -1,4 +1,5 @@
 import json 
+import bson
 
 from flask import Response, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
@@ -34,8 +35,10 @@ class DecksApi(Resource):
     def get(self):
         user_id = get_jwt_identity()
         try:
-            query = models.Deck.objects(author=user_id)
-            decks = query.to_json()
+            # query = models.Deck.objects(author=user_id)
+            # decks = query.to_json()
+            decks_list = models.Deck.objects(author=user_id).all()
+            decks = bson.json_util.dumps([deck.to_mongo() for deck in decks_list])
             return Response(decks, mimetype="application/json", status=200)
         except models.Deck.DoesNotExist:
             return Response("{}", mimetype="application/json", status=200)
@@ -56,7 +59,8 @@ class DeckApi(Resource):
     @jwt_required
     def get(self, deck_id):
         user_id = get_jwt_identity()
-        deck = models.Deck.objects.get(id=deck_id, author=user_id).to_json()
+        # deck = models.Deck.objects.get(id=deck_id, author=user_id).to_json()
+        deck = bson.json_util.dumps(models.Deck.objects.get(id=deck_id, author=user_id).to_mongo())
         return Response(deck, mimetype="application/json", status=200)
             
     @jwt_required
@@ -80,11 +84,13 @@ class CardsApi(Resource):
     def get(self, deck_id):
         user_id = get_jwt_identity()
         try:
-            deck = models.Deck.objects.get(id=deck_id, author=user_id)
-            cards = models.Card.objects(deck=deck_id).to_json()
+            # deck = models.Deck.objects.get(id=deck_id, author=user_id)
+            # cards = models.Card.objects(deck=deck_id).to_json()
+            cards_list = models.Card.objects(deck=deck_id).all()
+            cards = bson.json_util.dumps([card.to_mongo() for card in cards_list])
             return Response(cards, mimetype="application/json", status=200)
 
-        except models.Deck.DoesNotExist:
+        except models.Card.DoesNotExist:
             return Response("{}", mimetype="application/json", status=200)
 
     @jwt_required
@@ -104,7 +110,7 @@ class CardApi(Resource):
     def get(self, deck_id, card_id):
         user_id = get_jwt_identity()
         deck = models.Deck.objects.get(id=deck_id, author=user_id)  # Ensure the deck belongs to this user before proceeding
-        card = models.Card.objects.get(id=card_id).to_json()
+        card = bson.json_util.dumps(models.Card.objects.get(id=card_id).to_mongo())
         return Response(card, mimetype="application/json", status=200)
             
     @jwt_required
