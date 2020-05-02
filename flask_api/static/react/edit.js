@@ -8,54 +8,56 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var DecksContainer = function (_React$Component) {
-  _inherits(DecksContainer, _React$Component);
+var CardsContainer = function (_React$Component) {
+  _inherits(CardsContainer, _React$Component);
 
-  function DecksContainer() {
+  function CardsContainer() {
     var _ref;
 
     var _temp, _this, _ret;
 
-    _classCallCheck(this, DecksContainer);
+    _classCallCheck(this, CardsContainer);
 
     for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
       args[_key] = arguments[_key];
     }
 
-    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = DecksContainer.__proto__ || Object.getPrototypeOf(DecksContainer)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
-      decks_data: []
+    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = CardsContainer.__proto__ || Object.getPrototypeOf(CardsContainer)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
+      cards_data: [],
+      deck_id: 0
     }, _temp), _possibleConstructorReturn(_this, _ret);
   }
 
-  _createClass(DecksContainer, [{
+  _createClass(CardsContainer, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
       var _this2 = this;
 
-      fetch('http://127.0.0.1:5000/api/decks', { method: 'GET',
+      this.state.deck_id = window.location.pathname.split('/').pop();
+      fetch('http://127.0.0.1:5000/api/decks/' + this.state.deck_id + "/cards", { method: 'GET',
         headers: new Headers({ 'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1ODgwOTY3MjQsIm5iZiI6MTU4ODA5NjcyNCwianRpIjoiMjY4ZjQ2MDAtNzFhZC00ZTY1LThhNjAtZTZjYzM1MmIwYzdhIiwiZXhwIjoxNTg4NzAxNTI0LCJpZGVudGl0eSI6IjVlYTQyMzMyOWM1YWZjNjA4MjBlYzA4MSIsImZyZXNoIjpmYWxzZSwidHlwZSI6ImFjY2VzcyJ9.73vHmWLDkeBVtflBVMKc-FKOY594V8z0nQ8qqsM8OyA' })
       }).then(function (res) {
         return res.json();
       }).then(function (data) {
-        _this2.setState({ decks_data: data });
+        _this2.setState({ cards_data: data });
       }).catch(console.log);
     }
   }, {
     key: 'render',
     value: function render() {
-      var decks = [];
-      this.state.decks_data.forEach(function (deck) {
-        decks.push(React.createElement(DeckCard, { deck: deck }));
+      var cards = [];
+      this.state.cards_data.forEach(function (card) {
+        cards.push(React.createElement(CardBox, { card: card }));
       });
       return React.createElement(
         'div',
         { className: 'row' },
-        decks
+        cards
       );
     }
   }]);
 
-  return DecksContainer;
+  return CardsContainer;
 }(React.Component);
 
 var ListBox = function (_React$Component2) {
@@ -85,52 +87,16 @@ var ListBox = function (_React$Component2) {
   return ListBox;
 }(React.Component);
 
-var EditDropdown = function (_React$Component3) {
-  _inherits(EditDropdown, _React$Component3);
+var CardBox = function (_React$Component3) {
+  _inherits(CardBox, _React$Component3);
 
-  function EditDropdown(props) {
-    _classCallCheck(this, EditDropdown);
+  function CardBox(props) {
+    _classCallCheck(this, CardBox);
 
-    return _possibleConstructorReturn(this, (EditDropdown.__proto__ || Object.getPrototypeOf(EditDropdown)).call(this, props));
+    return _possibleConstructorReturn(this, (CardBox.__proto__ || Object.getPrototypeOf(CardBox)).call(this, props));
   }
 
-  _createClass(EditDropdown, [{
-    key: 'render',
-    value: function render() {
-      return React.createElement(
-        'div',
-        { className: 'dropdown no-arrow' },
-        React.createElement(
-          'a',
-          { className: 'dropdown-toggle', href: '#', role: 'button', id: 'dropdownMenuLink', 'data-toggle': 'dropdown', 'aria-haspopup': 'true', 'aria-expanded': 'false' },
-          React.createElement(
-            'h5',
-            { className: 'text-secondary' },
-            React.createElement('i', { className: 'fas fa-fw fa-pen text-gray-500' })
-          )
-        ),
-        React.createElement(
-          'div',
-          { className: 'dropdown-menu dropdown-menu-right shadow animated--fade-in', 'aria-labelledby': 'dropdownMenuLink' },
-          this.props.children
-        )
-      );
-    }
-  }]);
-
-  return EditDropdown;
-}(React.Component);
-
-var DeckCard = function (_React$Component4) {
-  _inherits(DeckCard, _React$Component4);
-
-  function DeckCard(props) {
-    _classCallCheck(this, DeckCard);
-
-    return _possibleConstructorReturn(this, (DeckCard.__proto__ || Object.getPrototypeOf(DeckCard)).call(this, props));
-  }
-
-  _createClass(DeckCard, [{
+  _createClass(CardBox, [{
     key: 'render',
     value: function render() {
       // if (this.state.liked) {
@@ -144,52 +110,21 @@ var DeckCard = function (_React$Component4) {
           'div',
           { className: 'card-body' },
           React.createElement(
-            'div',
-            { className: 'd-flex flex-row align-items-center justify-content-between' },
-            React.createElement(
-              'h1',
-              { className: 'text-primary' },
-              React.createElement(
-                'a',
-                { href: "study/" + this.props.deck._id.$oid },
-                this.props.deck.name
-              )
-            ),
-            React.createElement(
-              EditDropdown,
-              null,
-              React.createElement(
-                'a',
-                { href: "edit/" + this.props.deck._id.$oid, className: 'dropdown-item btn' },
-                'Edit Deck'
-              ),
-              React.createElement(
-                'a',
-                { href: "edit/" + this.props.deck._id.$oid, className: 'dropdown-item btn' },
-                'Cards List'
-              )
-            )
+            'span',
+            null,
+            this.props.card.question
           ),
           React.createElement(
             'span',
             null,
-            this.props.deck.description
+            this.props.card.answer
           )
-        ),
-        React.createElement(
-          'div',
-          { className: 'card-footer' },
-          'Cards to review: ',
-          this.props.deck.cards_to_review,
-          React.createElement('br', null),
-          'Unknown cards: ',
-          this.props.deck.new_cards
         )
       );
     }
   }]);
 
-  return DeckCard;
+  return CardBox;
 }(React.Component);
 
-ReactDOM.render(React.createElement(DecksContainer, null), document.querySelector('#decks_container'));
+ReactDOM.render(React.createElement(CardsContainer, null), document.querySelector('#cards_container'));

@@ -85,8 +85,8 @@ class DeckCard extends React.Component {
                 <a href={"study/" + this.props.deck._id.$oid}>{this.props.deck.name}</a>
               </h1>
               <EditDropdown>
-                  <a href={"edit/decks/"+this.props.deck._id.$oid} className="dropdown-item btn" href="#">Edit Deck</a>
-                  <a href={"edit/decks/"+this.props.deck._id.$oid+"/cards"} className="dropdown-item btn" href="#">Cards List</a>
+                  <a href={"edit/"+this.props.deck._id.$oid} className="dropdown-item btn">Edit Deck</a>
+                  <a href={"edit/"+this.props.deck._id.$oid} className="dropdown-item btn">Cards List</a>
               </EditDropdown>
             </div>
             <span>{this.props.deck.description}</span>

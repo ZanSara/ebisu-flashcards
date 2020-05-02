@@ -2,8 +2,6 @@
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -25,7 +23,8 @@ var StudyCard = function (_React$Component) {
     }
 
     return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = StudyCard.__proto__ || Object.getPrototypeOf(StudyCard)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
-      card_data: []
+      card_data: [],
+      deck_id: 0
     }, _temp), _possibleConstructorReturn(_this, _ret);
   }
 
@@ -34,9 +33,8 @@ var StudyCard = function (_React$Component) {
     value: function componentDidMount() {
       var _this2 = this;
 
-      var deck_id = window.location.pathname.split('/').pop();
-      console.log("PATH :  " + deck_id);
-      fetch('http://127.0.0.1:5000/api/study/' + deck_id, { method: 'GET',
+      this.state.deck_id = window.location.pathname.split('/').pop();
+      fetch('http://127.0.0.1:5000/api/study/' + this.state.deck_id, { method: 'GET',
         headers: new Headers({ 'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1ODgwOTY3MjQsIm5iZiI6MTU4ODA5NjcyNCwianRpIjoiMjY4ZjQ2MDAtNzFhZC00ZTY1LThhNjAtZTZjYzM1MmIwYzdhIiwiZXhwIjoxNTg4NzAxNTI0LCJpZGVudGl0eSI6IjVlYTQyMzMyOWM1YWZjNjA4MjBlYzA4MSIsImZyZXNoIjpmYWxzZSwidHlwZSI6ImFjY2VzcyJ9.73vHmWLDkeBVtflBVMKc-FKOY594V8z0nQ8qqsM8OyA' })
       }).then(function (res) {
         return res.json();
@@ -53,48 +51,48 @@ var StudyCard = function (_React$Component) {
         { className: 'row' },
         React.createElement(
           'div',
-          { 'class': 'col-xl-6 col-lg-5 mx-auto' },
+          { className: 'col-xl-6 col-lg-5 mx-auto' },
           React.createElement(
             'div',
-            { 'class': 'card shadow mb-4' },
+            { className: 'card shadow mb-4' },
             React.createElement(
               'div',
-              { 'class': 'card-header py-3 d-flex flex-row align-items-center justify-content-between' },
+              { className: 'card-header py-3 d-flex flex-row align-items-center justify-content-between' },
               React.createElement(
                 'a',
-                { href: '#', 'class': 'btn btn-default btn-sm' },
-                React.createElement('i', { 'class': 'fa fa-chevron-left' })
+                { href: '#', className: 'btn btn-default btn-sm' },
+                React.createElement('i', { className: 'fa fa-chevron-left' })
               ),
               React.createElement(
                 'span',
-                { 'class': 'm-0' },
+                { className: 'm-0' },
                 'Card # -- '
               ),
               React.createElement(
                 'div',
-                { 'class': 'dropdown no-arrow' },
+                { className: 'dropdown no-arrow' },
                 React.createElement(
                   'a',
-                  { 'class': 'dropdown-toggle', href: '#', role: 'button', id: 'dropdownMenuLink', 'data-toggle': 'dropdown', 'aria-haspopup': 'true', 'aria-expanded': 'false' },
-                  React.createElement('i', { 'class': 'fas fa-ellipsis-v fa-sm fa-fw text-gray-400' })
+                  { className: 'dropdown-toggle', href: '#', role: 'button', id: 'dropdownMenuLink', 'data-toggle': 'dropdown', 'aria-haspopup': 'true', 'aria-expanded': 'false' },
+                  React.createElement('i', { className: 'fas fa-ellipsis-v fa-sm fa-fw text-gray-400' })
                 ),
                 React.createElement(
                   'div',
-                  { 'class': 'dropdown-menu dropdown-menu-right shadow animated--fade-in', 'aria-labelledby': 'dropdownMenuLink' },
+                  { className: 'dropdown-menu dropdown-menu-right shadow animated--fade-in', 'aria-labelledby': 'dropdownMenuLink' },
                   React.createElement(
                     'a',
-                    { 'class': 'dropdown-item', href: '#' },
+                    { className: 'dropdown-item', href: '#' },
                     'Modify Card'
                   ),
                   React.createElement(
                     'a',
-                    { 'class': 'dropdown-item', href: '#' },
+                    { className: 'dropdown-item', href: '#' },
                     'Skip Card'
                   ),
-                  React.createElement('div', { 'class': 'dropdown-divider' }),
+                  React.createElement('div', { className: 'dropdown-divider' }),
                   React.createElement(
                     'a',
-                    { 'class': 'dropdown-item', href: '#' },
+                    { className: 'dropdown-item', href: '#' },
                     'Something else'
                   )
                 )
@@ -102,33 +100,33 @@ var StudyCard = function (_React$Component) {
             ),
             React.createElement(
               'div',
-              { 'class': 'card-body text-center' },
+              { className: 'card-body text-center' },
               React.createElement(
                 'div',
-                { 'class': 'row justify-content-center py-3' },
+                { className: 'row justify-content-center py-3' },
                 React.createElement(
                   'div',
-                  { 'class': 'col-12 text-center py-3' },
+                  { className: 'col-12 text-center py-3' },
                   this.state.card_data.question
                 ),
                 React.createElement(
                   'div',
-                  { 'class': 'col-6 py-3' },
-                  React.createElement('input', { type: 'text form-control-lg', placeholder: 'Your answer...', style: 'width:100%;' })
+                  { className: 'col-6 py-3' },
+                  React.createElement('input', { type: 'text form-control-lg', placeholder: 'Your answer...', style: { width: 100 + "%" } })
                 )
               ),
               React.createElement(
                 'a',
-                { id: 'answerButton', href: '#answerArea', 'class': 'btn btn-primary', 'data-toggle': 'collapse', role: 'button',
-                  'aria-expanded': 'true', 'aria-controls': 'collapseCardExample', onclick: 'getElementById(\'answerButton\').style.display = \'none\';' },
+                { id: 'answerButton', href: '#answerArea', className: 'btn btn-primary', 'data-toggle': 'collapse', role: 'button',
+                  'aria-expanded': 'true', 'aria-controls': 'collapseCardExample', onClick: 'getElementById(\'answerButton\').style.display = \'none\'' },
                 'Click to show answer'
               ),
               React.createElement(
                 'div',
-                { 'class': 'collapse hide', id: 'answerArea' },
+                { className: 'collapse hide', id: 'answerArea' },
                 React.createElement(
                   'div',
-                  { 'class': 'card-body' },
+                  { className: 'card-body' },
                   React.createElement('div', null),
                   React.createElement(
                     'div',
@@ -138,24 +136,24 @@ var StudyCard = function (_React$Component) {
                   React.createElement('hr', null),
                   React.createElement(
                     'form',
-                    { method: 'POST' },
+                    { action: "api/study/" + this.state.deck_id, method: 'POST' },
                     React.createElement(
                       'button',
-                      _defineProperty({ type: 'submit', name: 'test_result', value: '0', 'class': 'btn btn-danger' }, 'type', 'button'),
-                      React.createElement('i', { 'class': 'fas fa-fw fa-times d-md-none' }),
+                      { type: 'submit', name: 'test_result', value: '0', className: 'btn btn-danger' },
+                      React.createElement('i', { className: 'fas fa-fw fa-times d-md-none' }),
                       React.createElement(
                         'span',
-                        { 'class': 'd-none d-sm-inline-block' },
+                        { className: 'd-none d-sm-inline-block' },
                         'I forgot :('
                       )
                     ),
                     React.createElement(
                       'button',
-                      _defineProperty({ type: 'submit', name: 'test_result', value: '1', 'class': 'btn btn-success' }, 'type', 'button'),
-                      React.createElement('i', { 'class': 'fas fa-fw fa-check d-md-none' }),
+                      { type: 'submit', name: 'test_result', value: '1', className: 'btn btn-success' },
+                      React.createElement('i', { className: 'fas fa-fw fa-check d-md-none' }),
                       React.createElement(
                         'span',
-                        { 'class': 'd-none d-sm-inline-block' },
+                        { className: 'd-none d-sm-inline-block' },
                         'I remember!'
                       )
                     )

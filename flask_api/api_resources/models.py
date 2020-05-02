@@ -25,9 +25,7 @@ class StudyApi(Resource):
         deck = models.Deck.objects.get(id=deck_id, author=user_id)
         algorithm = algorithms.algorithm_engine(deck)
         algorithm.process_result(**body, user_id=user_id)
-        # Return directly the next card to review
-        next_card = algorithm.next_card_to_review().to_json()
-        return Response(next_card, mimetype="application/json", status=200)
+        return '', 200
 
 
 class DecksApi(Resource):
