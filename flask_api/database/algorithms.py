@@ -57,18 +57,17 @@ class RandomOrder(Algorithm):
     dynamic_fields = ["prioritize_unseen", "consecutive_never_identical"]
 
     def __init__(self, deck: 'Deck'):
-
         # Validate
         if deck.algorithm != "Random Order":
             raise ValueError("Deck algorithm does not match Random Order: {}".format(deck.algorithm))
 
-        for field in self.dynamic_fields:
+        for field in RandomOrder.dynamic_fields:
             if field not in deck._dynamic_fields:
                 raise ValueError("Deck is missing Random Order's dynamic field: {}".format(field))
 
         super(Algorithm, self).__init__()
         self.deck = deck
-
+        
     def add_fields_to_deck(self, value):
         value["cards_to_review"] = len(self.cards_to_review())
         value["new_cards"] = len(self.new_cards())
@@ -102,7 +101,7 @@ class RandomOrder(Algorithm):
         Saves a review with the test results (for eventual statistics) 
         """
         if not str(test_results).lower() == "true" and not str(test_results).lower() == "false":
-            raise ValueError("Invalid test result for Random Order: {}".format(rest_results))
+            raise ValueError("Invalid test result for Random Order: {}".format(test_results))
        
         user = models.User.objects.get(id=user_id)
         review = models.Review(
@@ -125,8 +124,8 @@ class RandomOrder(Algorithm):
             self.deck.last_reviewed_card = self.deck.reviewing_card
 
             # Select random unseen card
-            if self.prioritize_unseen and len(self.new_cards) > 0:
-                self.deck.reviewing_card = random.choice(self.new_cards)
+            if self.deck.prioritize_unseen and len(self.new_cards()) > 0:
+                self.deck.reviewing_card = random.choice(self.new_cards())
 
             # Avoid asking twice the same card in a row
             elif self.deck.consecutive_never_identical:
@@ -204,7 +203,7 @@ class Ebisu(Algorithm):
         elif str(test_results).lower() == "false":
             test_results = False
         else:
-            raise ValueError("Invalid test result for Ebisu: {}".format(rest_results))
+            raise ValueError("Invalid test result for Ebisu: {}".format(test_results))
 
         # Compute the prior or set defaults
         if not self.last_review:
@@ -222,13 +221,13 @@ class Ebisu(Algorithm):
                                                 total=1, 
                                                 tnow=time_from_last_review)
         # Save review
-        new_review = Review(
+        new_review = models.Review(
             alpha=alpha, 
             beta=beta,
             t=t/HALF_LIFE_UNIT, 
             user=user, 
             test_results=test_results, 
-            review_time=timezone.now,
+            review_time=datetime.utcnow(),
         )
         self.deck.reviewing_card.update(push__reviews=new_review)
         self.deck.reviewing_card.save()

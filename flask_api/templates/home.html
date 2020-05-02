@@ -1,0 +1,13 @@
+{% extends "logged-in-base.html" %}
+
+{% block content %}
+<div id="decks_container"></div>
+
+<!-- Load React. -->
+<!-- Replace development with production.min -->
+<script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>  
+<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+<!-- Load our React component. -->
+<script src="{{ url_for('static', filename='react/home.js') }}"></script>
+
+{% endblock %}
