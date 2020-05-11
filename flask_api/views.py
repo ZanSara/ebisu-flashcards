@@ -9,7 +9,7 @@ from app import app
 
 @app.route('/')
 def frontpage():
-    return render_template('frontpage.html')
+    return render_template('landing-page.html')
 
 
 @app.route('/login', methods=['GET', 'POST'])
