@@ -87,7 +87,7 @@ class User(db.Document):
     decks = db.ListField(db.ReferenceField('Deck', reverse_delete_rule=db.PULL))
 
     def __str__(self):
-        return self.name
+        return "{} ({})".format(self.username, self.email)
 
     def hash_password(self):
         self.password = generate_password_hash(self.password).decode('utf8')

@@ -6,9 +6,11 @@ class DecksContainer extends React.Component {
   }
 
   componentDidMount() {
+    const token = window.localStorage.getItem("token");
+    console.log(token);
     fetch('http://127.0.0.1:5000/api/decks', 
       { method:'GET',
-        headers:  new Headers({'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1ODgwOTY3MjQsIm5iZiI6MTU4ODA5NjcyNCwianRpIjoiMjY4ZjQ2MDAtNzFhZC00ZTY1LThhNjAtZTZjYzM1MmIwYzdhIiwiZXhwIjoxNTg4NzAxNTI0LCJpZGVudGl0eSI6IjVlYTQyMzMyOWM1YWZjNjA4MjBlYzA4MSIsImZyZXNoIjpmYWxzZSwidHlwZSI6ImFjY2VzcyJ9.73vHmWLDkeBVtflBVMKc-FKOY594V8z0nQ8qqsM8OyA'}),
+        headers:  new Headers({'Authorization': 'Bearer '+token}),
       })
     .then(res => res.json())
     .then((data) => {

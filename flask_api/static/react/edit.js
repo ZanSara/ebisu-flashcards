@@ -33,9 +33,10 @@ var CardsContainer = function (_React$Component) {
     value: function componentDidMount() {
       var _this2 = this;
 
+      var token = window.localStorage.getItem("token");
       this.state.deck_id = window.location.pathname.split('/').pop();
       fetch('http://127.0.0.1:5000/api/decks/' + this.state.deck_id + "/cards", { method: 'GET',
-        headers: new Headers({ 'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1ODgwOTY3MjQsIm5iZiI6MTU4ODA5NjcyNCwianRpIjoiMjY4ZjQ2MDAtNzFhZC00ZTY1LThhNjAtZTZjYzM1MmIwYzdhIiwiZXhwIjoxNTg4NzAxNTI0LCJpZGVudGl0eSI6IjVlYTQyMzMyOWM1YWZjNjA4MjBlYzA4MSIsImZyZXNoIjpmYWxzZSwidHlwZSI6ImFjY2VzcyJ9.73vHmWLDkeBVtflBVMKc-FKOY594V8z0nQ8qqsM8OyA' })
+        headers: new Headers({ 'Authorization': 'Bearer ' + token })
       }).then(function (res) {
         return res.json();
       }).then(function (data) {
@@ -45,9 +46,11 @@ var CardsContainer = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
+      var _this3 = this;
+
       var cards = [];
       this.state.cards_data.forEach(function (card) {
-        cards.push(React.createElement(CardBox, { card: card }));
+        cards.push(React.createElement(CardBox, { card: card, deck_id: _this3.state.deck_id }));
       });
       return React.createElement(
         'div',
@@ -60,31 +63,49 @@ var CardsContainer = function (_React$Component) {
   return CardsContainer;
 }(React.Component);
 
-var ListBox = function (_React$Component2) {
-  _inherits(ListBox, _React$Component2);
+var CardWithSidebar = function (_React$Component2) {
+  _inherits(CardWithSidebar, _React$Component2);
 
-  function ListBox(props) {
-    _classCallCheck(this, ListBox);
+  function CardWithSidebar(props) {
+    _classCallCheck(this, CardWithSidebar);
 
-    return _possibleConstructorReturn(this, (ListBox.__proto__ || Object.getPrototypeOf(ListBox)).call(this, props));
+    return _possibleConstructorReturn(this, (CardWithSidebar.__proto__ || Object.getPrototypeOf(CardWithSidebar)).call(this, props));
   }
 
-  _createClass(ListBox, [{
+  _createClass(CardWithSidebar, [{
     key: 'render',
     value: function render() {
       return React.createElement(
         'div',
-        { className: 'col-xl-3 col-md-6 mb-4' },
+        { className: 'col-xl-3 col-lg-4 col-md-6 col-sm-6 col-xs-12 py-2' },
         React.createElement(
           'div',
-          { className: "card border-bottom-" + this.props.accent + " shadow h-100 py-2" },
-          this.props.children
+          { className: "card border-bottom-" + this.props.accent + " bg-gradient-" + this.props.accent + " shadow", style: { flexDirection: 'row' } },
+          React.createElement(
+            'div',
+            { className: 'card-body text-center', style: { width: 3 + "em", maxWidth: 3 + "em", minWidth: 3 + "em", padding: 1 + "rem", lineHeight: 2 + "rem" } },
+            React.createElement(
+              'a',
+              { href: "/api/decks/" + this.props.deck_id + "/cards/" + this.props.card._id.$oid, style: { color: '#fff' } },
+              React.createElement('i', { className: 'fas fa-fw fa-pen' })
+            ),
+            React.createElement(
+              'a',
+              { href: "/api/decks/" + this.props.deck_id + "/cards/" + this.props.card._id.$oid, onClick: 'return confirm(\'Are you sure you want to delete this card?\')', style: { color: '#fff' } },
+              React.createElement('i', { className: 'fas fa-fw fa-trash' })
+            )
+          ),
+          React.createElement(
+            'div',
+            { className: 'card', style: { width: 100 + "%" } },
+            this.props.children
+          )
         )
       );
     }
   }]);
 
-  return ListBox;
+  return CardWithSidebar;
 }(React.Component);
 
 var CardBox = function (_React$Component3) {
@@ -99,25 +120,35 @@ var CardBox = function (_React$Component3) {
   _createClass(CardBox, [{
     key: 'render',
     value: function render() {
-      // if (this.state.liked) {
-      //   return 'You liked this.';
-      // }
-
       return React.createElement(
-        ListBox,
-        { accent: 'primary' },
+        CardWithSidebar,
+        { card: this.props.card, deck_id: this.props.deck_id, accent: 'primary' },
         React.createElement(
           'div',
-          { className: 'card-body' },
+          { className: 'card-body text-center' },
           React.createElement(
-            'span',
-            null,
-            this.props.card.question
-          ),
+            'div',
+            { className: 'row justify-content-center' },
+            React.createElement(
+              'div',
+              { className: 'col-12 text-center' },
+              this.props.card.question,
+              React.createElement('hr', null)
+            ),
+            React.createElement(
+              'div',
+              { className: 'col-12 text-center' },
+              this.props.card.answer
+            )
+          )
+        ),
+        React.createElement(
+          'div',
+          { className: 'card-footer' },
           React.createElement(
-            'span',
+            'p',
             null,
-            this.props.card.answer
+            'Last Review: --'
           )
         )
       );

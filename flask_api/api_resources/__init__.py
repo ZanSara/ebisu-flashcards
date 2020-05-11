@@ -14,6 +14,8 @@ def initialize_routes(api):
     api.add_resource(api_models.AlgorithmsApi, '/api/algorithms')
     
     api.add_resource(api_auth.SignupApi, '/api/auth/signup')
-    api.add_resource(api_auth.LoginApi, '/api/auth/login')
+    # api.add_resource(api_auth.LoginApi, '/api/auth/login')
+    api.add_resource(api_auth.RefreshTokenApi, '/api/auth/refresh')
+    # api.add_resource(api_auth.LogoutApi, '/api/auth/logout')
     api.add_resource(api_auth.ForgotPassword, '/api/auth/forgot')
     api.add_resource(api_auth.ResetPassword, '/api/auth/reset')
