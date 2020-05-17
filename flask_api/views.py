@@ -1,4 +1,4 @@
-from flask import render_template, redirect, request, jsonify
+from flask import render_template, redirect, request, jsonify, url_for
 import flask_jwt_extended as jwt
 
 from database.models import User
@@ -28,7 +28,7 @@ def login():
         refresh_token = jwt.create_refresh_token(identity=str(user.id))
 
         # Set the JWT cookies in the response
-        resp = jsonify({'login': True})
+        resp = redirect("/home")
         jwt.set_access_cookies(resp, access_token)
         jwt.set_refresh_cookies(resp, refresh_token)
         return resp
@@ -43,7 +43,7 @@ def logout():
     # We need the backend to send us a response to delete the cookies
     # in order to logout. unset_jwt_cookies is a helper function to
     # do just that.
-    resp = jsonify({'logout': True})
+    resp = resp = redirect(url_for('frontpage'))
     jwt.unset_jwt_cookies(resp)
     return resp, 200
 
