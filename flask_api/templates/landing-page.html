@@ -1,121 +1,67 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
 
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
 
-  <title>Ebisu Flashcards</title>
+{% block css%}
+<link href="{{ url_for('static', filename='css/landing.css') }}" rel="stylesheet">
+{% endblock %}
 
-  <!-- Custom styles for this template-->
-  <link href="{{ url_for('static', filename='css/sb-admin-2.min.css') }}" rel="stylesheet">
-    
-  <!-- Font Awesome icons (free version)-->
-  <script src="https://use.fontawesome.com/releases/v5.12.1/js/all.js" crossorigin="anonymous"></script>
-  <!-- Google fonts-->
-  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
-  <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
-  <!-- Core theme CSS (includes Bootstrap)-->
-  <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet" />
 
-</head>
+{% block body %}
+<body>
 
-<body id="page-top">
-        <!-- Navigation -->
-        <nav class="navbar navbar-expand-lg text-uppercase bg-primary" id="mainNav">
-            <div class="container">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item mx-0 mx-lg-1" style="border: 0.125rem solid transparent; border-radius: 0.5rem;"><a class="nav-link py-3 px-0 px-lg-3" href="/login">Sign In</a></li>
-                    <li class="nav-item mx-0 mx-lg-1" style="border: 0.125rem solid white; border-radius: 0.5rem;">
-                        <a class="nav-link py-3 px-0 px-lg-3" href="/register">Sign Up</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-        <!-- Masthead-->
-        <header class="masthead text-white text-center bg-gradient-primary">
-            <div class="container d-flex align-items-center flex-column">
-                <style>
-@keyframes swim {
-    0% {
-        transform: translate3d(50px, 40px, 0px);
-        animation-timing-function: ease-in;
-    }
-    50% {
-        transform: translate3d(50px, 50px, 0px);
-        animation-timing-function: ease-out;
-    }
-    100% {
-        transform: translate3d(50px, 40px, 0px);
-    }
-}
-                </style>
+<main class="wrapper">
 
-                <div style="div animation: swim 2s infinite;"><i class="fas fa-fish"></i></div>
-                
-                <!-- Masthead Heading-->
-                <h1 class="masthead-heading text-uppercase mb-0">Ebisu Flashcards</h1>
-                <!-- Icon Divider-->
-                <div class="divider-custom divider-light">
-                    <div class="divider-custom-line"></div>
-                    <div class="divider-custom-icon"><i class="fas fa-fish"></i></div>
-                    <div class="divider-custom-line"></div>
-                </div>
-                <!-- Masthead Subheading-->
-                <p class="masthead-subheading font-weight-light mb-0">A brand new flashcard application!</p>
-            </div>
-        </header>
-        <!-- About Section-->
-        <section class="page-section mb-0" id="about">
-            <div class="container">
-                <!-- About Section Heading-->
-                <h2 class="page-section-heading text-center text-uppercase">About</h2>
-                <!-- Icon Divider-->
-                <div class="divider-custom">
-                    <div class="divider-custom-line"></div>
-                    <div class="divider-custom-icon"><i class="fas fa-fish"></i></div>
-                    <div class="divider-custom-line"></div>
-                </div>
-                <!-- About Section Content-->
-                <div class="row">
-                    <div class="col-lg-4 ml-auto"><p class="lead">
-                        Ebisu Flashcards is a new flashcard application centerd on the new Ebisu algorithm, developer by fasiha. 
-                        It features a much easier to use interface than Anki, and aims at providing the same amount of features, especially language learning-oriented ones.
-                    </p></div>
-                    <div class="col-lg-4 mr-auto"><p class="lead">
-                        It's fundamentally different from the classic SM2/Anki approach to spaced repetition, because it's completely based on probability theory and on the exponential decay of memory [instert author and paper here].
-                    </p></div>
-                </div>
-            </div>
-        </section>
-        <!-- Footer-->
-        <footer class="footer text-center">
-            <div class="container">
-                <div class="row">
-                    <!-- Footer Location-->
-                    <div class="col-lg-4 mb-5 mb-lg-0">
-                        <h4 class="text-uppercase mb-4">Location</h4>
-                        <p class="lead mb-0">Nowhere currently</p>
-                    </div>
-                    <!-- Footer Social Icons-->
-                    <div class="col-lg-4 mb-5 mb-lg-0">
-                        <h4 class="text-uppercase mb-4">Around the Web</h4>
-                        <a class="btn btn-outline-light btn-social mx-1" href="#"><i class="fab fa-fw fa-facebook-f"></i></a><a class="btn btn-outline-light btn-social mx-1" href="#"><i class="fab fa-fw fa-twitter"></i></a><a class="btn btn-outline-light btn-social mx-1" href="#"><i class="fab fa-fw fa-linkedin-in"></i></a><a class="btn btn-outline-light btn-social mx-1" href="#"><i class="fab fa-fw fa-dribbble"></i></a>
-                    </div>
-                    <!-- Footer About Text-->
-                    <div class="col-lg-4">
-                        <h4 class="text-uppercase mb-4">About Freelancer</h4>
-                        <p class="lead mb-0">Yeah, go to <a href="https://github.com/ZanSara/ebisu-flashcards">GitHub</a> to see the rest</a>.</p>
-                    </div>
-                </div>
-            </div>
-        </footer>
-        <!-- Copyright Section-->
-        <section class="copyright py-4 text-center text-white">
-            <div class="container"><small>Non Existing Copyright © Ebisu Flashcards 2020 or later</small></div>
-        </section>
-    </body>
-</html>
+  <section class="banner">
+    <nav>
+        <a href="/login" class="borderless">Login</a>
+        <a href="/register">Signup</a>
+    </nav>
+
+    <div class="logo">
+        <i class="fas fa-fish"></i>
+    </div>
+
+    <h1>Ebisu</h1>
+
+    <div class="divider">
+        <div class="line"></div>
+        <div>
+            <i class="fas fa-fish"></i>
+        </div>
+        <div class="line"></div>
+    </div>
+
+    <p>A new approach to flashcards!</p>
+
+  </section>
+
+  <section class="about">
+
+    <h1>About</h1>
+
+    <div class="divider">
+        <div class="line"></div>
+        <div>
+            <i class="fas fa-fish"></i>
+        </div>
+        <div class="line"></div>
+    </div>
+
+    <div class="text">
+        <p>
+            Ebisu Flashcards is a new flashcard application centerd on the new Ebisu algorithm, developer by fasiha. 
+            It features a much easier to use interface than Anki, and aims at providing the same amount of features, especially language learning-oriented ones.
+        </p>
+        <p>
+            It's fundamentally different from the classic SM2/Anki approach to spaced repetition, because it's completely based on probability theory and on the exponential decay of memory [instert author and paper here].
+        </p>
+    </div>    
+  </section>
+
+  <footer>
+    <p>&copy; 2019. Made with ❤ and CSS Grid.</p>
+  </footer>
+</main>
+
+</body>
+{% endblock %}

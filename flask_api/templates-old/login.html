@@ -1,16 +1,8 @@
 {% extends "base.html" %}
+{% block page %}
+<body class="bg-gradient-primary">
 
-
-{% block css%}
-<link href="{{ url_for('static', filename='css/login.css') }}" rel="stylesheet">
-{% endblock %}
-
-
-
-{% block body %}
-<body class="small">
-
-<main class="wrapper">
+  <div class="container">
 
     <!-- Outer Row -->
     <div class="row justify-content-center">
@@ -58,7 +50,29 @@
 
     </div>
 
-</main>
+  </div>
 
-</body>
+  <!--script>
+  document.getElementById("loginForm").addEventListener('submit', function(event){
+    event.preventDefault();
+    fetch('/api/auth/login', 
+    { method:'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: document.getElementById("form_email").value,
+        password: document.getElementById("form_password").value,
+        redirect_to: "/home"
+      })
+    })
+    .then(res => res.json())
+    .then((data) => {
+      //window.localStorage.setItem("token", data["token"]);
+      window.location.href = "/home";
+    })
+    .catch(error => console.error(error));
+  });
+  </script-->
 {% endblock %}
