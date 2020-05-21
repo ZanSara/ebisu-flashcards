@@ -1,0 +1,30 @@
+/*----------------------------------------------------------------------------*/
+/*     Navbar Styles
+/*----------------------------------------------------------------------------*/
+
+nav {
+    margin: 0 1rem;
+    padding: 1rem 0;
+    text-align: justify;
+    border-bottom: 1px dashed var(--gray);
+    text-transform: uppercase;
+
+    display: grid;
+    align-items: center;
+    /* justify-items: center;    /* new */
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+}
+
+nav > h1 {
+    margin: 0;
+    padding: 0;
+    margin-left: 1.5rem;
+}
+
+nav > div {
+    text-align: right;
+}
+
+nav > div > .logout {
+    background-color: var(--danger);
+}
