@@ -36,6 +36,15 @@ def login():
     return render_template('login.html')
 
 
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == "POST":
+        pass
+        #TODO implement!!
+
+    return render_template('register.html')
+
+
 @app.route('/logout')
 def logout():
     # Because the JWTs are stored in an httponly cookie now, we cannot

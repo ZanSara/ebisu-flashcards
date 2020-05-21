@@ -1,120 +1,86 @@
 /*----------------------------------------------------------------------------*/
-/*     Banner Styles
+/*     Page Styles
 /*----------------------------------------------------------------------------*/
-.banner {
-    background: var(--primary-gradient);
-    background-size: cover;
-    padding: 1rem;
-    padding-bottom: 3rem;
-    border-radius: var(--page-corner-radius) var(--page-corner-radius) 0 0;
-}
 
-.banner > * {
-    text-align:center;
-    color: white;
-}
-
-.banner > nav {
-    text-align: right;
-    margin-bottom: 4rem;
-    text-transform: uppercase;
-}
-
-.banner > nav > a {
-    padding: 1rem 1.5rem;
-    margin: 1rem 0.5rem;
-}
-
-.banner > nav > a.borderless {
-    margin: 0;
-    border: 0;
-}
-
-.banner > div.logo {
-    margin: auto;
-}
-
-.banner > div.logo > svg {
-    font-size: 5rem;
-    transform: rotate(-15deg);
-}
-
-.banner > h1 {
-    font-size: 4rem;
+body.small {
+    background-color: var(--primary);
     padding: 0;
-    margin-bottom: 2rem;
-    text-transform: uppercase;
+    max-width: 500px;
+  
+    display:flex; 
+    flex-direction:column; 
+    justify-content:center;
+  
+    min-height:100vh; 
 }
 
-.banner > .divider > div.line {
-    background-color: white;
-}
-
-.banner > p {
-    font-size: 1.5rem;
-}
-
-/*----------------------------------------------------------------------------*/
-/*    Divider Styles
-/*----------------------------------------------------------------------------*/
-
-.divider {
+.wrapper {
     text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    box-shadow: 20px 20px var(--dark-gray);
 }
 
-.divider > div.line {
-    width: min(150px, 30vw);
-    height: 0.25rem;
-    border-radius: 1rem;
-    margin: 2rem;
-}
-
-.divider > div > svg {
-    font-size: 2rem;
+.wrapper > h1 {
+    text-transform: uppercase;
+    text-decoration: underline;
 }
 
 
 /*----------------------------------------------------------------------------*/
-/*    About Styles
+/*     Form Styles
 /*----------------------------------------------------------------------------*/
 
-.about {
-    background: white;
-    background-size: cover;
+form {
     padding: 1rem;
-    padding-bottom: 3rem;
 }
 
-.about > * {
-    text-align:center;
+form > div {
+    padding: 1rem;
+}
+
+input {
+    background-color: transparent;
+    font-size: 1.5rem;
+    text-align: center;
+    border: 0;
+    border-bottom: 1px solid var(--gray);
     color: black;
 }
 
-.about > h1 {
-    font-size: 3rem;
+/* ****************** Firefox hack :( *************************** */
+:not(output):-moz-ui-invalid:not(:focus) {
+    box-shadow: none;
+  }
+  
+  :not(output):-moz-ui-invalid:-moz-focusring:not(:focus) {
+    box-shadow: none;
+  }
+/* ****************** End Firefox hack :( *********************** */
+
+input[type="submit"]{
+    color: white;
+    font-size: 1.2rem;
+    width: 100%;
+}
+
+
+/*----------------------------------------------------------------------------*/
+/*     Footer Styles
+/*----------------------------------------------------------------------------*/
+
+footer {
+    background-color: var(--light-gray);
+    padding: 1rem;
+}
+
+footer > a {
+    color: var(--dark-gray);
+    background-color: transparent;
     padding: 0;
-    margin-bottom: 1rem;
-    text-transform: uppercase;
+    margin: 0.5rem 1rem;
+    border: 0;
 }
 
-.about > .divider > div.line {
-    background-color: black;
-}
-
-.about > .text {
-    max-width: 700px;
-    margin: auto;
-    text-align:left;
-
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-}
-
-.about > .text > p {
-    font-size: 14pt;
-    line-height: 2rem;
-    padding: 0 1rem;
+footer > a:hover {
+    color: black;
+    text-decoration: underline;
 }

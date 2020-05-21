@@ -12,7 +12,7 @@
     --white: #fff;
     --light-gray: #c2cbe5;
     --gray: #858796;
-    --gray-dark: #5a5c69;
+    --dark-gray: #5a5c69;
 
     --primary: #4e73df;
     --primary-gradient: linear-gradient(180deg, #4e73df 10%, #224abe 100%);
@@ -46,6 +46,7 @@ p, a, h1, h2, h3, h4, h5, h6 {
 /*----------------------------------------------------------------------------*/
 html {
   scroll-behavior: smooth;
+  height: 100%;
 }
 
 body {
@@ -55,16 +56,8 @@ body {
     padding: min(3rem, 2%);
 }
 
-body.small {
-  padding: 0;
-  max-width: 700px;
-  display:flex; 
-  flex-direction:column; 
-  justify-content:center;
-  min-height:100vh;
-}
-
-a {
+a,
+input[type=submit] {
   background-color: var(--blue);
   text-decoration: none;
   color: white;
@@ -73,9 +66,11 @@ a {
   text-align: center;
   display: inline-block;
   transition: all .3s;
+  padding: 1rem;
 }
 
-a:hover {
+a:hover,
+input[type=submit]:hover  {
   color: white;  /* if not specified, will get back blue */
   filter: brightness(120%);
 }
@@ -85,7 +80,7 @@ a:hover {
 /*----------------------------------------------------------------------------*/
 .wrapper {
     background-color: white;
-    box-shadow: 20px 20px var(--gray-dark);
+    box-shadow: 20px 20px var(--dark-gray);
     border-radius: var(--page-corner-radius);
 }
 
