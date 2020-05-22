@@ -1,0 +1,88 @@
+/*----------------------------------------------------------------------------*/
+/*     Study Styles
+/*----------------------------------------------------------------------------*/
+
+section {
+    padding: 2rem min(2rem, 3%);
+}
+
+/*----------------------------------------------------------------------------*/
+/*     Card Styles
+/*----------------------------------------------------------------------------*/
+
+#card {
+    max-width: 500px;
+    margin: auto;
+    padding: 2rem min(2rem, 3%);
+    
+    border: 1px solid var(--gray);
+    border-radius: 1rem;
+    box-shadow: 5px 5px var(--dark-gray);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+#card p {
+    color: var(--dark-gray);
+}
+
+
+/*----------------------------------------------------------------------------*/
+/*     Question and Answer Styles
+/*----------------------------------------------------------------------------*/
+
+
+#card #question {
+    border-bottom: 1px dashed var(--gray);
+}
+
+#card details summary {
+    text-align: center;
+    cursor: pointer;
+    list-style: none;
+}
+
+#card details summary:hover p {
+    color: black;
+    font-weight: bold;
+}
+
+#card details summary::-webkit-details-marker {
+    display: none;
+}
+
+#card  details[open] summary {
+    display: none;
+}
+
+
+/*----------------------------------------------------------------------------*/
+/*     Feedback Styles
+/*----------------------------------------------------------------------------*/
+
+#card .feedback {
+    padding-top: 0.5rem;
+    margin-top: 1rem;
+    border-top: 1px dashed var(--gray);
+}
+
+#card .feedback p {
+    text-align: center;
+    padding-bottom: 0.75rem;
+}
+
+#card .feedback .buttons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+    grid-gap: 1rem;
+}
+
+#card a.positive {
+    background-color: var(--green);
+}
+
+#card a.negative {
+    background-color: var(--red);
+}

@@ -15,7 +15,6 @@ nav {
 
     display: grid;
     align-items: center;
-    /* justify-items: center;    /* new */
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
 }
 
@@ -25,10 +24,15 @@ nav > h1 {
     margin-left: 1.5rem;
 }
 
-nav > div {
+nav > h1.center {
+    margin: 0;
+    text-align: center;
+}
+
+nav > .logout {
     text-align: right;
 }
 
-nav > div > .logout {
+nav > .logout > a {
     background-color: var(--danger);
 }

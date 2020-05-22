@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, redirect
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
 from flask_mail import Mail
@@ -48,6 +48,15 @@ mail = Mail(app)
 api = Api(app)
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
+
+
+# Using the expired_token_loader decorator, we will now call
+# this function whenever an expired but otherwise valid access
+# token attempts to access an endpoint
+@jwt.expired_token_loader
+def my_expired_token_callback(expired_token):
+    return redirect("/login")  # TODO Add small explanatory tag somewhere in the frontend?
+
 
 # imports requiring app and mail
 import views

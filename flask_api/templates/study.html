@@ -1,16 +1,50 @@
 {% extends "logged-in-base.html" %}
 
-{% block content %}
 
-<div className="row">
-  <div id="card_to_study"></div>
-</div>
+{% block css%}
+<link href="{{ url_for('static', filename='css/study.css') }}" rel="stylesheet">
+{% endblock %}
 
-<!-- Load React. -->
-<!-- Replace development with production.min -->
-<script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>  
-<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
-<!-- Load our React component. -->
-<script src="{{ url_for('static', filename='react/study.js') }}"></script>
 
+{% block js %}
+<script src="{{ url_for('static', filename='js/base.js') }}"></script>
+<script src="{{ url_for('static', filename='js/study.js') }}"></script>
+{% endblock %}
+
+
+{% block page %}
+
+<section>
+
+    {% include "loading.html" %}
+
+
+    <div id="card" class="hidden">    
+
+        <div id="question">
+            <p>Question</p>
+        </div>
+
+        <details>
+            <summary><p>Show the answer</p></summary>
+
+            <div>
+                <div id="answer">
+                    <p>Answer</p>
+                </div>
+
+                <div class="feedback">
+                    <p>Did you recall the answer?</p>
+
+                    <div class="buttons">
+                        <a class="positive" href="study/_deck_id_">Yes</a>
+                        <a class="negative" href="edit/_deck_id_">No</a>
+                    </div>
+                </div>
+            </div>
+        </details>
+
+    </div>
+
+</section>
 {% endblock %}

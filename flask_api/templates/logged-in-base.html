@@ -14,9 +14,19 @@
 <main class="wrapper">
 
   <nav>
-    <h1>{{navbar_title}}</h1>
-    <div>
-      <a href="/logout" class="logout">Logout</a>  
+
+    {% if navbar_home %}
+      <div>
+        <a href="/home">Home</a>  
+      </div>
+    <h1 class="center">{{navbar_title}}</h1>
+  
+    {% else %}
+      <h1>{{navbar_title}}</h1>
+    {% endif %}
+  
+    <div class="logout">
+      <a href="/logout">Logout</a>  
     </div>
   </nav>
 

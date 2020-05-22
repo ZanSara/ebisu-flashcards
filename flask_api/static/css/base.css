@@ -46,6 +46,7 @@ p, a, h1, h2, h3, h4, h5, h6 {
 /*----------------------------------------------------------------------------*/
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
   height: 100%;
 }
 
@@ -86,6 +87,34 @@ input[type=submit]:hover  {
     background-color: white;
     box-shadow: 20px 20px var(--dark-gray);
     border-radius: var(--page-corner-radius);
+}
+
+
+/*----------------------------------------------------------------------------*/
+/*     Loading Styles & Related
+/*----------------------------------------------------------------------------*/
+.hidden {
+  display: none !important;
+}
+
+#loading {
+  padding: 4rem;
+  text-align: center;
+  color: black;
+}
+
+#loading svg {
+  font-size: 30pt;
+  transform: rotate(-20deg);
+  animation: pulse;
+  animation-duration: 4s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes pulse {
+  0% {color: black;}
+  50% {color: white;}
+  100% {color: black;}
 }
 
 /*----------------------------------------------------------------------------*/

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+
+{% block style%}
+<link href="{{ url_for('static', filename='css/login.css') }}" rel="stylesheet">
+{% endblock %}
+
+
+
+{% block body %}
+<body class="small">
+
+<main class="wrapper">
+
+  <h1>Not Found - 404</h1>
+  <p>We could not find what you're looking for :(</p>
+
+  <footer>
+    <a href="/">Go back</a>
+  </footer>
+
+</main>
+
+</body>
+{% endblock %}

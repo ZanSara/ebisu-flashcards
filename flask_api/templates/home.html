@@ -14,11 +14,11 @@
 
 {% block page %}
 
+{% include "loading.html" %}
+
 <section id="deck-container">
 
-    <p id="loading">Loading GIF...</p>
-
-    <div id="deck-template" class="deck">
+    <div id="deck-template" class="deck hidden">
         <div>
             <h1 class="deck-name">Deck Name</h1>
             <p class="deck-desc">This is it.</p>
@@ -28,6 +28,10 @@
             <a class="edit" href="edit/_deck_id_">Edit</a>
             <a class="edit" href="edit/_deck_id_/cards">Browse</a>
         </div>
+    </div>
+
+    <div id="create-deck" class="hidden">
+        <a>New Deck...</a>
     </div>
 
 </section>

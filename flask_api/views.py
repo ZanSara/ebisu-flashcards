@@ -1,7 +1,7 @@
 from flask import render_template, redirect, request, jsonify, url_for
 import flask_jwt_extended as jwt
 
-from database.models import User
+from database.models import User, Deck
 from api_resources import errors
 from app import app
 
@@ -14,6 +14,8 @@ def frontpage():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    # TODO avoid asking people to login if they're logged in already
+
     if request.method == "POST":
         # Identify the user
         body = request.form
@@ -57,20 +59,48 @@ def logout():
 
 
 @app.route('/home')
-@jwt.jwt_required
+@jwt.jwt_optional
 def home():
-    return render_template('home.html', 
-                            navbar_title="Home")
-
-
+    if not jwt.get_jwt_identity():
+        return redirect("/login")
+    return render_template('home.html', navbar_title="Home")
+    
+    
 @app.route('/study/<deck_id>')
-@jwt.jwt_required
+@jwt.jwt_optional
 def study(deck_id):
-    return render_template('study.html', navbar_title="Study")
+    if not jwt.get_jwt_identity():
+        redirect("/login")
+
+    user_id = jwt.get_jwt_identity()
+    deck = Deck.objects.get(id=deck_id, author=user_id)
+    return render_template('study.html', navbar_title=deck.name, navbar_home=True)
 
 
 @app.route('/edit/<deck_id>')
-@jwt.jwt_required
+@jwt.jwt_optional
 def edit(deck_id):
-    return render_template('edit.html', 
-                            navbar_title="Edit")
+    if not jwt.get_jwt_identity():
+        redirect("/login")
+
+    user_id = jwt.get_jwt_identity()
+    deck = Deck.objects.get(id=deck_id, author=user_id)
+    return render_template('edit.html', navbar_title=deck.name, navbar_home=True)
+
+
+
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('not-found.html'), 404
+
+
+@app.errorhandler(500)
+def internal_error(e):
+    return render_template('error.html'), 500
+
+
+@app.errorhandler(401)
+def unauthorized(e):
+    return redirect("/login"), 401

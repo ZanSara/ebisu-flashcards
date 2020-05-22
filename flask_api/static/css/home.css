@@ -3,15 +3,20 @@
 /*----------------------------------------------------------------------------*/
 
 section {
-    padding: 2rem;
+    padding: min(2rem, 3%);
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-    grid-gap: 2rem;
-    gap: 2rem;  /* same as above, but grid-gap will be deprecated soon */
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    grid-column-gap: 3vw;
+    grid-row-gap: 3vh;
 }
 
+/*----------------------------------------------------------------------------*/
+/*     Deck Styles
+/*----------------------------------------------------------------------------*/
+
+
 .deck {
-    max-width: 500px;
+    max-width: min(500px, 75vw);
     padding: 1.5rem;
     border: 1px solid var(--gray);
     border-radius: 1rem;
@@ -49,14 +54,46 @@ section {
     margin-top: 1rem;
     border-top: 1px dashed var(--gray);
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
     grid-gap: 1rem;
 }
 
-a.study {
+.deck a.study {
     background-color: var(--success);
 }
 
-a.edit {
+.deck a.edit {
     background-color: var(--primary);
+}
+
+
+/*----------------------------------------------------------------------------*/
+/*     New Deck Styles
+/*----------------------------------------------------------------------------*/
+
+#create-deck {
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#create-deck a {
+    text-align: center;
+    display:inline;
+    padding: 1.5rem;
+    margin-right:auto;
+
+    border: 1px dashed var(--gray);
+    border-radius: 1rem;
+
+    background: transparent;
+    color: var(--gray);
+    font-size: 1.5rem;
+    font-style: italic;
+}
+
+#create-deck a:hover {
+    color:black;
+    border-color: black;
 }
