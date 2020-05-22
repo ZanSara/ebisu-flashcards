@@ -4,4 +4,59 @@
 
 section {
     padding: 2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    grid-gap: 2rem;
+    gap: 2rem;  /* same as above, but grid-gap will be deprecated soon */
+}
+
+.deck {
+    max-width: 500px;
+    padding: 1.5rem;
+    border: 1px solid var(--gray);
+    border-radius: 1rem;
+    box-shadow: 5px 5px var(--dark-gray);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.deck p {
+    color: var(--dark-gray);
+}
+
+.deck a {
+    text-transform: uppercase;
+    padding: 0.75rem;
+}
+
+.deck h1 {
+    color: black;
+    background-color: transparent;
+    text-align: unset;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    display:block;
+    margin: 0;
+    padding: 0 0 1rem 0;
+    border-bottom: 1px dashed var(--dark-gray);
+}
+
+.deck .buttons {
+    padding-top: 1rem;
+    margin-top: 1rem;
+    border-top: 1px dashed var(--gray);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+    grid-gap: 1rem;
+}
+
+a.study {
+    background-color: var(--success);
+}
+
+a.edit {
+    background-color: var(--primary);
 }

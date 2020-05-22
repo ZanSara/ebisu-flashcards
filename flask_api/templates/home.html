@@ -6,11 +6,29 @@
 {% endblock %}
 
 
+{% block js %}
+<script src="{{ url_for('static', filename='js/base.js') }}"></script>
+<script src="{{ url_for('static', filename='js/home.js') }}"></script>
+{% endblock %}
+
+
 {% block page %}
 
-<section>
+<section id="deck-container">
 
-    <p>Loading GIF...</p>
+    <p id="loading">Loading GIF...</p>
+
+    <div id="deck-template" class="deck">
+        <div>
+            <h1 class="deck-name">Deck Name</h1>
+            <p class="deck-desc">This is it.</p>
+        </div>
+        <div class="buttons">
+            <a class="study" href="study/_deck_id_">Study</a>
+            <a class="edit" href="edit/_deck_id_">Edit</a>
+            <a class="edit" href="edit/_deck_id_/cards">Browse</a>
+        </div>
+    </div>
 
 </section>
 

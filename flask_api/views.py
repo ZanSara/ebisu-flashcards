@@ -17,7 +17,6 @@ def login():
     if request.method == "POST":
         # Identify the user
         body = request.form
-        print(User.objects, body)
         user = User.objects.get(username=body.get('username'))
         authorized = user.check_password(body.get('password'))
         if not authorized:
