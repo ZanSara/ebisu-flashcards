@@ -4,6 +4,7 @@
 
 section {
     padding: 2rem min(2rem, 3%);
+    text-align: center;
 }
 
 /*----------------------------------------------------------------------------*/
@@ -34,17 +35,40 @@ section {
 /*----------------------------------------------------------------------------*/
 
 
-#card #question {
+#question,
+#card details summary {
     border-bottom: 1px dashed var(--gray);
 }
 
-#card details summary {
+#answer {
+    border-top: 1px dashed var(--gray);
+}
+
+#guess {
+    padding: min(2rem, 5%);
+    padding-bottom: min(3rem, 8%);
+}
+
+#guess p {
+    margin-top:0;
+} 
+
+#guess input {
+    background-color: transparent;
+    font-size: 1.5rem;
     text-align: center;
+    border: 0;
+    border-bottom: 1px solid var(--gray);
+    color: black;
+    width: 80%;
+}
+
+#card details summary {
     cursor: pointer;
     list-style: none;
 }
 
-#card details summary:hover p {
+#card details summary .show:hover {
     color: black;
     font-weight: bold;
 }
@@ -69,7 +93,6 @@ section {
 }
 
 #card .feedback p {
-    text-align: center;
     padding-bottom: 0.75rem;
 }
 
@@ -79,10 +102,12 @@ section {
     grid-gap: 1rem;
 }
 
-#card a.positive {
+#card .positive {
+    text-transform: uppercase;
     background-color: var(--green);
 }
 
-#card a.negative {
+#card .negative {
+    text-transform: uppercase;
     background-color: var(--red);
 }

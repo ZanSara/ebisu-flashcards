@@ -1,0 +1,5 @@
+.text-widget {
+    padding: min(3rem, 5%);
+    text-align: center;
+    font-size: 2rem;
+}

@@ -1,7 +1,8 @@
+import os
 import json 
 import bson
 
-from flask import Response, request
+from flask import Response, request, render_template
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_restful import Resource
 import mongoengine as mongo
@@ -15,8 +16,16 @@ class StudyApi(Resource):
         user_id = get_jwt_identity()
         deck = models.Deck.objects.get(id=deck_id, author=user_id)
         algorithm = algorithms.algorithm_engine(deck)
-        next_card = algorithm.next_card_to_review().to_json()
-        return Response(next_card, mimetype="application/json", status=200)
+        next_card = algorithm.next_card_to_review()
+
+        # Server Side question and answer blocks rendering
+        question = render_template(os.path.join("card-templates", next_card.question_template.path), content=next_card.question)
+        answer = render_template(os.path.join("card-templates", next_card.answer_template.path), content=next_card.answer)
+
+        next_card.question = question
+        next_card.answer = answer
+        
+        return Response(next_card.to_json(), mimetype="application/json", status=200)
 
     @jwt_required
     def post(self, deck_id):

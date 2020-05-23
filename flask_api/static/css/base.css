@@ -62,6 +62,7 @@ a, p, input[type=submit] {
 }
 
 a,
+button,
 input[type=submit] {
   background-color: var(--blue);
   text-decoration: none;
@@ -75,6 +76,7 @@ input[type=submit] {
 }
 
 a:hover,
+button:hover,
 input[type=submit]:hover  {
   color: white;  /* if not specified, will get back blue */
   filter: brightness(120%);

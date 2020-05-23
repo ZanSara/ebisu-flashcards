@@ -19,7 +19,7 @@ app.config['MAIL_PASSWORD'] = ""
 # Configure application to store JWTs in cookies. Whenever you make
 # a request to a protected endpoint, you will need to send in the
 # access or refresh JWT via a cookie.
-app.config['JWT_TOKEN_LOCATION'] = ['cookies']
+app.config['JWT_TOKEN_LOCATION'] = ['cookies', 'json']
 
 app.config['JWT_ACCESS_COOKIE_NAME'] = 'access_token-cookie'
 app.config['JWT_REFRESH_COOKIE_NAME'] = 'refresh_token-cookie'

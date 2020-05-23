@@ -3,6 +3,7 @@
 
 {% block css%}
 <link href="{{ url_for('static', filename='css/study.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/widgets.css') }}" rel="stylesheet">
 {% endblock %}
 
 
@@ -22,23 +23,30 @@
     <div id="card" class="hidden">    
 
         <div id="question">
-            <p>Question</p>
+            <p>---</p>
         </div>
 
-        <details>
-            <summary><p>Show the answer</p></summary>
+        <div id="guess">
+            <input type="text" placeholder="Your Answer..." autocomplete=off></input>
+        </div>
+
+        <details id="collapsible">
+            <summary>
+                <p class="show">Show the answer</p>
+            </summary>
 
             <div>
                 <div id="answer">
                     <p>Answer</p>
+                    <p>---</p>
                 </div>
 
-                <div class="feedback">
+                <div id="feedback">
                     <p>Did you recall the answer?</p>
 
                     <div class="buttons">
-                        <a class="positive" href="study/_deck_id_">Yes</a>
-                        <a class="negative" href="edit/_deck_id_">No</a>
+                        <a class="positive" onclick="submitResults('true');">Yes</a>
+                        <a class="negative" onclick="submitResults('false');">No</a>
                     </div>
                 </div>
             </div>
