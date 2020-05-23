@@ -91,6 +91,10 @@ input[type=submit]:hover  {
     border-radius: var(--page-corner-radius);
 }
 
+.wrapper #stretched {
+  min-height: 75vh;
+}
+
 
 /*----------------------------------------------------------------------------*/
 /*     Loading Styles & Related
