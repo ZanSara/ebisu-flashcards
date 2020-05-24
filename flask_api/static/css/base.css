@@ -82,6 +82,13 @@ input[type=submit]:hover  {
   filter: brightness(120%);
 }
 
+a[disabled],
+button:disabled,
+input[type=submit]:disabled {
+  pointer-events: none;  /* to make <a>s unclickable  */
+  background-color: var(--gray) !important;
+}
+
 /*----------------------------------------------------------------------------*/
 /*     Wrapper Styles
 /*----------------------------------------------------------------------------*/

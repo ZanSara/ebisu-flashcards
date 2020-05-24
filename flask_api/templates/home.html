@@ -19,16 +19,35 @@
 <section id="deck-container">
 
     <div id="deck-template" class="deck hidden">
-        <div>
-            <h1 class="deck-name">Deck Name</h1>
-            <p class="deck-desc">This is it.</p>
-        </div>
-        <div class="buttons">
-            <a class="study" href="study/_deck_id_">Study</a>
-            <a class="edit" href="edit/_deck_id_">Edit</a>
-            <a class="edit" href="edit/_deck_id_/cards">Browse</a>
+        <div class="static-info">
+            <div>
+                <h1 class="deck-name">Deck Name</h1>
+                <p class="deck-desc">This is it.</p>
+                <p class="deck-type">Algorithm</p>
+            </div>
+            <div class="buttons">
+                <a class="positive" href="study/_deck_id_">Study</a>
+                <button class="neutral" type="button" onclick="showForm('_deck_id_')">Edit</button>
+                <a class="neutral" href="edit/_deck_id_/cards">Browse</a>
+            </div>
         </div>
     </div>
+
+    <form id="deck-form" class="hidden">
+        <div>
+            <input class="deck-name-form" type="text" value="Deck Name"></input>
+            <input class="deck-desc-form" type="text" value="Deck Description"></input>
+            <select class="deck-type-form">
+                <option>Type1</option>
+                <option>Type2</option>
+            </select>
+        </div>
+        <div class="buttons">
+            <button type="button" class="positive">Save</button>
+            <button type="button" class="neutral" onclick="hideForm('_deck_id_')">Cancel</button>
+            <button type="button" class="negative">Delete</button>
+        </div>
+    </form>
 
     <div id="create-deck" class="hidden">
         <a>New Deck...</a>

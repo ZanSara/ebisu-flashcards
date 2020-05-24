@@ -32,12 +32,19 @@ function renderDecks(data) {
         newDeck.id = deck._id.$oid;
         newDeck.getElementsByClassName("deck-name")[0].innerHTML = deck.name;
         newDeck.getElementsByClassName("deck-desc")[0].innerHTML = deck.description;
+        newDeck.getElementsByClassName("deck-type")[0].innerHTML = deck.algorithm;
 
         // Render deck id into the HREFs
         for (const element of newDeck.getElementsByTagName('a')) {
             const oldUrl = element.getAttribute("href");
             if (oldUrl) {
                 element.setAttribute("href", oldUrl.replace("_deck_id_", deck._id.$oid ));
+            }
+        }
+        for (const element of newDeck.getElementsByTagName('button')) {
+            const oldValue = element.getAttribute("onclick");
+            if (oldValue) {
+                element.setAttribute("onclick", oldValue.replace("_deck_id_", deck._id.$oid ));
             }
         }
         // Append rendered copy
@@ -50,4 +57,73 @@ function renderDecks(data) {
     createDeck = document.getElementById("create-deck");
     document.getElementById("deck-container").appendChild(createDeck);
     createDeck.classList.remove("hidden");
+}
+
+
+function showForm(deck_id) {
+    // Disable all buttons for the decks
+    for (const deck of document.getElementsByClassName('deck')){
+        for (const element of deck.getElementsByTagName('button')) {
+            element.setAttribute("disabled", "disabled")
+        }
+        for (const element of deck.getElementsByTagName('a')) {
+            element.setAttribute("disabled", "disabled")
+        }    
+    }
+    // Disable New Deck button
+    newDeckButton = document.getElementById('create-deck').getElementsByTagName("a")[0];
+    newDeckButton.setAttribute("disabled", "disabled");
+
+    // Find selected deck and the form template
+    deck = document.getElementById(""+deck_id);  // Necessary to make deck_id a string and match
+    template = document.getElementById('deck-form');
+
+    // Clone the form & render deck id in buttons and links
+    form = template.cloneNode(true);
+    for (const element of form.getElementsByTagName('a')) {
+        const oldUrl = element.getAttribute("href");
+        if (oldUrl) {
+            element.setAttribute("href", oldUrl.replace("_deck_id_", deck_id ));
+        }
+    }
+    for (const element of form.getElementsByTagName('button')) {
+        const oldValue = element.getAttribute("onclick");
+        if (oldValue) {
+            element.setAttribute("onclick", oldValue.replace("_deck_id_", deck_id ));
+        }
+    }
+    // Fill for with static data
+    display = deck.getElementsByClassName("static-info")[0];
+    form.getElementsByClassName("deck-name-form")[0].value = display.getElementsByClassName("deck-name")[0].textContent;
+    form.getElementsByClassName("deck-desc-form")[0].value = display.getElementsByClassName("deck-desc")[0].textContent;
+    form.getElementsByClassName("deck-name-form")[0].value = display.getElementsByClassName("deck-name")[0].textContent;
+
+    // Clone the form into the selected deck & hide the static data
+    display.classList.add("hidden");
+    form.classList.remove("hidden");
+    deck.appendChild(form);
+}
+
+function hideForm(deck_id) {
+    // Find selected deck and the form template
+    deck = document.getElementById(""+deck_id);  // Necessary to make deck_id a string and match
+    console.log(deck);
+    // Remove form
+    deck.getElementsByTagName('form')[0].remove();
+    // Make static info visible
+    display = deck.getElementsByClassName("static-info")[0];
+    display.classList.remove("hidden");
+    // Enable all buttons for the decks
+    for (const deck of document.getElementsByClassName('deck')){
+        for (const element of deck.getElementsByTagName('button')) {
+            element.removeAttribute("disabled")
+        }
+        for (const element of deck.getElementsByTagName('a')) {
+            element.removeAttribute("disabled")
+        }    
+    }
+    // Enable New Deck button
+    newDeckButton = document.getElementById('create-deck').getElementsByTagName("a")[0];
+    newDeckButton.removeAttribute("disabled");
+
 }
