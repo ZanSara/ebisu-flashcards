@@ -21,6 +21,7 @@ section {
     border: 1px solid var(--gray);
     border-radius: 1rem;
     box-shadow: 5px 5px var(--dark-gray);
+    transition: all .3s;
 
     display: flex;
     flex-direction: column;
@@ -92,9 +93,10 @@ section {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    transition: all .3s;
 }
 
-#create-deck a {
+#create-deck button {
     text-align: center;
     display:inline;
     padding: 1.5rem;
@@ -109,12 +111,12 @@ section {
     font-style: italic;
 }
 
-#create-deck a:hover {
+#create-deck button:hover {
     color:black;
-    border-color: black;
+    border: 1px dashed black;
 }
 
-#create-deck a[disabled] {
+#create-deck button:disabled {
     color: white;
     border-color: white;
 }

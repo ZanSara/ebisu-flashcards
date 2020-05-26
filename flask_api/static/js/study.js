@@ -35,6 +35,9 @@ function renderCard(data){
 
     // Ensure answer block is closed
     document.getElementById("collapsible").removeAttribute("open");
+
+    // Clear the answer's field
+    document.getElementById("guess").getElementsByTagName("input")[0].value = "";
     
     // Get the template box & remove the hiding class if present
     var cardBox = document.getElementById("card");

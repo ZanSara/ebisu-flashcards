@@ -8,7 +8,8 @@
 
 {% block js %}
 <script src="{{ url_for('static', filename='js/base.js') }}"></script>
-<script src="{{ url_for('static', filename='js/home.js') }}"></script>
+<script src="{{ url_for('static', filename='js/home-ajax.js') }}"></script>
+<script src="{{ url_for('static', filename='js/home-ui.js') }}"></script>
 {% endblock %}
 
 
@@ -35,22 +36,22 @@
 
     <form id="deck-form" class="hidden">
         <div>
-            <input class="deck-name-form" type="text" value="Deck Name"></input>
-            <input class="deck-desc-form" type="text" value="Deck Description"></input>
+            <input class="deck-name-form" type="text" placeholder="Deck Name"></input>
+            <input class="deck-desc-form" type="text" placeholder="Deck Description"></input>
             <select class="deck-type-form">
                 <option>Type1</option>
                 <option>Type2</option>
             </select>
         </div>
         <div class="buttons">
-            <button type="button" class="positive">Save</button>
+            <button type="button" class="positive" onclick="saveDeck('_deck_id_')">Save</button>
             <button type="button" class="neutral" onclick="hideForm('_deck_id_')">Cancel</button>
-            <button type="button" class="negative">Delete</button>
+            <button type="button" class="negative" onclick="deleteDeck('_deck_id_')">Delete</button>
         </div>
     </form>
 
     <div id="create-deck" class="hidden">
-        <a>New Deck...</a>
+        <button type="button" onclick="newDeck()">New Deck...</button>
     </div>
 
 </section>
