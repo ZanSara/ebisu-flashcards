@@ -26,12 +26,10 @@ function loadDecks(){
 }
 
 
-
-function createDeck(deck_id) {
+function createNewDeck() {
     
     // Create the form data object to be passed to JSON
-    console.log(deck_id, document.getElementById(""+deck_id));
-    formData = new FormData(document.getElementById(""+deck_id).getElementsByTagName("form")[0]);
+    formData = new FormData(document.getElementById("create-deck").getElementsByTagName("form")[0]);
     formJSON = {}
     formData.forEach(function(value, key){
         formJSON[key] = value;
@@ -55,8 +53,9 @@ function createDeck(deck_id) {
             credentials: 'include'
         })
     .then(res => res.json())
-    .then((_) => {
-        loadDecks();
+    .then((data) => {
+        hideNewForm();
+        updateDeckData(data);
     })
     .catch(console.log);  /* TODO: HANDLE BETTER */
 }
@@ -65,7 +64,6 @@ function createDeck(deck_id) {
 function updateDeck(deck_id) {
     
     // Create the form data object to be passed to JSON
-    console.log(deck_id, document.getElementById(""+deck_id));
     formData = new FormData(document.getElementById(""+deck_id).getElementsByTagName("form")[0]);
     formJSON = {}
     formData.forEach(function(value, key){
@@ -90,8 +88,10 @@ function updateDeck(deck_id) {
             credentials: 'include'
         })
     .then(res => res.json())
-    .then((_) => {
-        loadDecks();
+    .then((data) => {
+        hideForm(deck_id);
+        console.log(data);
+        updateDeckData(data, deck_id);
     })
     .catch(console.log);  /* TODO: HANDLE BETTER */
 }
@@ -116,8 +116,9 @@ function deleteDeck(deck_id) {
             credentials: 'include'
         })
     .then(res => res.json())
-    .then((_) => {
-        loadDecks();
+    .then((data) => {
+        hideForm(deck_id);
+        updateDeckData(data, deck_id);
     })
     .catch(console.log);  /* TODO: HANDLE BETTER */
 }

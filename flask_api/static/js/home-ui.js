@@ -1,3 +1,45 @@
+function updateDeckData(data, deck_id){
+    
+    if (deck_id) {
+        // Select the existing deck
+        deck = document.getElementById(""+deck_id);
+    } else {
+        // Clone a new deck box
+        deck = document.getElementById("deck-template").cloneNode(true);
+        document.getElementById("deck-container").appendChild(deck);
+
+        // Move the New Deck button after the new box
+        createDeck = document.getElementById("create-deck");
+        document.getElementById("deck-container").appendChild(createDeck);
+    }
+    
+    // Render proper data in the template
+    deck.id = data._id.$oid;
+    deck.getElementsByClassName("deck-name")[0].innerHTML = data.name;
+    deck.getElementsByClassName("deck-name-form")[0].value = data.name;
+    deck.getElementsByClassName("deck-desc")[0].innerHTML = data.description;
+    deck.getElementsByClassName("deck-desc-form")[0].value = data.description;
+    deck.getElementsByClassName("deck-type")[0].innerHTML = data.algorithm;
+    deck.getElementsByClassName("deck-type-form")[0].value = data.algorithm;
+
+    // Append extra fields in form
+    deck.getElementsByClassName("extra-fields")[0].innerHTML = data.extra_fields;
+
+    // Render deck id into the HREFs
+    for (const element of deck.getElementsByTagName('a')) {
+        const oldUrl = element.getAttribute("href");
+        if (oldUrl) {
+            element.setAttribute("href", oldUrl.replace("_deck_id_", data._id.$oid ));
+        }
+    }
+    for (const element of deck.getElementsByTagName('button')) {
+        const oldValue = element.getAttribute("onclick");
+        if (oldValue) {
+            element.setAttribute("onclick", oldValue.replace("_deck_id_", data._id.$oid ));
+        }
+    }
+}
+
 /*
  * Invoked at load, renders every deck by copying the deck-template
  * and filling in the various values, taking them from the 'data' object.

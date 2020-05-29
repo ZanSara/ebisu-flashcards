@@ -63,7 +63,7 @@ class DecksApi(Resource):
         deck.save()
         user.update(push__decks=deck)
         user.save()
-        return {'id': str(deck.id)}, 200
+        return Response(deck.to_json(), mimetype="application/json", status=200)
 
 
 class DeckApi(Resource):
@@ -72,7 +72,7 @@ class DeckApi(Resource):
         user_id = get_jwt_identity()
         # deck = models.Deck.objects.get(id=deck_id, author=user_id).to_json()
         deck = bson.json_util.dumps(models.Deck.objects.get(id=deck_id, author=user_id).to_mongo())
-        return Response(deck, mimetype="application/json", status=200)
+        return Response(deck.to_json(), mimetype="application/json", status=200)
             
     @jwt_required
     def put(self, deck_id):
@@ -80,7 +80,7 @@ class DeckApi(Resource):
         deck = models.Deck.objects.get(id=deck_id, author=user_id)
         body = request.get_json()
         deck.update(**body)
-        return '', 200      
+        return Response(deck.reload().to_json(), mimetype="application/json", status=200)
     
     @jwt_required
     def delete(self, deck_id):
@@ -99,7 +99,7 @@ class CardsApi(Resource):
             # cards = models.Card.objects(deck=deck_id).to_json()
             cards_list = models.Card.objects(deck=deck_id).all()
             cards = bson.json_util.dumps([card.to_mongo() for card in cards_list])
-            return Response(cards, mimetype="application/json", status=200)
+            return Response(cards.to_json(), mimetype="application/json", status=200)
 
         except models.Card.DoesNotExist:
             return Response("{}", mimetype="application/json", status=200)
@@ -113,7 +113,7 @@ class CardsApi(Resource):
         card.save()
         # deck.update(push__cards=card)
         # deck.save()
-        return {'id': str(card.id)}, 200
+        return Response(card.reload().to_json(), mimetype="application/json", status=200)
 
 
 class CardApi(Resource):
@@ -122,7 +122,7 @@ class CardApi(Resource):
         user_id = get_jwt_identity()
         deck = models.Deck.objects.get(id=deck_id, author=user_id)  # Ensure the deck belongs to this user before proceeding
         card = bson.json_util.dumps(models.Card.objects.get(id=card_id).to_mongo())
-        return Response(card, mimetype="application/json", status=200)
+        return Response(card.to_json(), mimetype="application/json", status=200)
             
     @jwt_required
     def put(self, deck_id, card_id):
@@ -132,7 +132,7 @@ class CardApi(Resource):
         card = models.Card.objects.get(id=card_id)
         if deck.id == card.deck:
             card.update(**body)
-            return '', 200   
+            return Response(card.reload().to_json(), mimetype="application/json", status=200)
         else:
             raise ValueError("Card does not belong to deck")   
     
@@ -159,21 +159,21 @@ class TemplatesApi(Resource):
         body = request.get_json()
         template = models.Template(**body)
         template.save()
-        return {'id': str(template.id)}, 200
+        return Response(template.reload().to_json(), mimetype="application/json", status=200)
 
 
 class TemplateApi(Resource):
     @jwt_required
     def get(self, template_id):
         template = models.Template.objects.get(id=template_id).to_json()
-        return Response(template, mimetype="application/json", status=200)
+        return Response(template.to_json(), mimetype="application/json", status=200)
             
     @jwt_required
     def put(self, template_id):
         body = request.get_json()
         template = models.Template.objects.get(id=template_id)
         template.update(**body)
-        return '', 200   
+        return Response(template.reload().to_json(), mimetype="application/json", status=200)
     
     @jwt_required
     def delete(self, template_id):
