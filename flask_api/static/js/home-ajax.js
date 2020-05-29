@@ -2,14 +2,20 @@ loadDecks();
 
 
 function loadDecks(){
-    // I should have a CSRF token set after logging in
-    var token = getCookie("csrf_access_token");
+    // Gather the tokens
+    var access_token = getCookie("access_token-cookie");
+    var csrf_token = getCookie("csrf_access_token");
 
     // Fetch decks data
     fetch('http://127.0.0.1:5000/api/decks', 
         {   
             method:'GET',
-            headers:  new Headers({'Authorization': 'Bearer '+token}),
+            headers:  new Headers({
+                'Authorization': 'Bearer ' + access_token,
+                'Content-Type': 'application/json; charset=utf-8',
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': csrf_token
+            }),
         })
     .then(res => res.json())
     .then((data) => {
@@ -21,12 +27,97 @@ function loadDecks(){
 
 
 
-function saveDeck(deck_id) {
-    console.log("IMPLEMENT");
+function createDeck(deck_id) {
+    
+    // Create the form data object to be passed to JSON
+    console.log(deck_id, document.getElementById(""+deck_id));
+    formData = new FormData(document.getElementById(""+deck_id).getElementsByTagName("form")[0]);
+    formJSON = {}
+    formData.forEach(function(value, key){
+        formJSON[key] = value;
+    });
+
+    // Gather the tokens
+    var access_token = getCookie("access_token-cookie");
+    var csrf_token = getCookie("csrf_access_token");
+
+    // Fetch decks data
+    fetch('http://127.0.0.1:5000/api/decks', 
+        {   
+            method:'POST',
+            headers:  new Headers({
+                'Authorization': 'Bearer ' + access_token,
+                'Content-Type': 'application/json; charset=utf-8',
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': csrf_token,
+            }),
+            body: JSON.stringify(formJSON),
+            credentials: 'include'
+        })
+    .then(res => res.json())
+    .then((_) => {
+        loadDecks();
+    })
+    .catch(console.log);  /* TODO: HANDLE BETTER */
 }
 
 
+function updateDeck(deck_id) {
+    
+    // Create the form data object to be passed to JSON
+    console.log(deck_id, document.getElementById(""+deck_id));
+    formData = new FormData(document.getElementById(""+deck_id).getElementsByTagName("form")[0]);
+    formJSON = {}
+    formData.forEach(function(value, key){
+        formJSON[key] = value;
+    });
+
+    // Gather the tokens
+    var access_token = getCookie("access_token-cookie");
+    var csrf_token = getCookie("csrf_access_token");
+
+    // Fetch decks data
+    fetch('http://127.0.0.1:5000/api/decks/'+deck_id, 
+        {   
+            method:'PUT',
+            headers:  new Headers({
+                'Authorization': 'Bearer ' + access_token,
+                'Content-Type': 'application/json; charset=utf-8',
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': csrf_token,
+            }),
+            body: JSON.stringify(formJSON),
+            credentials: 'include'
+        })
+    .then(res => res.json())
+    .then((_) => {
+        loadDecks();
+    })
+    .catch(console.log);  /* TODO: HANDLE BETTER */
+}
+
 
 function deleteDeck(deck_id) {
-    console.log("IMPLEMENT");
+    
+    // Gather the tokens
+    var access_token = getCookie("access_token-cookie");
+    var csrf_token = getCookie("csrf_access_token");
+
+    // Fetch decks data
+    fetch('http://127.0.0.1:5000/api/decks/'+deck_id, 
+        {   
+            method:'DELETE',
+            headers:  new Headers({
+                'Authorization': 'Bearer ' + access_token,
+                'Content-Type': 'application/json; charset=utf-8',
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': csrf_token,
+            }),
+            credentials: 'include'
+        })
+    .then(res => res.json())
+    .then((_) => {
+        loadDecks();
+    })
+    .catch(console.log);  /* TODO: HANDLE BETTER */
 }

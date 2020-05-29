@@ -96,7 +96,7 @@ section {
     transition: all .3s;
 }
 
-#create-deck button {
+#create-deck > button {
     text-align: center;
     display:inline;
     padding: 1.5rem;
@@ -111,12 +111,12 @@ section {
     font-style: italic;
 }
 
-#create-deck button:hover {
+#create-deck  > button:hover {
     color:black;
     border: 1px dashed black;
 }
 
-#create-deck button:disabled {
+#create-deck > button:disabled {
     color: white;
     border-color: white;
 }

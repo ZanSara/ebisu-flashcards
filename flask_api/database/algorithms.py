@@ -150,6 +150,7 @@ class Ebisu(Algorithm):
     # TODO make customizable?
     HALF_LIFE_UNIT = timedelta(hours=1)
 
+    dynamic_fields = []
     
     def __init__(self, deck: 'Deck'):
         super(Algorithm, self).__init__()

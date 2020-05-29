@@ -42,11 +42,15 @@ class DecksApi(Resource):
     def get(self):
         user_id = get_jwt_identity()
         try:
-            # query = models.Deck.objects(author=user_id)
-            # decks = query.to_json()
             decks_list = models.Deck.objects(author=user_id).all()
-            decks = bson.json_util.dumps([deck.to_mongo() for deck in decks_list])
-            return Response(decks, mimetype="application/json", status=200)
+            
+            for deck in decks_list:
+                # Server Side extra form fields rendering
+                deck.extra_fields = render_template(os.path.join("deck-templates", deck.algorithm+".html"), deck=deck)
+            
+            decks = [deck.to_mongo() for deck in decks_list]
+            return Response(bson.json_util.dumps(decks), mimetype="application/json", status=200)
+
         except models.Deck.DoesNotExist:
             return Response("{}", mimetype="application/json", status=200)
 

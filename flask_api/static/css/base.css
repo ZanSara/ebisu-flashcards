@@ -57,7 +57,7 @@ body {
     padding: min(3rem, 2%);
 }
 
-a, p, input[type=submit] {
+a, p, input[type=submit], button {
   word-break: break-word;
 }
 
