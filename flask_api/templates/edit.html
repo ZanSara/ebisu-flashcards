@@ -9,9 +9,10 @@
 
 {% block js %}
 <script src="{{ url_for('static', filename='js/base.js') }}"></script>
-<script src="{{ url_for('static', filename='js/edit-ajax.js') }}"></script>
-<script src="{{ url_for('static', filename='js/edit-rendering.js') }}"></script>
-<script src="{{ url_for('static', filename='js/edit-ui.js') }}"></script>
+<script src="{{ url_for('static', filename='js/boxes-ajax.js') }}"></script>
+<script src="{{ url_for('static', filename='js/boxes-rendering.js') }}"></script>
+<script src="{{ url_for('static', filename='js/boxes-ui.js') }}"></script>
+<script src="{{ url_for('static', filename='js/edit.js') }}"></script>
 {% endblock %}
 
 
@@ -19,9 +20,9 @@
 
 {% include "loading.html" %}
 
-<section id="cards-container">
+<section id="boxes-container">
 
-    <div id="card-template" class="box hidden">
+    <div id="box-template" class="box hidden">
         <div class="static-info">
 
             <div class="question">
@@ -32,7 +33,7 @@
             </div>
 
             <div class="buttons">
-                <button class="neutral" type="button" onclick="showForm('_card_id_')">Edit</button>
+                <button class="neutral" type="button" onclick="showForm('_box_id_')">Edit</button>
             </div>
 
         </div>
@@ -48,16 +49,16 @@
                 <div class="extra-fields"></div>
             </div>
             <div class="buttons">
-                <button type="button" class="positive" onclick="updateCard('_card_id_')">Save</button>
-                <button type="button" class="neutral" onclick="hideForm('_card_id_')">Cancel</button>
-                <button type="button" class="negative" onclick="deleteCard('_card_id_')">Delete</button>
+                <button type="button" class="positive" onclick="updateCard('_box_id_')">Save</button>
+                <button type="button" class="neutral" onclick="hideForm('_box_id_')">Cancel</button>
+                <button type="button" class="negative" onclick="deleteCard('_box_id_')">Delete</button>
             </div>
         </form>
     </div>
 
     
 
-    <div id="create-card" class="hidden">
+    <div id="create-box" class="hidden">
         <button type="button" onclick="showNewForm()">New Card...</button>
         <form class="hidden">
             <div>
@@ -70,8 +71,8 @@
                 <div class="extra-fields"></div>
             </div>
             <div class="buttons">
-                <button type="button" class="positive" onclick="createNewCard('_card_id_')">Save</button>
-                <button type="button" class="neutral" onclick="hideNewForm('_card_id_')">Cancel</button>
+                <button type="button" class="positive" onclick="createNewCard('_box_id_')">Save</button>
+                <button type="button" class="neutral" onclick="hideNewForm('_box_id_')">Cancel</button>
             </div>
         </form>
     </div>

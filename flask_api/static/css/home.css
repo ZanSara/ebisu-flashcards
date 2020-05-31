@@ -1,5 +1,3 @@
-
-
 /*----------------------------------------------------------------------------*/
 /*     Deck Styles
 /*----------------------------------------------------------------------------*/
@@ -13,43 +11,6 @@
     margin: 0;
     border: 1px dashed var(--gray);
     border-radius: 2px;
-}
-
-/*----------------------------------------------------------------------------*/
-/*     New Deck Styles
-/*----------------------------------------------------------------------------*/
-
-#create-deck {
-    max-width: 500px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    transition: all .3s;
-}
-
-#create-deck > button {
-    text-align: center;
-    display:inline;
-    padding: 1.5rem;
-    margin-right:auto;
-
-    border: 1px dashed var(--gray);
-    border-radius: 1rem;
-
-    background: transparent;
-    color: var(--gray);
-    font-size: 1.5rem;
-    font-style: italic;
-}
-
-#create-deck  > button:hover {
-    color:black;
-    border: 1px dashed black;
-}
-
-#create-deck > button:disabled {
-    color: white;
-    border-color: white;
 }
 
 

@@ -76,3 +76,40 @@ section {
     background-color: var(--danger);
 }
 
+
+/*----------------------------------------------------------------------------*/
+/*     New Box Styles
+/*----------------------------------------------------------------------------*/
+
+#create-box {
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: all .3s;
+}
+
+#create-box > button {
+    text-align: center;
+    display:inline;
+    padding: 1.5rem;
+    margin-right:auto;
+
+    border: 1px dashed var(--gray);
+    border-radius: 1rem;
+
+    background: transparent;
+    color: var(--gray);
+    font-size: 1.5rem;
+    font-style: italic;
+}
+
+#create-box  > button:hover {
+    color:black;
+    border: 1px dashed black;
+}
+
+#create-box > button:disabled {
+    color: white;
+    border-color: white;
+}
