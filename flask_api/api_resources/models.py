@@ -10,31 +10,39 @@ import mongoengine as mongo
 from database import models, algorithms
 
 
-class StudyApi(Resource):
-    @jwt_required
-    def get(self, deck_id):
-        user_id = get_jwt_identity()
-        deck = models.Deck.objects.get(id=deck_id, author=user_id)
-        algorithm = algorithms.algorithm_engine(deck)
-        next_card = algorithm.next_card_to_review()
+
+
+class CardResource(Resource):
+
+    def serialize_cards(self, db_cards):
+        json_cards = []
+        for card in db_cards:
+            
+            # Server Side question and answer blocks rendering
+            question_path = os.path.join("card-templates", card.question_template.path)
+            answer_path = os.path.join("card-templates", card.answer_template.path)
+
+            card.question = render_template(question_path, content=card.question)
+            card.answer = render_template(answer_path, content=card.answer)
+
+            # Prepare for JSON serialization
+            card = card.to_mongo()
+            json_cards.append(card)
+        # Return serialized list
+        return bson.json_util.dumps(json_cards)
+
+
+    def serialize_card(self, db_card):
 
         # Server Side question and answer blocks rendering
-        question_path = os.path.join("card-templates", next_card.question_template.path)
-        answer_path = os.path.join("card-templates", next_card.answer_template.path)
+        question_path = os.path.join("card-templates", db_card.question_template.path)
+        answer_path = os.path.join("card-templates", db_card.answer_template.path)
 
-        next_card.question = render_template(question_path, content=next_card.question)
-        next_card.answer = render_template(answer_path, content=next_card.answer)
+        db_card.question = render_template(question_path, content=db_card.question)
+        db_card.answer = render_template(answer_path, content=db_card.answer)
 
-        return Response(next_card.to_json(), mimetype="application/json", status=200)
+        return db_card.to_json()
 
-    @jwt_required
-    def post(self, deck_id):
-        user_id = get_jwt_identity()
-        body = request.get_json()
-        deck = models.Deck.objects.get(id=deck_id, author=user_id)
-        algorithm = algorithms.algorithm_engine(deck)
-        algorithm.process_result(**body, user_id=user_id)
-        return '', 200
 
 
 class DeckResource(Resource):
@@ -56,6 +64,30 @@ class DeckResource(Resource):
         template_path = os.path.join("deck-templates", db_deck.algorithm+".html")
         db_deck.extra_fields = render_template(template_path, deck=db_deck)
         return db_deck.to_json()
+
+
+
+class StudyApi(CardResource):
+    @jwt_required
+    def get(self, deck_id):
+        user_id = get_jwt_identity()
+        deck = models.Deck.objects.get(id=deck_id, author=user_id)
+        
+        algorithm = algorithms.algorithm_engine(deck)
+        next_card = algorithm.next_card_to_review()
+
+        next_card = self.serialize_card(next_card)
+        return Response(next_card, mimetype="application/json", status=200)
+
+    @jwt_required
+    def post(self, deck_id):
+        user_id = get_jwt_identity()
+        body = request.get_json()
+        deck = models.Deck.objects.get(id=deck_id, author=user_id)
+        algorithm = algorithms.algorithm_engine(deck)
+        algorithm.process_result(**body, user_id=user_id)
+        return '', 200
+
 
 
 class DecksApi(DeckResource):
@@ -111,16 +143,14 @@ class DeckApi(DeckResource):
         return '', 200
 
 
-class CardsApi(Resource):
+class CardsApi(CardResource):
     @jwt_required
     def get(self, deck_id):
         user_id = get_jwt_identity()
         try:
-            # deck = models.Deck.objects.get(id=deck_id, author=user_id)
-            # cards = models.Card.objects(deck=deck_id).to_json()
             cards_list = models.Card.objects(deck=deck_id).all()
-            cards = bson.json_util.dumps([card.to_mongo() for card in cards_list])
-            return Response(cards.to_json(), mimetype="application/json", status=200)
+            cards = self.serialize_cards(cards_list)
+            return Response(cards, mimetype="application/json", status=200)
 
         except models.Card.DoesNotExist:
             return Response("{}", mimetype="application/json", status=200)
@@ -130,20 +160,27 @@ class CardsApi(Resource):
         user_id = get_jwt_identity()
         deck = models.Deck.objects.get(id=deck_id, author=user_id)
         body = request.get_json()
-        card = models.Card(**body, deck=deck.id)
+        card = models.Card(**body, deck=deck)
+
+        card.question_template = models.Template.objects.get(name=card.question_template)
+        card.answer_template = models.Template.objects.get(name=card.answer_template)
+
         card.save()
+        card.reload()
+        card = self.serialize_card(card)
         # deck.update(push__cards=card)
         # deck.save()
-        return Response(card.reload().to_json(), mimetype="application/json", status=200)
+        return Response(card, mimetype="application/json", status=200)
 
 
-class CardApi(Resource):
+class CardApi(CardResource):
     @jwt_required
     def get(self, deck_id, card_id):
         user_id = get_jwt_identity()
         deck = models.Deck.objects.get(id=deck_id, author=user_id)  # Ensure the deck belongs to this user before proceeding
-        card = bson.json_util.dumps(models.Card.objects.get(id=card_id).to_mongo())
-        return Response(card.to_json(), mimetype="application/json", status=200)
+        db_card = models.Card.objects.get(id=card_id)
+        card = self.serialize_card(db_card)
+        return Response(card, mimetype="application/json", status=200)
             
     @jwt_required
     def put(self, deck_id, card_id):
@@ -153,7 +190,10 @@ class CardApi(Resource):
         card = models.Card.objects.get(id=card_id)
         if deck.id == card.deck:
             card.update(**body)
-            return Response(card.reload().to_json(), mimetype="application/json", status=200)
+            card.save()
+            card.reload()
+            card = self.serialize_card(card)
+            return Response(card, mimetype="application/json", status=200)
         else:
             raise ValueError("Card does not belong to deck")   
     

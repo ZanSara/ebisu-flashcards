@@ -1,14 +1,81 @@
 {% extends "logged-in-base.html" %}
 
-{% block content %}
 
-<div id="cards_container"></div>
+{% block css%}
+<link href="{{ url_for('static', filename='css/boxes.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/edit.css') }}" rel="stylesheet">
+{% endblock %}
 
-<!-- Load React. -->
-<!-- Replace development with production.min -->
-<script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>  
-<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
-<!-- Load our React component. -->
-<script src="{{ url_for('static', filename='react/edit.js') }}"></script>
+
+{% block js %}
+<script src="{{ url_for('static', filename='js/base.js') }}"></script>
+<script src="{{ url_for('static', filename='js/edit-ajax.js') }}"></script>
+<script src="{{ url_for('static', filename='js/edit-rendering.js') }}"></script>
+<script src="{{ url_for('static', filename='js/edit-ui.js') }}"></script>
+{% endblock %}
+
+
+{% block page %}
+
+{% include "loading.html" %}
+
+<section id="cards-container">
+
+    <div id="card-template" class="box hidden">
+        <div class="static-info">
+
+            <div class="question">
+                <p>---</p>
+            </div>
+            <div class="answer">
+                <p>---</p>
+            </div>
+
+            <div class="buttons">
+                <button class="neutral" type="button" onclick="showForm('_card_id_')">Edit</button>
+            </div>
+
+        </div>
+
+        <form class="hidden">
+            <div>
+                <input class="question-form" type="text" name="question" placeholder="Question"></input>
+                <input class="hidden" type="text" name="question_template" value="Text Renderer"></input>
+
+                <input class="answer-form" type="text" name="answer" placeholder="Answer"></input>
+                <input class="hidden" type="text" name="answer_template" value="Text Renderer"></input>
+
+                <div class="extra-fields"></div>
+            </div>
+            <div class="buttons">
+                <button type="button" class="positive" onclick="updateCard('_card_id_')">Save</button>
+                <button type="button" class="neutral" onclick="hideForm('_card_id_')">Cancel</button>
+                <button type="button" class="negative" onclick="deleteCard('_card_id_')">Delete</button>
+            </div>
+        </form>
+    </div>
+
+    
+
+    <div id="create-card" class="hidden">
+        <button type="button" onclick="showNewForm()">New Card...</button>
+        <form class="hidden">
+            <div>
+                <input class="question-form" type="text" name="question" placeholder="Question"></input>
+                <input class="hidden" type="text" name="question_template" value="Text Renderer"></input>
+
+                <input class="answer-form" type="text" name="answer" placeholder="Answer"></input>
+                <input class="hidden" type="text" name="answer_template" value="Text Renderer"></input>
+
+                <div class="extra-fields"></div>
+            </div>
+            <div class="buttons">
+                <button type="button" class="positive" onclick="createNewCard('_card_id_')">Save</button>
+                <button type="button" class="neutral" onclick="hideNewForm('_card_id_')">Cancel</button>
+            </div>
+        </form>
+    </div>
+
+</section>
 
 {% endblock %}

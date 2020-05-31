@@ -1,55 +1,8 @@
-/*----------------------------------------------------------------------------*/
-/*     Home Styles
-/*----------------------------------------------------------------------------*/
 
-section {
-    padding: min(2rem, 3%);
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-    grid-column-gap: 3vw;
-    grid-row-gap: 3vh;
-}
 
 /*----------------------------------------------------------------------------*/
 /*     Deck Styles
 /*----------------------------------------------------------------------------*/
-
-
-.deck {
-    max-width: min(500px, 75vw);
-    padding: 1.5rem;
-    border: 1px solid var(--gray);
-    border-radius: 1rem;
-    box-shadow: 5px 5px var(--dark-gray);
-    transition: all .3s;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.deck p {
-    color: var(--dark-gray);
-}
-
-.deck a,     
-.deck button {
-    text-transform: uppercase;
-    padding: 0.75rem;
-}
-
-.deck h1 {
-    color: black;
-    background-color: transparent;
-    text-align: unset;
-    font-size: 1.5rem;
-    font-weight: bold;
-    text-transform: uppercase;
-    display:block;
-    margin: 0;
-    padding: 0 0 1rem 0;
-    border-bottom: 1px dashed var(--dark-gray);
-}
 
 .deck-type {
     display: inline-block;
@@ -61,28 +14,6 @@ section {
     border: 1px dashed var(--gray);
     border-radius: 2px;
 }
-
-.deck .buttons {
-    padding-top: 1rem;
-    margin-top: 1rem;
-    border-top: 1px dashed var(--gray);
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-    grid-gap: 1rem;
-}
-
-.deck .positive {
-    background-color: var(--success);
-}
-
-.deck .neutral {
-    background-color: var(--primary);
-}
-
-.deck .negative {
-    background-color: var(--danger);
-}
-
 
 /*----------------------------------------------------------------------------*/
 /*     New Deck Styles
@@ -126,7 +57,7 @@ section {
 /*      Deck Form Styles
 /*----------------------------------------------------------------------------*/
 
-.deck .deck-name-form {
+.deck-name-form {
     color: black;
     background-color: #eee;
     text-align: unset;
@@ -142,7 +73,7 @@ section {
     width: 95%;
 }
 
-.deck .deck-desc-form {
+.deck-desc-form {
     color: var(--dark-gray);
     background-color: #eee;
     text-align: unset;

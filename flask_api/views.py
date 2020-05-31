@@ -85,9 +85,7 @@ def edit(deck_id):
 
     user_id = jwt.get_jwt_identity()
     deck = Deck.objects.get(id=deck_id, author=user_id)
-    return render_template('edit.html', navbar_title=deck.name, navbar_home=True)
-
-
+    return render_template('edit.html', navbar_title="\"{}\" Cards List".format(deck.name), navbar_home=True)
 
 
 

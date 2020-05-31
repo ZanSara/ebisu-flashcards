@@ -2,6 +2,7 @@
 
 
 {% block css%}
+<link href="{{ url_for('static', filename='css/boxes.css') }}" rel="stylesheet">
 <link href="{{ url_for('static', filename='css/home.css') }}" rel="stylesheet">
 {% endblock %}
 
@@ -20,7 +21,7 @@
 
 <section id="deck-container">
 
-    <div id="deck-template" class="deck hidden">
+    <div id="deck-template" class="box hidden">
         <div class="static-info">
             <div>
                 <h1 class="deck-name">Deck Name</h1>
@@ -30,7 +31,7 @@
             <div class="buttons">
                 <a class="positive" href="study/_deck_id_">Study</a>
                 <button class="neutral" type="button" onclick="showForm('_deck_id_')">Edit</button>
-                <a class="neutral" href="edit/_deck_id_/cards">Browse</a>
+                <a class="neutral" href="edit/_deck_id_">Browse</a>
             </div>
         </div>
 

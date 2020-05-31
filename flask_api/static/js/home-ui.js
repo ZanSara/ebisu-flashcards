@@ -123,8 +123,8 @@ function showNewForm() {
     form = deck.getElementsByTagName("form")[0];
     button = deck.getElementsByTagName("button")[0];
 
-    // Add the deck class to the div
-    deck.classList.add("deck");
+    // Add the box class to the div
+    deck.classList.add("box");
 
     // Enable back form buttons
     for (const element of form.getElementsByTagName('button')) {
@@ -155,8 +155,8 @@ function hideNewForm() {
     form = deck.getElementsByTagName("form")[0];
     button = deck.getElementsByTagName("button")[0];
     
-    // Remove the deck class to the div
-    deck.classList.remove("deck");
+    // Remove the box class to the div
+    deck.classList.remove("box");
     
     // Show the New Deck button
     button.removeAttribute("disabled");

@@ -1,57 +1,6 @@
 loadDecks();
 
 
-function serializeForm(form){
-    // Create the form data object to be passed to JSON
-    formData = new FormData(form);
-    formJSON = {}
-    formData.forEach(function(value, key){
-        formJSON[key] = value;
-    });
-    // Render the checkbox as true/false values
-    for (const checkbox of form.querySelectorAll('input[type=checkbox')) {
-        formJSON[checkbox.name] = checkbox.checked;
-    }
-    console.log(formJSON);
-    return JSON.stringify(formJSON);
-}
-
-function callBackend(endpoint, method, body, callback){
-    // Gather the tokens
-    var access_token = getCookie("access_token-cookie");
-    var csrf_token = getCookie("csrf_access_token");
-
-    // Fetch decks data
-    fetch(endpoint, 
-        {   
-            method: method,
-            headers:  new Headers({
-                'Authorization': 'Bearer ' + access_token,
-                'Content-Type': 'application/json; charset=utf-8',
-                'Accept': 'application/json',
-                'X-CSRF-TOKEN': csrf_token,
-            }),
-            body: body,
-            credentials: 'include'
-    })
-    .then(res => {
-        if (!res.ok) {
-            throw Error(res.statusText);
-        }
-        return res;
-    })
-    .then(res => res.json())
-    .then(data => callback(data))
-    .catch(reportError);  /* TODO: HANDLE BETTER */
-}
-
-function reportError(message) {
-    console.log(message);
-    alert("An error occured.");
-}
-
-
-
 function loadDecks(){
     callBackend(
         endpoint='http://127.0.0.1:5000/api/decks',
