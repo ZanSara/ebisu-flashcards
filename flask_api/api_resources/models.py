@@ -19,12 +19,12 @@ class StudyApi(Resource):
         next_card = algorithm.next_card_to_review()
 
         # Server Side question and answer blocks rendering
-        question = render_template(os.path.join("card-templates", next_card.question_template.path), content=next_card.question)
-        answer = render_template(os.path.join("card-templates", next_card.answer_template.path), content=next_card.answer)
+        question_path = os.path.join("card-templates", next_card.question_template.path)
+        answer_path = os.path.join("card-templates", next_card.answer_template.path)
 
-        next_card.question = question
-        next_card.answer = answer
-        
+        next_card.question = render_template(question_path, content=next_card.question)
+        next_card.answer = render_template(answer_path, content=next_card.answer)
+
         return Response(next_card.to_json(), mimetype="application/json", status=200)
 
     @jwt_required
@@ -37,20 +37,37 @@ class StudyApi(Resource):
         return '', 200
 
 
-class DecksApi(Resource):
+class DeckResource(Resource):
+
+    def serialize_decks(self, db_decks):
+        json_decks = []
+        for deck in db_decks:
+            # Server Side extra form fields rendering
+            template_path = os.path.join("deck-templates", deck.algorithm+".html")
+            deck.extra_fields = render_template(template_path, deck=deck)
+            # Prepare for JSON serialization
+            deck = deck.to_mongo()
+            json_decks.append(deck)
+        # Return serialized list
+        return bson.json_util.dumps(json_decks)
+
+    def serialize_deck(self, db_deck):
+        # Server Side extra form fields rendering
+        template_path = os.path.join("deck-templates", db_deck.algorithm+".html")
+        db_deck.extra_fields = render_template(template_path, deck=db_deck)
+        return db_deck.to_json()
+
+
+class DecksApi(DeckResource):
+
     @jwt_required
     def get(self):
         user_id = get_jwt_identity()
         try:
             decks_list = models.Deck.objects(author=user_id).all()
+            decks = self.serialize_decks(decks_list)
+            return Response(decks, mimetype="application/json", status=200)
             
-            for deck in decks_list:
-                # Server Side extra form fields rendering
-                deck.extra_fields = render_template(os.path.join("deck-templates", deck.algorithm+".html"), deck=deck)
-            
-            decks = [deck.to_mongo() for deck in decks_list]
-            return Response(bson.json_util.dumps(decks), mimetype="application/json", status=200)
-
         except models.Deck.DoesNotExist:
             return Response("{}", mimetype="application/json", status=200)
 
@@ -63,16 +80,17 @@ class DecksApi(Resource):
         deck.save()
         user.update(push__decks=deck)
         user.save()
-        return Response(deck.to_json(), mimetype="application/json", status=200)
+        deck = self.serialize_deck(deck)
+        return Response(deck, mimetype="application/json", status=200)
 
 
-class DeckApi(Resource):
+class DeckApi(DeckResource):
     @jwt_required
     def get(self, deck_id):
         user_id = get_jwt_identity()
-        # deck = models.Deck.objects.get(id=deck_id, author=user_id).to_json()
-        deck = bson.json_util.dumps(models.Deck.objects.get(id=deck_id, author=user_id).to_mongo())
-        return Response(deck.to_json(), mimetype="application/json", status=200)
+        deck = models.Deck.objects.get(id=deck_id, author=user_id)
+        deck = self.serialize_deck(deck)
+        return Response(deck, mimetype="application/json", status=200)
             
     @jwt_required
     def put(self, deck_id):
@@ -80,7 +98,10 @@ class DeckApi(Resource):
         deck = models.Deck.objects.get(id=deck_id, author=user_id)
         body = request.get_json()
         deck.update(**body)
-        return Response(deck.reload().to_json(), mimetype="application/json", status=200)
+        # Reload and serialize the new deck data
+        deck = deck.reload()
+        deck = self.serialize_deck(deck)
+        return Response(deck, mimetype="application/json", status=200)
     
     @jwt_required
     def delete(self, deck_id):
@@ -185,6 +206,12 @@ class TemplateApi(Resource):
 class AlgorithmsApi(Resource):
     @jwt_required
     def get(self):
-        names = json.dumps(list(algorithms.ALGORITHM_MAPPING.keys()))
-        return Response(names, mimetype="application/json", status=200)
+        names = []
+        for name, klass in algorithms.ALGORITHM_MAPPING.items():
+            algorithm = {
+                'name': name,
+                'extra_fields': render_template(os.path.join("deck-templates", name+".html"), deck={})    
+            }
+            names.append(algorithm)
+        return Response(json.dumps(names), mimetype="application/json", status=200)
 

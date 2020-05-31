@@ -9,6 +9,7 @@
 {% block js %}
 <script src="{{ url_for('static', filename='js/base.js') }}"></script>
 <script src="{{ url_for('static', filename='js/home-ajax.js') }}"></script>
+<script src="{{ url_for('static', filename='js/home-rendering.js') }}"></script>
 <script src="{{ url_for('static', filename='js/home-ui.js') }}"></script>
 {% endblock %}
 
@@ -51,14 +52,15 @@
     
 
     <div id="create-deck" class="hidden">
-        <button type="button" onclick="displayNewDeck()">New Deck...</button>
+        <button type="button" onclick="showNewForm()">New Deck...</button>
         <form class="hidden">
             <div>
                 <input class="deck-name-form" type="text" name="name", placeholder="Deck Name"></input>
                 <input class="deck-desc-form" type="text" name="description" placeholder="Deck Description"></input>
-                <select class="deck-type-form" name="algorithm">
-                    <option>Random Order</option>
+                <select class="deck-type-form" name="algorithm" onchange="switchExtraFields()">
+                    <option disabled selected value> -- select an option -- </option>
                 </select>
+                <div class="extra-fields"></div>
             </div>
             <div class="buttons">
                 <button type="button" class="positive" onclick="createNewDeck()">Save</button>

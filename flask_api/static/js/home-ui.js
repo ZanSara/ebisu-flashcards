@@ -1,98 +1,73 @@
-function updateDeckData(data, deck_id){
-    
-    if (deck_id) {
-        // Select the existing deck
-        deck = document.getElementById(""+deck_id);
-    } else {
-        // Clone a new deck box
-        deck = document.getElementById("deck-template").cloneNode(true);
+/*
+ * Spawns many new boxes at the end of the boxes list.
+ * New Deck button is kept at the very end.
+ */
+function appendBoxes(data_list){
+
+    var template = document.getElementById("deck-template");
+
+    for (const data of data_list){
+        var deck = createBox(data, template);
         document.getElementById("deck-container").appendChild(deck);
-
-        // Move the New Deck button after the new box
-        createDeck = document.getElementById("create-deck");
-        document.getElementById("deck-container").appendChild(createDeck);
     }
     
-    // Render proper data in the template
-    deck.id = data._id.$oid;
-    deck.getElementsByClassName("deck-name")[0].innerHTML = data.name;
-    deck.getElementsByClassName("deck-name-form")[0].value = data.name;
-    deck.getElementsByClassName("deck-desc")[0].innerHTML = data.description;
-    deck.getElementsByClassName("deck-desc-form")[0].value = data.description;
-    deck.getElementsByClassName("deck-type")[0].innerHTML = data.algorithm;
-    deck.getElementsByClassName("deck-type-form")[0].value = data.algorithm;
-
-    // Append extra fields in form
-    deck.getElementsByClassName("extra-fields")[0].innerHTML = data.extra_fields;
-
-    // Render deck id into the HREFs
-    for (const element of deck.getElementsByTagName('a')) {
-        const oldUrl = element.getAttribute("href");
-        if (oldUrl) {
-            element.setAttribute("href", oldUrl.replace("_deck_id_", data._id.$oid ));
-        }
-    }
-    for (const element of deck.getElementsByTagName('button')) {
-        const oldValue = element.getAttribute("onclick");
-        if (oldValue) {
-            element.setAttribute("onclick", oldValue.replace("_deck_id_", data._id.$oid ));
-        }
-    }
+    // Move the New Deck button after the box
+    createDeck = document.getElementById("create-deck");
+    document.getElementById("deck-container").appendChild(createDeck);
 }
 
+
 /*
- * Invoked at load, renders every deck by copying the deck-template
- * and filling in the various values, taking them from the 'data' object.
- * 
- *      Required the 'data' object
+ * Spawns a new box at the end of the boxes list.
+ * New Deck button is kept at the very end.
  */
-function renderDecks(data) {
+function appendBox(data){
+    appendBoxes([data]);
+}
+
+
+
+/*
+ * Invoked at load, renders every deck using the data
+ * received from the caller.
+ */
+function initialDecksRendering(decks_list) {
 
     // Remove loading icon if present
     document.getElementById("loading").classList.add("hidden");
     
-    // Get the template box
-    var deckTemplate = document.getElementById("deck-template");
+    appendBoxes(decks_list);
 
-    for (const deck of data){
-        // Clone template & remove the hiding class
-        var newDeck = deckTemplate.cloneNode(true);
-        newDeck.classList.remove("hidden");
-        
-        // Render proper data in the template
-        newDeck.id = deck._id.$oid;
-        newDeck.getElementsByClassName("deck-name")[0].innerHTML = deck.name;
-        newDeck.getElementsByClassName("deck-name-form")[0].value = deck.name;
-        newDeck.getElementsByClassName("deck-desc")[0].innerHTML = deck.description;
-        newDeck.getElementsByClassName("deck-desc-form")[0].value = deck.description;
-        newDeck.getElementsByClassName("deck-type")[0].innerHTML = deck.algorithm;
-        newDeck.getElementsByClassName("deck-type-form")[0].value = deck.algorithm;
-
-        // Append extra fields in form
-        newDeck.getElementsByClassName("extra-fields")[0].innerHTML = deck.extra_fields;
-
-        // Render deck id into the HREFs
-        for (const element of newDeck.getElementsByTagName('a')) {
-            const oldUrl = element.getAttribute("href");
-            if (oldUrl) {
-                element.setAttribute("href", oldUrl.replace("_deck_id_", deck._id.$oid ));
-            }
-        }
-        for (const element of newDeck.getElementsByTagName('button')) {
-            const oldValue = element.getAttribute("onclick");
-            if (oldValue) {
-                element.setAttribute("onclick", oldValue.replace("_deck_id_", deck._id.$oid ));
-            }
-        }
-        // Append rendered copy
-        document.getElementById("deck-container").appendChild(newDeck);
-    }
-    // Display the New Deck button
+    // Display the New Deck button & reset its form for good measure
     createDeck = document.getElementById("create-deck");
-    document.getElementById("deck-container").appendChild(createDeck);
     createDeck.classList.remove("hidden");
+    createDeck.getElementsByTagName("form")[0].reset();
 }
 
+
+/*
+ * Updates the representation of a single deck,
+ * either creating a box, updating an existing one, 
+ * or deleting one.
+ */
+function updateDeckData(data, deck_id){
+    
+    if (data === ""){
+        // Deck was deleted: delete its div (deck_id must be defined)
+        deleteBox(""+deck_id);
+
+    } else {
+        if (deck_id) {
+            // Existing deck - update its box
+            deck = document.getElementById(""+deck_id);
+            updateBox(data, deck);
+
+        } else {
+            // New Deck - create a box for it
+            appendBox(data);
+        }
+    }
+}
 
 /* 
  * Invoked when clicking on the EDIT button of a static deck.
@@ -102,23 +77,12 @@ function renderDecks(data) {
  */
 function showForm(deck_id) {
 
+    pageModeEdit();    
+
     // Find selected deck and the form template
     deck = document.getElementById(""+deck_id);  // Necessary to make deck_id a string and match
     display = deck.getElementsByClassName("static-info")[0];
     form = deck.getElementsByTagName("form")[0];
-
-    // Disable all buttons for the decks
-    for (const deck of document.getElementsByClassName('deck')){
-        for (const element of deck.getElementsByTagName('button')) {
-            element.setAttribute("disabled", "disabled");
-        }
-        for (const element of deck.getElementsByTagName('a')) {
-            element.setAttribute("disabled", "disabled");
-        }    
-    }
-    // Disable New Deck button
-    newDeckButton = document.getElementById('create-deck').getElementsByTagName("button")[0];
-    newDeckButton.setAttribute("disabled", "disabled");
 
     // Enable back form buttons
     for (const element of form.getElementsByTagName('button')) {
@@ -142,39 +106,18 @@ function showForm(deck_id) {
  *      Requires the deck_id
  */
 function hideForm(deck_id) {
-
-    // Find selected deck, the static data and the form template
-    deck = document.getElementById(""+deck_id);  // Necessary to make deck_id a string and match
-    display = deck.getElementsByClassName("static-info")[0];
-    form = deck.getElementsByTagName('form')[0];
-
-    // Enable all buttons for the decks
-    for (const deck of document.getElementsByClassName('deck')){
-        for (const element of deck.getElementsByTagName('button')) {
-            element.removeAttribute("disabled");
-        }
-        for (const element of deck.getElementsByTagName('a')) {
-            element.removeAttribute("disabled");
-        }    
-    }
-    // Enable New Deck button
-    newDeckDiv = document.getElementById('create-deck');
-    newDeckDiv.classList.remove("hidden");
-    newDeckDiv.getElementsByTagName("button")[0].removeAttribute("disabled");     
-    
-    // Switch visibility between form and static data
-    form.classList.add("hidden");
-    display.classList.remove("hidden");
-    
+    pageModeRead();
 }
-
 
 /* 
  * Invoked when clicking on the New Deck button.
  * Hides the button itself and adds a new div with an empty
  * form.
  */
-function displayNewDeck() {
+function showNewForm() {
+
+    pageModeEdit();
+
     // Find div
     deck = document.getElementById('create-deck');
     form = deck.getElementsByTagName("form")[0];
@@ -182,16 +125,7 @@ function displayNewDeck() {
 
     // Add the deck class to the div
     deck.classList.add("deck");
-    
-    // Disable all buttons for the decks
-    for (const deck of document.getElementsByClassName('deck')){
-        for (const element of deck.getElementsByTagName('button')) {
-            element.setAttribute("disabled", "disabled")
-        }
-        for (const element of deck.getElementsByTagName('a')) {
-            element.setAttribute("disabled", "disabled")
-        }    
-    }
+
     // Enable back form buttons
     for (const element of form.getElementsByTagName('button')) {
         element.removeAttribute("disabled");
@@ -199,9 +133,11 @@ function displayNewDeck() {
     for (const element of form.getElementsByTagName('a')) {
         element.removeAttribute("disabled");
     }    
-    // Hide and disable New Deck button
+
+    // Hide the New Deck button
     button.setAttribute("disabled", "disabled");
     button.classList.add("hidden");
+
     // Show the form
     form.classList.remove("hidden");
 }
@@ -211,26 +147,63 @@ function displayNewDeck() {
  * Hides the form and restores the button
  */
 function hideNewForm() {
+
+    pageModeRead();
+
     // Find div
     deck = document.getElementById('create-deck');
     form = deck.getElementsByTagName("form")[0];
     button = deck.getElementsByTagName("button")[0];
     
-    // Enable all buttons for the decks
-    for (const deck of document.getElementsByClassName('deck')){
-        for (const element of deck.getElementsByTagName('button')) {
-            element.removeAttribute("disabled");
-        }
-        for (const element of deck.getElementsByTagName('a')) {
-            element.removeAttribute("disabled");
-        }    
-    }
     // Remove the deck class to the div
     deck.classList.remove("deck");
-    // Hide the form
-    form.classList.add("hidden");
+    
     // Show the New Deck button
     button.removeAttribute("disabled");
     button.classList.remove("hidden");
-    
+}
+
+
+function switchExtraFields(){
+    deck = document.getElementById("create-deck");
+    algorithm = deck.getElementsByClassName("deck-type-form")[0].value;
+
+    for (extraFields of deck.getElementsByClassName("extra-fields")) {
+        extraFields.classList.add("hidden");
+    }
+
+    document.getElementById("extra-fields-"+algorithm).classList.remove("hidden");
+}
+
+
+
+
+
+/*
+ * Sets up the algorithm options in the New Deck form.
+ *      
+ *      Requires data
+ */
+function renderNewDeckAlgorithms(data){
+
+    // Get the necessary element
+    createDeck = document.getElementById("create-deck");
+    extraFieldsTemplate = createDeck.getElementsByClassName("extra-fields")[0];
+    dropdown = createDeck.getElementsByClassName("deck-type-form")[0];
+
+    for (const algorithm of data) {
+
+        // Append algorithm name to the dropdown
+        var option = document.createElement("option");
+        option.text = algorithm.name;
+        dropdown.add(option); 
+
+        // Append hidden extra fields block
+        extraFields = extraFieldsTemplate.cloneNode(true);
+        extraFields.id = "extra-fields-"+algorithm.name;
+        extraFields.innerHTML = algorithm.extra_fields;
+        extraFields.classList.add("hidden");
+        // Append right after the template
+        extraFieldsTemplate.parentNode.insertBefore(extraFields, extraFieldsTemplate.nextSibling);
+    }
 }

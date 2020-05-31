@@ -1,124 +1,118 @@
 loadDecks();
 
 
-function loadDecks(){
+function serializeForm(form){
+    // Create the form data object to be passed to JSON
+    formData = new FormData(form);
+    formJSON = {}
+    formData.forEach(function(value, key){
+        formJSON[key] = value;
+    });
+    // Render the checkbox as true/false values
+    for (const checkbox of form.querySelectorAll('input[type=checkbox')) {
+        formJSON[checkbox.name] = checkbox.checked;
+    }
+    console.log(formJSON);
+    return JSON.stringify(formJSON);
+}
+
+function callBackend(endpoint, method, body, callback){
     // Gather the tokens
     var access_token = getCookie("access_token-cookie");
     var csrf_token = getCookie("csrf_access_token");
 
     // Fetch decks data
-    fetch('http://127.0.0.1:5000/api/decks', 
+    fetch(endpoint, 
         {   
-            method:'GET',
+            method: method,
             headers:  new Headers({
                 'Authorization': 'Bearer ' + access_token,
                 'Content-Type': 'application/json; charset=utf-8',
                 'Accept': 'application/json',
-                'X-CSRF-TOKEN': csrf_token
+                'X-CSRF-TOKEN': csrf_token,
             }),
-        })
-    .then(res => res.json())
-    .then((data) => {
-        while (document.readyState === "loading") {};
-        renderDecks(data);
+            body: body,
+            credentials: 'include'
     })
-    .catch(console.log);  /* TODO: HANDLE BETTER */
+    .then(res => {
+        if (!res.ok) {
+            throw Error(res.statusText);
+        }
+        return res;
+    })
+    .then(res => res.json())
+    .then(data => callback(data))
+    .catch(reportError);  /* TODO: HANDLE BETTER */
 }
 
+function reportError(message) {
+    console.log(message);
+    alert("An error occured.");
+}
+
+
+
+function loadDecks(){
+    callBackend(
+        endpoint='http://127.0.0.1:5000/api/decks',
+        method = "GET",
+        body = null,
+        callback = function(data) {
+            // Wait for the page to be loaded
+            while (document.readyState === "loading") {};
+            getNewDeckAlgorithms();
+            initialDecksRendering(data);
+        }
+    )
+}
 
 function createNewDeck() {
-    
-    // Create the form data object to be passed to JSON
-    formData = new FormData(document.getElementById("create-deck").getElementsByTagName("form")[0]);
-    formJSON = {}
-    formData.forEach(function(value, key){
-        formJSON[key] = value;
-    });
+    form = document.getElementById("create-deck").getElementsByTagName("form")[0];
+    form = serializeForm(form);
 
-    // Gather the tokens
-    var access_token = getCookie("access_token-cookie");
-    var csrf_token = getCookie("csrf_access_token");
-
-    // Fetch decks data
-    fetch('http://127.0.0.1:5000/api/decks', 
-        {   
-            method:'POST',
-            headers:  new Headers({
-                'Authorization': 'Bearer ' + access_token,
-                'Content-Type': 'application/json; charset=utf-8',
-                'Accept': 'application/json',
-                'X-CSRF-TOKEN': csrf_token,
-            }),
-            body: JSON.stringify(formJSON),
-            credentials: 'include'
-        })
-    .then(res => res.json())
-    .then((data) => {
-        hideNewForm();
-        updateDeckData(data);
-    })
-    .catch(console.log);  /* TODO: HANDLE BETTER */
+    callBackend(
+        endpoint = 'http://127.0.0.1:5000/api/decks',
+        method = "POST",
+        body = form,
+        callback = function(data){
+            hideNewForm();
+            updateDeckData(data);
+        }
+    )
 }
-
 
 function updateDeck(deck_id) {
-    
-    // Create the form data object to be passed to JSON
-    formData = new FormData(document.getElementById(""+deck_id).getElementsByTagName("form")[0]);
-    formJSON = {}
-    formData.forEach(function(value, key){
-        formJSON[key] = value;
-    });
+    form = document.getElementById(""+deck_id).getElementsByTagName("form")[0];
+    form = serializeForm(form)
 
-    // Gather the tokens
-    var access_token = getCookie("access_token-cookie");
-    var csrf_token = getCookie("csrf_access_token");
-
-    // Fetch decks data
-    fetch('http://127.0.0.1:5000/api/decks/'+deck_id, 
-        {   
-            method:'PUT',
-            headers:  new Headers({
-                'Authorization': 'Bearer ' + access_token,
-                'Content-Type': 'application/json; charset=utf-8',
-                'Accept': 'application/json',
-                'X-CSRF-TOKEN': csrf_token,
-            }),
-            body: JSON.stringify(formJSON),
-            credentials: 'include'
-        })
-    .then(res => res.json())
-    .then((data) => {
-        hideForm(deck_id);
-        console.log(data);
-        updateDeckData(data, deck_id);
-    })
-    .catch(console.log);  /* TODO: HANDLE BETTER */
+    callBackend(
+        endpoint = 'http://127.0.0.1:5000/api/decks/'+deck_id, 
+        method = "PUT",
+        body = form,
+        callback = function(data){
+            hideForm(deck_id);
+            updateDeckData(data, deck_id);
+        }
+    )
 }
 
-
 function deleteDeck(deck_id) {
-    
-    // Gather the tokens
-    var access_token = getCookie("access_token-cookie");
-    var csrf_token = getCookie("csrf_access_token");
+    callBackend(
+        endpoint = 'http://127.0.0.1:5000/api/decks/'+deck_id, 
+        method = 'DELETE',
+        body = null,
+        callback = function(data){
+            hideForm(deck_id);
+            updateDeckData(data, deck_id);
+        }
+    )
+}
 
-    // Fetch decks data
-    fetch('http://127.0.0.1:5000/api/decks/'+deck_id, 
-        {   
-            method:'DELETE',
-            headers:  new Headers({
-                'Authorization': 'Bearer ' + access_token,
-                'Content-Type': 'application/json; charset=utf-8',
-                'Accept': 'application/json',
-                'X-CSRF-TOKEN': csrf_token,
-            }),
-            credentials: 'include'
-        })
-    .then(res => res.json())
-    .then((data) => {
-        hideForm(deck_id);
-        updateDeckData(data, deck_id);
-    })
-    .catch(console.log);  /* TODO: HANDLE BETTER */
+function getNewDeckAlgorithms(){
+    callBackend(
+        endpoint = 'http://127.0.0.1:5000/api/algorithms',
+        method = "GET",
+        body = null, 
+        callback = renderNewDeckAlgorithms
+    )
 }
