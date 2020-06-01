@@ -10,32 +10,32 @@ loadCards();
  * Fills up all the fields which are card-specific
  */ 
 function cardRender(data, card){
-    card.getElementsByClassName("question")[0].innerHTML = data.question;
-    card.getElementsByClassName("question-form")[0].value = data.question;
-    card.getElementsByClassName("answer")[0].innerHTML = data.answer;
-    card.getElementsByClassName("answer-form")[0].value = data.answer;
+    card.getElementsByClassName("question")[0].innerHTML = data.question_display;
+    card.getElementsByClassName("question-form")[0].innerHTML = data.question_form;
+    card.getElementsByClassName("answer")[0].innerHTML = data.answer_display;
+    card.getElementsByClassName("answer-form")[0].innerHTML = data.answer_form;
 }
 
 
 function loadCards(){
     deckId = window.localStorage.getItem("deckId");
-    loadBoxes('http://127.0.0.1:5000/api/decks/'+deckId+'/cards', cardRender);
+    callLoadBoxes('http://127.0.0.1:5000/api/decks/'+deckId+'/cards', cardRender);
     //getNewCardAlgorithms();
 }
 
 function createNewCard() {
     deckId = window.localStorage.getItem("deckId");
-    createNewBox('http://127.0.0.1:5000/api/decks/'+deckId+'/cards', cardRender);
+    callCreateNewBox('http://127.0.0.1:5000/api/decks/'+deckId+'/cards', cardRender);
 }
 
 function updateCard(cardId) {
     deckId = window.localStorage.getItem("deckId");
-    updateBox(cardId, 'http://127.0.0.1:5000/api/decks/'+deckId+'/cards/'+cardId, cardRender);
+    callUpdateBox(cardId, 'http://127.0.0.1:5000/api/decks/'+deckId+'/cards/'+cardId, cardRender);
 }
 
 function deleteCard(cardId){
     deckId = window.localStorage.getItem("deckId");
-    deleteBox(cardId, 'http://127.0.0.1:5000/api/decks/'+deckId+'/cards/'+cardId, cardRender);
+    callDeleteBox(cardId, 'http://127.0.0.1:5000/api/decks/'+deckId+'/cards/'+cardId, cardRender);
 }
 
 

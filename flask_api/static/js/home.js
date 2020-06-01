@@ -4,30 +4,42 @@ loadDecks();
  * Fills up all the fields which are deck-specific
  */ 
 function deckRender(data, deck){
+    
+    // Render regular data into static view and form
     deck.getElementsByClassName("deck-name")[0].innerHTML = data.name;
     deck.getElementsByClassName("deck-name-form")[0].value = data.name;
     deck.getElementsByClassName("deck-desc")[0].innerHTML = data.description;
     deck.getElementsByClassName("deck-desc-form")[0].value = data.description;
     deck.getElementsByClassName("deck-type")[0].innerHTML = data.algorithm;
     deck.getElementsByClassName("deck-type-form")[0].value = data.algorithm;
+
+    // Append extra fields in form
+    extraFields = deck.getElementsByClassName("extra-fields")[0];
+    extraFields.innerHTML = data.extra_fields;
+
+    // Render the extra field values
+    for (const input of extraFields.querySelectorAll("input[type=checkbox]")){
+        input.checked = data[input.name];
+    }
+
 }
 
 
 function loadDecks(){
-    loadBoxes('http://127.0.0.1:5000/api/decks', deckRender);
+    callLoadBoxes('http://127.0.0.1:5000/api/decks', deckRender);
     getNewDeckAlgorithms();
 }
 
 function createNewDeck() {
-    createNewBox('http://127.0.0.1:5000/api/decks', deckRender);
+    callCreateNewBox('http://127.0.0.1:5000/api/decks', deckRender);
 }
 
 function updateDeck(deckId) {
-    updateBox(deckId, 'http://127.0.0.1:5000/api/decks/'+deckId, deckRender);
+    callUpdateBox(deckId, 'http://127.0.0.1:5000/api/decks/'+deckId, deckRender);
 }
 
 function deleteDeck(deckId){
-    deleteBox(deckId, 'http://127.0.0.1:5000/api/decks/'+deckId, deckRender);
+    callDeleteBox(deckId, 'http://127.0.0.1:5000/api/decks/'+deckId, deckRender);
 }
 
 function getNewDeckAlgorithms(){
@@ -47,7 +59,6 @@ function renderNewDeckAlgorithms(data){
     dropdown = newBox.getElementsByClassName("deck-type-form")[0];
 
     for (const algorithm of data) {
-
         // Append algorithm name to the dropdown
         var option = document.createElement("option");
         option.text = algorithm.name;
@@ -71,6 +82,5 @@ function switchAlgorithmFields(){
     for (extraFields of box.getElementsByClassName("extra-fields")) {
         extraFields.classList.add("hidden");
     }
-
     document.getElementById("extra-fields-"+algorithm).classList.remove("hidden");
 }

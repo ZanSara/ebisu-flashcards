@@ -1,44 +1,7 @@
-/*----------------------------------------------------------------------------*/
-/*     Home Styles
-/*----------------------------------------------------------------------------*/
 
-
-
-
-
-/*----------------------------------------------------------------------------*/
-/*     New Card Styles
-/*----------------------------------------------------------------------------*/
-
-#create-card {
-    max-width: 500px;
+.box {
+    text-align: center;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    transition: all .3s;
-}
-
-#create-card > button {
-    text-align: center;
-    display:inline;
-    padding: 1.5rem;
-    margin-right:auto;
-
-    border: 1px dashed var(--gray);
-    border-radius: 1rem;
-
-    background: transparent;
-    color: var(--gray);
-    font-size: 1.5rem;
-    font-style: italic;
-}
-
-#create-card  > button:hover {
-    color:black;
-    border: 1px dashed black;
-}
-
-#create-card > button:disabled {
-    color: white;
-    border-color: white;
+    justify-content: space-between;
 }

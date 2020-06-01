@@ -3,12 +3,12 @@
  * Spawns many new boxes at the end of the boxes list.
  * New Box button is kept at the very end.
  */
-function appendBoxes(dataList, renderer){
+function appendBoxesInDOM(dataList, renderer){
 
     var template = document.getElementById("box-template");
 
     for (const data of dataList){
-        var box = createBox(data, template, renderer);
+        var box = renderNewBox(data, template, renderer);
         document.getElementById("boxes-container").appendChild(box);
     }
     
@@ -22,8 +22,8 @@ function appendBoxes(dataList, renderer){
  * Spawns a new box at the end of the boxes list.
  * New Box button is kept at the very end.
  */
-function appendBox(data, renderer){
-    appendBoxes([data], renderer);
+function appendBoxInDOM(data, renderer){
+    appendBoxesInDOM([data], renderer);
 }
 
 
@@ -32,12 +32,12 @@ function appendBox(data, renderer){
  * Invoked at load, renders every box using the data
  * received from the caller.
  */
-function initialBoxesRendering(boxesList, renderer) {
+function loadBoxesInDOM(boxesList, renderer) {
 
     // Remove loading icon if present
     document.getElementById("loading").classList.add("hidden");
     
-    appendBoxes(boxesList, renderer);
+    appendBoxesInDOM(boxesList, renderer);
 
     // Display the New ox button & reset its form for good measure
     newBox = document.getElementById("create-box");
@@ -51,7 +51,7 @@ function initialBoxesRendering(boxesList, renderer) {
  * either creating a box, updating an existing one, 
  * or deleting one.
  */
-function updateBoxData(data, boxId, renderer){
+function updateBoxInDOM(data, boxId, renderer){
     
     if (data === ""){
         // Box was deleted
@@ -65,7 +65,7 @@ function updateBoxData(data, boxId, renderer){
 
         } else {
             // New Box
-            appendBox(data, renderer);
+            appendBoxInDOM(data, renderer);
         }
     }
 }
@@ -76,7 +76,7 @@ function updateBoxData(data, boxId, renderer){
  *   
  *      Requires the boxId
  */
-function showForm(boxId) {
+function showFormInDOM(boxId) {
 
     pageModeEdit();    
 
@@ -106,7 +106,7 @@ function showForm(boxId) {
  *   
  *      Requires the boxId
  */
-function hideForm(boxId) {
+function hideFormInDOM(boxId) {
     pageModeRead();
 }
 
@@ -115,7 +115,7 @@ function hideForm(boxId) {
  * Hides the button itself and adds a new div with an empty
  * form.
  */
-function showNewForm() {
+function showNewFormInDOM() {
 
     pageModeEdit();
 
@@ -147,7 +147,7 @@ function showNewForm() {
  * Invoked when clicking on the Cancel button into a New Box form.
  * Hides the form and restores the button
  */
-function hideNewForm() {
+function hideNewFormInDOM() {
 
     pageModeRead();
 

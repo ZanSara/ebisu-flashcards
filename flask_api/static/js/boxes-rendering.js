@@ -9,15 +9,6 @@ function renderBox(data, box, renderCallback){
 
     renderCallback(data, box);
 
-    // Append extra fields in form
-    extraFields = box.getElementsByClassName("extra-fields")[0];
-    extraFields.innerHTML = data.extra_fields;
-
-    // Render the extra field values
-    for (const input of extraFields.querySelectorAll("input[type=checkbox]")){
-        input.checked = data[input.name];
-    }
-
     // Render box id into the HREFs
     for (const element of box.getElementsByTagName('a')) {
         const oldUrl = element.getAttribute("href");
@@ -41,7 +32,7 @@ function renderBox(data, box, renderCallback){
  * Given a box data and the template, 
  * returns a new box with the new data rendered in.
  */
-function createBox(data, template, renderer){
+function renderNewBox(data, template, renderer){
 
     // Clone template & remove the hiding class
     var box = template.cloneNode(true);
@@ -59,8 +50,8 @@ function createBox(data, template, renderer){
  * Given a box id, removes its box.
  * Fails if box does not exits.
  */
-function removeBox(box_id){
-    document.getElementById(box_id).remove();
+function removeBox(boxId){
+    document.getElementById(boxId).remove();
     pageModeRead();
 }
 

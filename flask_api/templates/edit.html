@@ -33,24 +33,19 @@
             </div>
 
             <div class="buttons">
-                <button class="neutral" type="button" onclick="showForm('_box_id_')">Edit</button>
+                <button class="neutral" type="button" onclick="showFormInDOM('_box_id_')">Edit</button>
             </div>
 
         </div>
 
         <form class="hidden">
             <div>
-                <input class="question-form" type="text" name="question" placeholder="Question"></input>
-                <input class="hidden" type="text" name="question_template" value="Text Renderer"></input>
-
-                <input class="answer-form" type="text" name="answer" placeholder="Answer"></input>
-                <input class="hidden" type="text" name="answer_template" value="Text Renderer"></input>
-
-                <div class="extra-fields"></div>
+                <div class="question-form"></div>
+                <div class="answer-form"></div>
             </div>
             <div class="buttons">
                 <button type="button" class="positive" onclick="updateCard('_box_id_')">Save</button>
-                <button type="button" class="neutral" onclick="hideForm('_box_id_')">Cancel</button>
+                <button type="button" class="neutral" onclick="hideFormInDOM('_box_id_')">Cancel</button>
                 <button type="button" class="negative" onclick="deleteCard('_box_id_')">Delete</button>
             </div>
         </form>
@@ -59,7 +54,7 @@
     
 
     <div id="create-box" class="hidden">
-        <button type="button" onclick="showNewForm()">New Card...</button>
+        <button type="button" onclick="showNewFormInDOM()">New Card...</button>
         <form class="hidden">
             <div>
                 <input class="question-form" type="text" name="question" placeholder="Question"></input>
@@ -72,7 +67,7 @@
             </div>
             <div class="buttons">
                 <button type="button" class="positive" onclick="createNewCard('_box_id_')">Save</button>
-                <button type="button" class="neutral" onclick="hideNewForm('_box_id_')">Cancel</button>
+                <button type="button" class="neutral" onclick="hideNewFormInDOM('_box_id_')">Cancel</button>
             </div>
         </form>
     </div>

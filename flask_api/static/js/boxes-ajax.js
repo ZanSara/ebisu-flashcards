@@ -1,4 +1,4 @@
-function loadBoxes(endpoint, renderer){
+function callLoadBoxes(endpoint, renderer){
     callBackend(
         endpoint=endpoint,
         method = "GET",
@@ -6,12 +6,12 @@ function loadBoxes(endpoint, renderer){
         callback = function(data) {
             // Wait for the page to be loaded
             while (document.readyState === "loading") {};
-            initialBoxesRendering(data, renderer);
+            loadBoxesInDOM(data, renderer);
         }
     )
 }
 
-function createNewBox(endpoint, renderer) {
+function callCreateNewBox(endpoint, renderer) {
     form = document.getElementById("create-box").getElementsByTagName("form")[0];
     form = serializeForm(form);
 
@@ -20,13 +20,13 @@ function createNewBox(endpoint, renderer) {
         method = "POST",
         body = form,
         callback = function(data){
-            hideNewForm();
-            updateBoxData(data, null, renderer);
+            hideNewFormInDOM();
+            updateBoxInDOM(data, null, renderer);
         }
     )
 }
 
-function updateBox(boxId, endpoint, renderer) {
+function callUpdateBox(boxId, endpoint, renderer) {
     form = document.getElementById(""+boxId).getElementsByTagName("form")[0];
     form = serializeForm(form)
 
@@ -35,20 +35,20 @@ function updateBox(boxId, endpoint, renderer) {
         method = "PUT",
         body = form,
         callback = function(data){
-            hideForm(boxId);
-            updateBoxData(data, boxId, renderer);
+            hideFormInDOM(boxId);
+            updateBoxInDOM(data, boxId, renderer);
         }
     )
 }
 
-function deleteBox(boxId, endpoint) {
+function callDeleteBox(boxId, endpoint) {
     callBackend(
         endpoint = endpoint,
         method = 'DELETE',
         body = null,
         callback = function(data){
-            hideForm(boxId);
-            updateBoxData(data, boxId);
+            hideFormInDOM(boxId);
+            updateBoxInDOM(data, boxId);
         }
     )
 }

@@ -32,7 +32,7 @@
             </div>
             <div class="buttons">
                 <a class="positive" href="study/_box_id_">Study</a>
-                <button class="neutral" type="button" onclick="showForm('_box_id_')">Edit</button>
+                <button class="neutral" type="button" onclick="showFormInDOM('_box_id_')">Edit</button>
                 <a class="neutral" href="edit/_box_id_">Browse</a>
             </div>
         </div>
@@ -46,7 +46,7 @@
             </div>
             <div class="buttons">
                 <button type="button" class="positive" onclick="updateDeck('_box_id_')">Save</button>
-                <button type="button" class="neutral" onclick="hideForm('_box_id_')">Cancel</button>
+                <button type="button" class="neutral" onclick="hideFormInDOM('_box_id_')">Cancel</button>
                 <button type="button" class="negative" onclick="deleteDeck('_box_id_')">Delete</button>
             </div>
         </form>
@@ -55,7 +55,7 @@
     
 
     <div id="create-box" class="hidden">
-        <button type="button" onclick="showNewForm()">New Deck...</button>
+        <button type="button" onclick="showNewFormInDOM()">New Deck...</button>
         <form class="hidden">
             <div>
                 <input class="deck-name-form" type="text" name="name", placeholder="Deck Name"></input>
