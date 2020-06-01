@@ -17,7 +17,6 @@ with (HERE / 'README.md').open('rt') as fh:
 REQUIREMENTS: dict = {
     'core': [
         "flask",
-        "marshmallow",
         "flask_restful",
         "mongoengine",
         "Pillow",
