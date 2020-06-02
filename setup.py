@@ -17,9 +17,11 @@ with (HERE / 'README.md').open('rt') as fh:
 REQUIREMENTS: dict = {
     'core': [
         "flask",
+        "flask_bcrypt",
+        "flask_jwt_extended",
         "flask_restful",
+        "flask_mail",
         "mongoengine",
-        "Pillow",
         "ebisu",
     ],
     'test': [
@@ -64,7 +66,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            # 'ebisu=ebisu.main:main',
+            'ebisu=ebisu_flashcards.run',
         ],
     },
 

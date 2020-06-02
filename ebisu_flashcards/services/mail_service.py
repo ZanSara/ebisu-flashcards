@@ -1,8 +1,10 @@
 from threading import Thread
-from flask_mail import Message
+from flask_mail import Mail, Message
 
-from app import app
-from app import mail
+from ebisu_flashcards.app import app
+
+
+mail = Mail(app)
 
 
 def send_async_email(app, msg):

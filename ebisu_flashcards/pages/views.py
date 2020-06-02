@@ -1,18 +1,36 @@
-from flask import render_template, redirect, request, jsonify, url_for
+from flask import Blueprint, render_template, redirect, request, jsonify, url_for
+
+from flask_bcrypt import Bcrypt
 import flask_jwt_extended as jwt
 
-from database.models import User, Deck
-from api_resources import errors
-from app import app
+
+from ebisu_flashcards.database.models import User, Deck
+from ebisu_flashcards.app import app
+from ebisu_flashcards.pages import pages_blueprint
+
+
+bcrypt = Bcrypt(app)
+jwt_manager = jwt.JWTManager(app)
+
+
+# Using the expired_token_loader decorator, we will now call
+# this function whenever an expired but otherwise valid access
+# token attempts to access an endpoint
+@jwt_manager.expired_token_loader
+def my_expired_token_callback(expired_token):
+    return redirect("/login")  # TODO Add small explanatory tag somewhere in the frontend?
 
 
 
-@app.route('/')
+
+
+
+@pages_blueprint.route('/')
 def frontpage():
     return render_template('landing-page.html')
 
 
-@app.route('/login', methods=['GET', 'POST'])
+@pages_blueprint.route('/login', methods=['GET', 'POST'])
 def login():
     # TODO avoid asking people to login if they're logged in already
 
@@ -37,7 +55,7 @@ def login():
     return render_template('login.html')
 
 
-@app.route('/register', methods=['GET', 'POST'])
+@pages_blueprint.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == "POST":
         pass
@@ -46,7 +64,7 @@ def register():
     return render_template('register.html')
 
 
-@app.route('/logout')
+@pages_blueprint.route('/logout')
 def logout():
     # Because the JWTs are stored in an httponly cookie now, we cannot
     # log the user out by simply deleting the cookie in the frontend.
@@ -58,7 +76,7 @@ def logout():
     return resp, 200
 
 
-@app.route('/home')
+@pages_blueprint.route('/home')
 @jwt.jwt_optional
 def home():
     if not jwt.get_jwt_identity():
@@ -66,7 +84,7 @@ def home():
     return render_template('home.html', navbar_title="Home")
     
     
-@app.route('/study/<deck_id>')
+@pages_blueprint.route('/study/<deck_id>')
 @jwt.jwt_optional
 def study(deck_id):
     if not jwt.get_jwt_identity():
@@ -77,7 +95,7 @@ def study(deck_id):
     return render_template('study.html', navbar_title=deck.name, navbar_home=True)
 
 
-@app.route('/edit/<deck_id>')
+@pages_blueprint.route('/edit/<deck_id>')
 @jwt.jwt_optional
 def edit(deck_id):
     if not jwt.get_jwt_identity():
@@ -89,16 +107,16 @@ def edit(deck_id):
 
 
 
-@app.errorhandler(404)
+@pages_blueprint.errorhandler(404)
 def page_not_found(e):
     return render_template('not-found.html'), 404
 
 
-@app.errorhandler(500)
+@pages_blueprint.errorhandler(500)
 def internal_error(e):
     return render_template('error.html'), 500
 
 
-@app.errorhandler(401)
+@pages_blueprint.errorhandler(401)
 def unauthorized(e):
     return redirect("/login"), 401

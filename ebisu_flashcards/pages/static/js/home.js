@@ -26,25 +26,25 @@ function deckRender(data, deck){
 
 
 function loadDecks(){
-    callLoadBoxes('http://127.0.0.1:5000/api/decks', deckRender);
+    callLoadBoxes('/api/decks', deckRender);
     getNewDeckAlgorithms();
 }
 
 function createNewDeck() {
-    callCreateNewBox('http://127.0.0.1:5000/api/decks', deckRender);
+    callCreateNewBox('/api/decks', deckRender);
 }
 
 function updateDeck(deckId) {
-    callUpdateBox(deckId, 'http://127.0.0.1:5000/api/decks/'+deckId, deckRender);
+    callUpdateBox(deckId, '/api/decks/'+deckId, deckRender);
 }
 
 function deleteDeck(deckId){
-    callDeleteBox(deckId, 'http://127.0.0.1:5000/api/decks/'+deckId, deckRender);
+    callDeleteBox(deckId, '/api/decks/'+deckId, deckRender);
 }
 
 function getNewDeckAlgorithms(){
     callBackend(
-        endpoint = 'http://127.0.0.1:5000/api/algorithms',
+        endpoint = '/api/algorithms',
         method = "GET",
         body = null, 
         callback = renderNewDeckAlgorithms

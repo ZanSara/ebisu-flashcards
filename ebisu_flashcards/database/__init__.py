@@ -1,6 +1,7 @@
 from flask_mongoengine import MongoEngine
 
+from ebisu_flashcards.app import app
+
 db = MongoEngine()
 
-def initialize_db(app):
-    db.init_app(app)
+db.init_app(app)

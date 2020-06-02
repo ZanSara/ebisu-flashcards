@@ -7,7 +7,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_restful import Resource
 import mongoengine as mongo
 
-from database import models, algorithms
+from ebisu_flashcards.database import models, algorithms
 
 
 

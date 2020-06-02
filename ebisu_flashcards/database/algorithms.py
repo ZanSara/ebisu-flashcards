@@ -6,7 +6,7 @@ import random
 import ebisu
 from datetime import datetime, timedelta
 
-from . import db, models
+from ebisu_flashcards.database import db, models
 
 
 class Algorithm:

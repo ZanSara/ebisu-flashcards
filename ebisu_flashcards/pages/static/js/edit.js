@@ -19,23 +19,23 @@ function cardRender(data, card){
 
 function loadCards(){
     deckId = window.localStorage.getItem("deckId");
-    callLoadBoxes('http://127.0.0.1:5000/api/decks/'+deckId+'/cards', cardRender);
+    callLoadBoxes('/api/decks/'+deckId+'/cards', cardRender);
     //getNewCardAlgorithms();
 }
 
 function createNewCard() {
     deckId = window.localStorage.getItem("deckId");
-    callCreateNewBox('http://127.0.0.1:5000/api/decks/'+deckId+'/cards', cardRender);
+    callCreateNewBox('/api/decks/'+deckId+'/cards', cardRender);
 }
 
 function updateCard(cardId) {
     deckId = window.localStorage.getItem("deckId");
-    callUpdateBox(cardId, 'http://127.0.0.1:5000/api/decks/'+deckId+'/cards/'+cardId, cardRender);
+    callUpdateBox(cardId, '/api/decks/'+deckId+'/cards/'+cardId, cardRender);
 }
 
 function deleteCard(cardId){
     deckId = window.localStorage.getItem("deckId");
-    callDeleteBox(cardId, 'http://127.0.0.1:5000/api/decks/'+deckId+'/cards/'+cardId, cardRender);
+    callDeleteBox(cardId, '/api/decks/'+deckId+'/cards/'+cardId, cardRender);
 }
 
 
@@ -48,7 +48,7 @@ function deleteCard(cardId){
 
 function getNewCardAlgorithms(){
     callBackend(
-        endpoint = 'http://127.0.0.1:5000/api/algorithms',
+        endpoint = '/api/algorithms',
         method = "GET",
         body = null, 
         callback = renderNewCardAlgorithms

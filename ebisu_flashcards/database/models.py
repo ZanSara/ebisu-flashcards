@@ -5,7 +5,7 @@ import os
 from datetime import datetime
 from flask_bcrypt import generate_password_hash, check_password_hash
 
-from . import db, algorithms
+from ebisu_flashcards.database import db, algorithms
 
 
 class Tag(db.EmbeddedDocument):

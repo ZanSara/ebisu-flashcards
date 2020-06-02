@@ -1,3 +1,3 @@
-from app import app
+from ebisu_flashcards.app import app
 
 app.run(port=3500)

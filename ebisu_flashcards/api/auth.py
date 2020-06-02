@@ -4,9 +4,9 @@ from flask import Response, request, render_template, jsonify
 import flask_jwt_extended as jwt
 from flask_restful import Resource
 
-from services.mail_service import send_email
-from database.models import User
-from api_resources import errors
+from ebisu_flashcards.services.mail_service import send_email
+from ebisu_flashcards.database.models import User
+from ebisu_flashcards.api import errors
 
 
 class SignupApi(Resource):
