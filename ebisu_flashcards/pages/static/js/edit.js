@@ -35,7 +35,7 @@ function updateCard(cardId) {
 
 function deleteCard(cardId){
     deckId = window.localStorage.getItem("deckId");
-    callDeleteBox(cardId, '/api/decks/'+deckId+'/cards/'+cardId, cardRender);
+    callDeleteBox(cardId, '/api/decks/'+deckId+'/cards/'+cardId);
 }
 
 

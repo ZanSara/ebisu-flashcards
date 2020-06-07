@@ -1,32 +1,30 @@
+/* Save the deckId in the local storage for quicker access */
+window.localStorage.setItem("deckId", window.location.pathname.split('/').pop());
+
 // Run at page load
 fetchCard();
 
 
 function fetchCard(){
-    // I should have a CSRF token set after logging in
-    var csrf_token = getCookie("csrf_access_token");
-
-    // Read the deck id from the URL
-    var deck_id = window.location.href.split("/").pop();
-
-    // Fetch card data
-    fetch('http://127.0.0.1:5000/api/study/'+deck_id, 
-        {   
-            method:'GET',
-            headers:  new Headers({'Authorization': 'Bearer ' + csrf_token}),
-        })
-    .then(res => res.json())
-    .then((data) => {
-        while (document.readyState === "loading") {};
-        renderCard(data);
-    })
-    .catch(console.log);  /* TODO: HANDLE BETTER */
- };
+    deckId = window.localStorage.getItem("deckId");
+    callBackend(
+        endpoint='/api/study/'+deckId,
+        method = "GET",
+        body = null,
+        callback = function(data) {
+            while (document.readyState === "loading") {};
+            renderCard(data);
+        }
+    );
+ }
 
 
 function renderCard(data){
     console.log(data);
 
+    // Save the card id for later
+    window.localStorage.setItem("cardId", data._id.$oid);
+    
     // Remove loading icon
     loading_icon = document.getElementById("loading");
     if(loading_icon !== null){
@@ -44,8 +42,8 @@ function renderCard(data){
     cardBox.classList.remove("hidden");
 
     // Fill in question and answer
-    document.getElementById("question").innerHTML = data.question;
-    document.getElementById("answer").innerHTML = data.answer;
+    document.getElementById("question").innerHTML = data.question_display;
+    document.getElementById("answer").innerHTML = data.answer_display;
 
     // Sets CSRF tokens into forms
     for (const element of document.getElementsByClassName('csrf')) {
@@ -54,31 +52,16 @@ function renderCard(data){
 }
 
 function submitResults(value){
-    
-    // Gather the tokens
-    var access_token = getCookie("access_token-cookie");
-    var csrf_token = getCookie("csrf_access_token");
 
-    // Read the deck id from the URL
-    var deck_id = window.location.href.split("/").pop();
-
-    // Submit results to the FORM action endpoint
-    fetch('http://127.0.0.1:5000/api/study/'+deck_id, 
-    {   
-        method:'POST',
-        headers:  new Headers({
-            'Authorization': 'Bearer ' + access_token,
-            'Content-Type': 'application/json; charset=utf-8',
-            'Accept': 'application/json',
-            'X-CSRF-TOKEN': csrf_token,
-        }),
-        body: JSON.stringify({'test_results': value}),
-        credentials: 'include'
-    })
-    .then(res => res.json())
-    .then((data) => {
-        fetchCard();    
-    }).catch(console.log);  /* TODO: HANDLE BETTER */
-
+    deckId = window.localStorage.getItem("deckId");
+    cardId = window.localStorage.getItem("cardId");
+    callBackend(
+        endpoint='/api/study/'+deckId,
+        method = "POST",
+        body = JSON.stringify({'test_results': value, 'card_id': cardId}),
+        callback = function(data) {
+            fetchCard(); 
+        }
+    );
     return false;
 }

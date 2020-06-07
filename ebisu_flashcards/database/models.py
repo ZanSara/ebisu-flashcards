@@ -26,7 +26,7 @@ class Template(db.Document):
 
 class Review(db.DynamicEmbeddedDocument):
     user = db.ReferenceField('User', required=True)
-    test_results = db.StringField(required=True)  # Can store more complex objects as JSON in case, I guess...
+    test_results = db.DynamicField(required=True)
     review_time = db.DateTimeField(default=datetime.utcnow(), required=True)
 
     def __str__(self):

@@ -39,7 +39,7 @@ function updateDeck(deckId) {
 }
 
 function deleteDeck(deckId){
-    callDeleteBox(deckId, '/api/decks/'+deckId, deckRender);
+    callDeleteBox(deckId, '/api/decks/'+deckId);
 }
 
 function getNewDeckAlgorithms(){

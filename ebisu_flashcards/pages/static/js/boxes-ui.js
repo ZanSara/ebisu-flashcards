@@ -53,7 +53,7 @@ function loadBoxesInDOM(boxesList, renderer) {
  */
 function updateBoxInDOM(data, boxId, renderer){
     
-    if (data === ""){
+    if (data == null){
         // Box was deleted
         removeBox(""+boxId);
 

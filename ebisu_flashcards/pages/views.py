@@ -6,6 +6,8 @@ import flask_jwt_extended as jwt
 
 from ebisu_flashcards.database.models import User, Deck
 from ebisu_flashcards.app import app
+from ebisu_flashcards.database import auth
+from ebisu_flashcards.api import errors 
 from ebisu_flashcards.pages import pages_blueprint
 
 
@@ -35,22 +37,19 @@ def login():
     # TODO avoid asking people to login if they're logged in already
 
     if request.method == "POST":
-        # Identify the user
-        body = request.form
-        user = User.objects.get(username=body.get('username'))
-        authorized = user.check_password(body.get('password'))
-        if not authorized:
-            raise errors.UnauthorizedError
+        username = request.form.get('username')
+        password = request.form.get('password')
+        try:
+            access_token, refresh_token = auth.login(username, password)
 
-        # Create the tokens we will be sending back to the user
-        access_token = jwt.create_access_token(identity=str(user.id))
-        refresh_token = jwt.create_refresh_token(identity=str(user.id))
-
-        # Set the JWT cookies in the response
-        resp = redirect("/home")
-        jwt.set_access_cookies(resp, access_token)
-        jwt.set_refresh_cookies(resp, refresh_token)
-        return resp
+            # Set the JWT cookies in the response
+            resp = redirect("/home")
+            jwt.set_access_cookies(resp, access_token)
+            jwt.set_refresh_cookies(resp, refresh_token)
+            return resp
+        
+        except errors.UnauthorizedError:
+            return render_template('login.html', feedback="User or password are incorrect")
 
     return render_template('login.html')
 

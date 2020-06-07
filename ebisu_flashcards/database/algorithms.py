@@ -96,17 +96,17 @@ class RandomOrder(Algorithm):
         cards = models.Card.objects(deck=self.deck.id).all()
         return [card for card in cards if not card.last_review]
 
-    def process_result(self, user_id: int, test_results: str) -> None:
+    def process_result(self, user_id: int, results: bool) -> None:
         """ 
         Saves a review with the test results (for eventual statistics) 
         """
-        if not str(test_results).lower() == "true" and not str(test_results).lower() == "false":
-            raise ValueError("Invalid test result for Random Order: {}".format(test_results))
+        if not isinstance(results, bool):
+            raise ValueError("Invalid test result for Random Order: {}".format(results))
        
         user = models.User.objects.get(id=user_id)
         review = models.Review(
             user=user, 
-            test_results=test_results.lower(), 
+            test_results=results, 
             review_time=datetime.utcnow()
         )
         self.deck.reviewing_card.update(push__reviews=review)
