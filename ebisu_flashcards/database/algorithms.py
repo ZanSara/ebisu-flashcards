@@ -7,6 +7,7 @@ import ebisu
 from datetime import datetime, timedelta
 
 from ebisu_flashcards.database import db, models
+from ebisu_flashcards import errors
 
 
 class Algorithm:
@@ -119,6 +120,9 @@ class RandomOrder(Algorithm):
         Gives priority to unseen cards if so required.
         """
         cards = models.Card.objects(deck=self.deck.id).all()
+        
+        if len(cards) == 0:
+            raise errors.NoCardsToReviewError("No cards to review in this deck")
         
         try:
             self.deck.last_reviewed_card = self.deck.reviewing_card

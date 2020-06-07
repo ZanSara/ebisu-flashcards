@@ -5,8 +5,8 @@ from flask import Response, request, jsonify, render_template
 from flask_restful import Resource
 import flask_jwt_extended as jwt
 
-from ebisu_flashcards.database import auth, algorithms, models
-from ebisu_flashcards.api import serialization, study, decks, cards
+from ebisu_flashcards.database import algorithms, models
+from ebisu_flashcards.operations import auth, serialization, study, decks, cards
 
 
 class SignupApi(Resource):
@@ -127,7 +127,7 @@ class StudyApi(study.StudyMixin, cards.CardMixin, Resource):
         user_id = jwt.get_jwt_identity()
         body = request.get_json()
         self.process_test_results(**body, user_id=user_id, deck_id=deck_id)
-        return Response(template.to_json(), mimetype="application/json", status=200)
+        return Response(json.dumps(None), mimetype="application/json", status=200)
 
 
 

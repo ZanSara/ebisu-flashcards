@@ -11,7 +11,7 @@ section {
 /*     Card Styles
 /*----------------------------------------------------------------------------*/
 
-#card {
+.card {
     max-width: 500px;
     margin: auto;
     padding: 2rem min(2rem, 3%);
@@ -25,7 +25,7 @@ section {
     justify-content: space-between;
 }
 
-#card p {
+.card p {
     color: var(--dark-gray);
 }
 
@@ -36,7 +36,7 @@ section {
 
 
 #question,
-#card details summary {
+.card details summary {
     border-bottom: 1px dashed var(--gray);
 }
 
@@ -63,21 +63,21 @@ section {
     width: 80%;
 }
 
-#card details summary {
+.card details summary {
     cursor: pointer;
     list-style: none;
 }
 
-#card details summary .show:hover {
+.card details summary .show:hover {
     color: black;
     font-weight: bold;
 }
 
-#card details summary::-webkit-details-marker {
+.card details summary::-webkit-details-marker {
     display: none;
 }
 
-#card  details[open] summary {
+.card  details[open] summary {
     display: none;
 }
 
@@ -86,28 +86,49 @@ section {
 /*     Feedback Styles
 /*----------------------------------------------------------------------------*/
 
-#card .feedback {
+.card .feedback {
     padding-top: 0.5rem;
     margin-top: 1rem;
     border-top: 1px dashed var(--gray);
 }
 
-#card .feedback p {
+.card .feedback p {
     padding-bottom: 0.75rem;
 }
 
-#card .feedback .buttons {
+.card .feedback .buttons {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
     grid-gap: 1rem;
 }
 
-#card .positive {
+.card .positive {
     text-transform: uppercase;
     background-color: var(--green);
 }
 
-#card .negative {
+.card .negative {
     text-transform: uppercase;
     background-color: var(--red);
+}
+
+
+/*----------------------------------------------------------------------------*/
+/*     No Cards Styles
+/*----------------------------------------------------------------------------*/
+
+#no-cards h1,
+#no-cards p {
+    border-bottom: 1px dashed var(--gray);
+    margin:0;
+    padding: 2rem;
+}
+
+#no-cards p,
+#no-cards a {
+    font-size: 1.3rem;
+}
+
+#no-cards a {
+    margin-top: 2rem;
 }

@@ -1,23 +1,3 @@
-/* Save the deckId in the local storage for quicker access */
-window.localStorage.setItem("deckId", window.location.pathname.split('/').pop());
-
-// Run at page load
-fetchCard();
-
-
-function fetchCard(){
-    deckId = window.localStorage.getItem("deckId");
-    callBackend(
-        endpoint='/api/study/'+deckId,
-        method = "GET",
-        body = null,
-        callback = function(data) {
-            while (document.readyState === "loading") {};
-            renderCard(data);
-        }
-    );
- }
-
 
 function renderCard(data){
     console.log(data);
@@ -30,6 +10,10 @@ function renderCard(data){
     if(loading_icon !== null){
         document.getElementById("loading").remove();
     }
+
+    // Hide the No Cards block if necessary
+    var noCardsBox = document.getElementById("no-cards");
+    noCardsBox.classList.add("hidden");
 
     // Ensure answer block is closed
     document.getElementById("collapsible").removeAttribute("open");
@@ -51,17 +35,26 @@ function renderCard(data){
     }
 }
 
-function submitResults(value){
 
+function renderRemoteErrors(response){
+    
+    // Remove loading icon
+    loading_icon = document.getElementById("loading");
+    if(loading_icon !== null){
+        document.getElementById("loading").remove();
+    }
+
+    // Get the box & remove the hiding class
+    var noCardsBox = document.getElementById("no-cards");
+    noCardsBox.classList.remove("hidden");
+
+    // Renders deckId where necessary
     deckId = window.localStorage.getItem("deckId");
-    cardId = window.localStorage.getItem("cardId");
-    callBackend(
-        endpoint='/api/study/'+deckId,
-        method = "POST",
-        body = JSON.stringify({'test_results': value, 'card_id': cardId}),
-        callback = function(data) {
-            fetchCard(); 
+    for (const element of document.getElementsByTagName('a')) {
+        const oldUrl = element.getAttribute("href");
+        if (oldUrl) {
+            element.setAttribute("href", oldUrl.replace("_deck_id_", deckId ));
         }
-    );
-    return false;
+    }
 }
+

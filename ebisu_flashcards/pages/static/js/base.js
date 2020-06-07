@@ -44,7 +44,7 @@ function serializeForm(form){
  * Perform fetch call to the backend, 
  * authenticating with the various cookies.
  */
-function callBackend(endpoint, method, body, callback){
+function callBackend(endpoint, method, body, callback, errorCallback = reportError){
 
     // Gather the tokens
     var access_token = getCookie("access_token-cookie");
@@ -65,19 +65,18 @@ function callBackend(endpoint, method, body, callback){
     })
     .then(res => {
         if (!res.ok) {
-            throw Error(res.statusText);
+            return Promise.reject(res.statusText);
         }
         return res;
     })
     .then(res => res.json())
     .then(data => callback(data))
-    .catch(reportError);  /* TODO: HANDLE BETTER */
+    .catch(errorCallback);  /* TODO: HANDLE BETTER */
 }
 
 
 /* TODO: HANDLE BETTER */
-function reportError(message) {
-    console.log(message);
+function reportError(error) {
+    console.log(error);
     alert("An error occured.");
 }
-

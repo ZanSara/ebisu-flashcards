@@ -1,7 +1,26 @@
+from functools import wraps
+
+from flask import abort
 import flask_jwt_extended as jwt
 
 from ebisu_flashcards.database.models import User
-from ebisu_flashcards.api import errors
+from ebisu_flashcards import errors
+
+
+
+def unauth_goes_to_login(func):
+    """
+        Decorator for protected pages. 
+        Sends unauthorized users to /login.
+    """
+    @wraps(func)
+    def wrapped(*args, **kwargs):
+        if not jwt.get_jwt_identity():
+            raise abort(401)
+        return func(*args, **kwargs)
+
+    return wrapped
+
 
 
 def login(username, password):
@@ -41,5 +60,3 @@ def signup(user_data):
     user.hash_password()
     user.save()
     return user.id
-
-

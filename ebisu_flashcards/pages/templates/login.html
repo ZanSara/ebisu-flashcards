@@ -12,12 +12,12 @@
 
 <main class="wrapper">
 
-  <form id="login" method="POST">
+  <form id="login" method="POST" action="/login">
     <h1>Login</h1>
 
     <div><input type="text" name="username" placeholder="Username" aria-describedby="usernameHelp" required></div>
     <div><input type="password"name="password" placeholder="Password"  aria-describedby="passwordeHelp" required></div>
-    <div class="feedback {% if not feedback %} hidden {% endif %}"><p>{{feedback}}</p></div>
+    <div class="feedback feedback-{{feedback_type}} {% if not feedback %} hidden {% endif %}"><p>{{feedback}}</p></div>
     <div><input type="submit" value="Login" /></div>
   </form>
 

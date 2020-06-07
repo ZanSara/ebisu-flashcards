@@ -5,25 +5,8 @@ import os
 from flask import render_template
 
 from ebisu_flashcards.database import models
-from ebisu_flashcards.api.serialization import SerializationMixin
-
-
-class DeckRenderingMixin:
-    """
-        Mixin for the Server Side Rendering of the Decks.
-    """
-
-    def server_side_rendering(self, deck: 'Deck') -> 'Deck':
-        """
-            Perform server-side rendering of the templated fields of a Deck.
-
-            :param db_deck: the Deck object which fields will be pre-rendered.
-            :returns: a partially pre-rendered Deck object.
-        """
-        template_path = os.path.join("deck-templates", deck.algorithm+".html")
-        deck.extra_fields = render_template(template_path, deck=deck)
-
-        return deck
+from ebisu_flashcards.operations.serialization import SerializationMixin
+from ebisu_flashcards.operations.server_side_rendering import DeckRenderingMixin
 
 
 

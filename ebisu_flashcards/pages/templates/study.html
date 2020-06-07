@@ -9,7 +9,8 @@
 
 {% block js %}
 <script src="{{ url_for('.static', filename='js/base.js') }}"></script>
-<script src="{{ url_for('.static', filename='js/study.js') }}"></script>
+<script src="{{ url_for('.static', filename='js/study-ui.js') }}"></script>
+<script src="{{ url_for('.static', filename='js/study-ajax.js') }}"></script>
 {% endblock %}
 
 
@@ -20,7 +21,7 @@
     {% include "loading.html" %}
 
 
-    <div id="card" class="hidden">    
+    <div id="card" class="card hidden">    
 
         <div id="question">
             <p>---</p>
@@ -52,6 +53,14 @@
             </div>
         </details>
 
+    </div>
+
+    <div id="no-cards" class="card hidden">  
+        <h1>No Cards!</h1>
+        <p>Seems like you have no cards to review.<br><br>
+           Some deck types have limits on the cards to review for specific timespans:
+           check your deck configuration, and make sure your deck contains any card.</p>
+        <a href="/edit/_deck_id_">Browse Deck Cards</a>
     </div>
 
 </section>
