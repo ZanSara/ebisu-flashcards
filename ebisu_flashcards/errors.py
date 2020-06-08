@@ -1,25 +1,28 @@
-class InternalServerError(Exception):
+from flask_restful import HTTPException
+
+
+class InternalServerError(HTTPException):
     pass
 
 
-class SchemaValidationError(Exception):
+class SchemaValidationError(HTTPException):
     pass
 
 
-class UsernameAlreadyExistsError(Exception):
+class UsernameAlreadyExistsError(HTTPException):
     pass
 
-class UsernameDoesnotExistsError(Exception):
+class UsernameDoesnotExistsError(HTTPException):
     pass
 
-class BadTokenError(Exception):
+class BadTokenError(HTTPException):
     pass
 
-class UnauthorizedError(Exception):
+class UnauthorizedError(HTTPException):
     pass
 
 
-class NoCardsToReviewError(Exception):
+class NoCardsToReviewError(HTTPException):
     pass
 
 

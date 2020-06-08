@@ -65,7 +65,8 @@ function callBackend(endpoint, method, body, callback, errorCallback = reportErr
     })
     .then(res => {
         if (!res.ok) {
-            return Promise.reject(res.statusText);
+            console.log(res);
+            return Promise.reject(res);
         }
         return res;
     })

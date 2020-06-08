@@ -35,8 +35,7 @@ section {
 /*----------------------------------------------------------------------------*/
 
 
-#question,
-.card details summary {
+#question {
     border-bottom: 1px dashed var(--gray);
 }
 
@@ -45,8 +44,8 @@ section {
 }
 
 #guess {
-    padding: min(2rem, 5%);
-    padding-bottom: min(3rem, 8%);
+    padding: min(5rem, 12%);
+    padding-bottom: min(5rem, 12%);
 }
 
 #guess p {
@@ -114,21 +113,25 @@ section {
 
 
 /*----------------------------------------------------------------------------*/
-/*     No Cards Styles
+/*     Problem Cards Styles
 /*----------------------------------------------------------------------------*/
 
-#no-cards h1,
-#no-cards p {
+.problem-card h1 {
+    text-transform: uppercase;
+}
+
+.problem-card h1,
+.problem-card p {
     border-bottom: 1px dashed var(--gray);
     margin:0;
     padding: 2rem;
 }
 
-#no-cards p,
-#no-cards a {
+.problem-card p,
+.problem-card a {
     font-size: 1.3rem;
 }
 
-#no-cards a {
+.problem-card a {
     margin-top: 2rem;
 }

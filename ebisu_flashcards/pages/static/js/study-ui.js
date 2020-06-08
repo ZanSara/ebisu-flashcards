@@ -11,9 +11,11 @@ function renderCard(data){
         document.getElementById("loading").remove();
     }
 
-    // Hide the No Cards block if necessary
+    // Hide the error blocks if necessary
     var noCardsBox = document.getElementById("no-cards");
     noCardsBox.classList.add("hidden");
+    var serverErrorBox = document.getElementById("server-error");
+    serverErrorBox.classList.add("hidden");
 
     // Ensure answer block is closed
     document.getElementById("collapsible").removeAttribute("open");
@@ -21,7 +23,7 @@ function renderCard(data){
     // Clear the answer's field
     document.getElementById("guess").getElementsByTagName("input")[0].value = "";
     
-    // Get the template box & remove the hiding class if present
+    // Get the card box & remove the hiding class if present
     var cardBox = document.getElementById("card");
     cardBox.classList.remove("hidden");
 
@@ -37,7 +39,25 @@ function renderCard(data){
 
 
 function renderRemoteErrors(response){
+
+    // Hide all the boxes
+    for (card of document.getElementsByClassName("card")){
+        card.classList.add("hidden");
+    }
+
+    if (response.status == 404){
+        renderNoCardsFound();
+
+    } else {
+        renderServerError();
+    }
     
+    
+}
+
+
+function renderNoCardsFound(){
+
     // Remove loading icon
     loading_icon = document.getElementById("loading");
     if(loading_icon !== null){
@@ -58,3 +78,15 @@ function renderRemoteErrors(response){
     }
 }
 
+function renderServerError(){
+
+    // Remove loading icon
+    loading_icon = document.getElementById("loading");
+    if(loading_icon !== null){
+        document.getElementById("loading").remove();
+    }
+
+    // Get the box & remove the hiding class
+    var noCardsBox = document.getElementById("server-error");
+    noCardsBox.classList.remove("hidden");
+}

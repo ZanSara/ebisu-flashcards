@@ -13,7 +13,6 @@ from ebisu_flashcards import errors
 class Algorithm:
 
     def __init__(self, deck: 'Deck'):
-        # FIXME Make sure deck and cards contain the right extra fields
         self.deck = deck
 
     @abc.abstractmethod
@@ -42,7 +41,7 @@ class Algorithm:
         raise NotImplementedError("Can't use Algorithm base class: use one of the subclasses")
 
     @abc.abstractmethod
-    def process_result(self, card_id: int, user_id: int, test_results: Any) -> None:
+    def process_result(self, card_id: int, user_id: int, results: Any) -> None:
         """ Calls the updated method of the card, enriching the input data if needed. """
         raise NotImplementedError("Can't use Algorithm base class: use one of the subclasses")
 
@@ -151,12 +150,23 @@ class RandomOrder(Algorithm):
 
 class Ebisu(Algorithm):
 
-    # TODO make customizable?
+    # TODO make customizable
+    INITIAL_ALPHA = 3.0
+    INITIAL_BETA = 3.0
+    INITIAL_T = 3.0
     HALF_LIFE_UNIT = timedelta(hours=1)
 
     dynamic_fields = []
     
     def __init__(self, deck: 'Deck'):
+        # Validate
+        if deck.algorithm != "Ebisu":
+            raise ValueError("Deck algorithm does not match Ebisu: {}".format(deck.algorithm))
+
+        for field in Ebisu.dynamic_fields:
+            if field not in deck._dynamic_fields:
+                raise ValueError("Deck is missing Ebisu's dynamic field: {}".format(field))
+
         super(Algorithm, self).__init__()
         self.deck = deck
 
@@ -173,10 +183,10 @@ class Ebisu(Algorithm):
         if card.last_review is None:
             return 0
         time_from_last_review = datetime.now() - card.last_review.review_time
-        recall_probability = ebisu.predictRecall(prior=self.last_review.to_ebisu_model(), 
+        recall_probability = ebisu.predictRecall(prior=(card.last_review.alpha, card.last_review.beta, card.last_review.t*self.HALF_LIFE_UNIT), 
                                                 tnow=time_from_last_review, 
                                                 exact=exact) # Normalizes the output to a real probability.
-        return recall_probability
+        return recall_probability*100
 
     def export_to_file(self) -> str:
         """ Returns the path to a zipped file containing all the information needed to recreate a deck. """
@@ -196,42 +206,37 @@ class Ebisu(Algorithm):
         cards = models.Card.objects(deck=self.deck.id).all()
         return [card for card in cards if not card.last_review]
 
-    def process_result(self, user_id: int, test_results: str) -> None:
+    def process_result(self, user_id: int, results: bool) -> None:
         """ 
         Saves a review with the test results (for eventual statistics) 
         """
+        if not isinstance(results, bool):
+            raise ValueError("Invalid test result for Ebisu: {}".format(results))
+        
         user = models.User.objects.get(id=user_id)
 
-        # Convert test results
-        if str(test_results).lower() == "true":
-            test_results = True
-        elif str(test_results).lower() == "false":
-            test_results = False
-        else:
-            raise ValueError("Invalid test result for Ebisu: {}".format(test_results))
-
         # Compute the prior or set defaults
-        if not self.last_review:
-            alpha = 3.0
-            beta = 3.0
-            t = 3.0*HALF_LIFE_UNIT
-        else:
-            previous_model = (self.last_review.alpha,
-                              self.last_review.beta, 
-                              self.last_review.t*HALF_LIFE_UNIT)
-            time_from_last_review = datetime.now() - self.last_review.review_time
+        try:
+            previous_model = self.get_card_model(self.deck.reviewing_card)
+            time_from_last_review = datetime.now() - self.deck.reviewing_card.review_time
             
             alpha, beta, t = ebisu.updateRecall(prior=previous_model, 
-                                                successes=bool(int(test_results)), 
+                                                successes=bool(int(results)), 
                                                 total=1, 
                                                 tnow=time_from_last_review)
+        
+        except AttributeError:
+            alpha = self.INITIAL_ALPHA
+            beta = self.INITIAL_BETA
+            t = self.INITIAL_T*self.HALF_LIFE_UNIT
+
         # Save review
         new_review = models.Review(
             alpha=alpha, 
             beta=beta,
-            t=t/HALF_LIFE_UNIT, 
+            t=t/self.HALF_LIFE_UNIT, 
             user=user, 
-            test_results=test_results, 
+            test_results=results, 
             review_time=datetime.utcnow(),
         )
         self.deck.reviewing_card.update(push__reviews=new_review)
@@ -249,7 +254,7 @@ class Ebisu(Algorithm):
         self.deck.last_reviewed_card = self.deck.reviewing_card
         self.deck.reviewing_card = next_card
         self.deck.save()
-        return self.reviewing_card
+        return self.deck.reviewing_card
 
 
 

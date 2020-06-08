@@ -2,10 +2,11 @@ from flask import Blueprint
 from flask_restful import Api
 
 from ebisu_flashcards.api import resources
+from ebisu_flashcards.errors import errors
 
 
 api_blueprint = Blueprint('api', __name__)
-api = Api(api_blueprint)
+api = Api(api_blueprint, errors=errors)
 
 
 # Study API
