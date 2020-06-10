@@ -34,7 +34,8 @@
     width: 95%;
 }
 
-.deck-desc-form {
+.deck-desc-form,
+.extra-fields input[type="text"] {
     color: var(--dark-gray);
     background-color: #eee;
     text-align: unset;
@@ -44,4 +45,32 @@
     padding: 0.5rem;
     border: 0;
     width: 95%;
+}
+
+
+
+/*----------------------------------------------------------------------------*/
+/*    Extra Fields form styles
+/*----------------------------------------------------------------------------*/
+
+/* The box around the entry */
+.extra-fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.inline-entry p {
+  grid-column: 1/2;
+}
+
+/* Hide default HTML checkbox (for toggles) */
+.inline-entry input {
+  grid-column: 2/3;
+}
+
+div.toggle {
+    grid-column: 2/3;
+}
+p.toggle {
+    grid-column: 1/2;
 }

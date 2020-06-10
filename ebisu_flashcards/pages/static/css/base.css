@@ -131,49 +131,33 @@ input[type=submit]:disabled {
 }
 
 
-
 /*----------------------------------------------------------------------------*/
-/*    Toggle Switches styles
+/*    Toggle Switch styles
 /*----------------------------------------------------------------------------*/
 
- /* The switch - the box around the slider */
- .switch {
-  display:flex; 
-  flex-direction:row; 
-  justify-content:flex-start; 
-  align-items:center; 
-  padding: 0.2rem;
- }
-
- .switch label {
-  position: relative;
-  display: inline-block;
+div.toggle {
   width: 50px;
   height: 24px;
 }
 
-/* Hide default HTML checkbox */
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
+.toggle {
+  margin: 0.5rem;
 }
 
-/* The label */
-.switch p {
-  padding-left: 1rem;
-  margin: 0;
+/* Hide default HTML checkbox (for toggles) */
+input[type="checkbox"] {
+  display: none;
 }
 
-/* The slider */
+/* The toggle's slider */
 .slider {
-  position: absolute;
+  display: block;
+  position: relative;
   cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
+
+  height: 24px;
+  
+  background-color: var(--light-gray);
   -webkit-transition: .4s;
   transition: .4s;
 
@@ -194,16 +178,15 @@ input[type=submit]:disabled {
   border-radius: 50%;
 }
 
-input:checked + .slider {
+input[type="checkbox"]:checked + .slider {
   background-color: var(--green);
 }
 
-input:checked + .slider:before {
+input[type="checkbox"]:checked + .slider:before {
   -webkit-transform: translateX(26px);
   -ms-transform: translateX(26px);
   transform: translateX(26px);
 }
-
 
 
 /*----------------------------------------------------------------------------*/

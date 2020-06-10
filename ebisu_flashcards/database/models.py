@@ -3,6 +3,8 @@ from typing import Any, Callable, List, Mapping, Optional, Tuple
 import abc
 import os
 from datetime import datetime
+
+import mongoengine
 from flask_bcrypt import generate_password_hash, check_password_hash
 
 from ebisu_flashcards.database import db, algorithms
@@ -35,9 +37,9 @@ class Review(db.DynamicEmbeddedDocument):
 
 class Card(db.DynamicDocument):
     deck = db.ReferenceField('Deck', required=True)
-    question = db.StringField(required=True, unique=True)
+    question = db.StringField(required=True, unique=False)
     question_template = db.ReferenceField(Template, required=True)
-    answer = db.StringField(required=True, unique=True)
+    answer = db.StringField(required=True, unique=False)
     answer_template = db.ReferenceField(Template, required=True)
     tags = db.ListField(Tag, blank=True)
     marked = db.BooleanField(default=False)
@@ -66,8 +68,9 @@ class Deck(db.DynamicDocument):
     algorithm = db.StringField(max_length=50, required=True)  # FIXME make this a Choice field at least
     author = db.ReferenceField('User', required=True)
     tags = db.ListField(Tag, blank=True)
-    last_reviewed_card =  db.ReferenceField(Card)
-    reviewing_card =  db.ReferenceField(Card)
+
+    last_reviewed_card =  db.ReferenceField(Card, reverse_delete_rule=mongoengine.NULLIFY)
+    reviewing_card =  db.ReferenceField(Card, reverse_delete_rule=mongoengine.NULLIFY)
 
     def to_mongo(self, *args, **kwargs):
         value = super().to_mongo(*args, **kwargs)
