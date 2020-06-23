@@ -28,6 +28,9 @@ REQUIREMENTS: dict = {
         "pytest",
         "pytest-cov",
         "pytest-random-order",
+        "selenium",
+        "pytest-selenium",
+        "pytest-flask",
     ],
     'doc': [
         'sphinx',

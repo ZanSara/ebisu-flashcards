@@ -2,15 +2,15 @@
 
 
 {% block css%}
-<link href="{{ url_for('.static', filename='css/study.css') }}" rel="stylesheet">
-<link href="{{ url_for('.static', filename='css/widgets.css') }}" rel="stylesheet">
+<link href="{{ url_for('pages.static', filename='css/study.css') }}" rel="stylesheet">
+<link href="{{ url_for('pages.static', filename='css/widgets.css') }}" rel="stylesheet">
 {% endblock %}
 
 
 {% block js %}
-<script src="{{ url_for('.static', filename='js/base.js') }}"></script>
-<script src="{{ url_for('.static', filename='js/study-ui.js') }}"></script>
-<script src="{{ url_for('.static', filename='js/study-ajax.js') }}"></script>
+<script src="{{ url_for('pages.static', filename='js/base.js') }}"></script>
+<script src="{{ url_for('pages.static', filename='js/study-ui.js') }}"></script>
+<script src="{{ url_for('pages.static', filename='js/study-ajax.js') }}"></script>
 {% endblock %}
 
 

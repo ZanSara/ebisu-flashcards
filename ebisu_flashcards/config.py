@@ -25,10 +25,25 @@ class Config(object):
     JWT_COOKIE_CSRF_PROTECT = True
 
 
+    # Mail - unused
+    MAIL_SERVER = "localhost"
+    MAIL_PORT = "1025"
+    MAIL_USERNAME = "support@ebisu-flashcards.com"
+    MAIL_PASSWORD = ""
+
+    # The secret key to sign the JWTs with
+    JWT_SECRET_KEY = 't1NP63m4wnBg6nyHYKfmc2TpCOGI4nss'
+
+
 
 class ProductionConfig(Config):
     DEBUG = False
     TESTING = False
+
+    # DB Settings
+    MONGODB_SETTINGS = {
+        'host': 'mongodb://localhost/ebisu-db'
+    }
 
 
 
@@ -37,34 +52,16 @@ class DevelopmentConfig(Config):
 
     # DB Settings
     MONGODB_SETTINGS = {
-        'host': 'mongodb://localhost/ebisu-db'
+        'host': 'mongodb://localhost/ebisu-db-dev'
     }
-
-    # Mail - unused
-    MAIL_SERVER = "localhost"
-    MAIL_PORT = "1025"
-    MAIL_USERNAME = "support@ebisu-flashcards.com"
-    MAIL_PASSWORD = ""
-
-    # The secret key to sign the JWTs with
-    JWT_SECRET_KEY = 't1NP63m4wnBg6nyHYKfmc2TpCOGI4nss'
 
 
 
 class TestingConfig(Config):
-    TESTING = True
+    # TESTING = True
     DEBUG = True
 
     # DB Settings
     MONGODB_SETTINGS = {
-        'host': 'mongodb://localhost/ebisu-db'
+        'host': 'mongodb://localhost/ebisu-db-test'
     }
-
-    # Mail - unused
-    MAIL_SERVER = "localhost"
-    MAIL_PORT = "1025"
-    MAIL_USERNAME = "support@ebisu-flashcards.com"
-    MAIL_PASSWORD = ""
-
-    # The secret key to sign the JWTs with
-    JWT_SECRET_KEY = 't1NP63m4wnBg6nyHYKfmc2TpCOGI4nss'
