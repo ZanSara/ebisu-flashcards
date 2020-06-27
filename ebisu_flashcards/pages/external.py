@@ -38,8 +38,17 @@ def login(feedback=None, feedback_type=None):
 @pages_blueprint.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == "POST":
-        pass
-        #TODO implement!!
+        
+        username = request.form.get('username')
+        email = request.form.get("email")
+        password = request.form.get('password')
+        try:
+            auth.signup(request.form)
+            return login(feedback="Registered successfully! Please login again", feedback_type="positive")
+
+        except Exception as e:
+            print(e)
+            return render_template('register.html', feedback="Registration failed! Please try again", feedback_type="negative")
 
     return render_template('register.html')
 
