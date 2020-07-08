@@ -113,3 +113,20 @@ section {
     color: white;
     border-color: white;
 }
+
+
+/*----------------------------------------------------------------------------*/
+/*     Form Styles
+/*----------------------------------------------------------------------------*/
+
+input[type="text"] {
+    color: var(--dark-gray);
+    background-color: #eee;
+    text-align: unset;
+    font-style: italic;
+    display:block;
+    margin: 0.75rem 0;
+    padding: 0.5rem;
+    border: 0;
+    width: 95%;
+}

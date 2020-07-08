@@ -44,7 +44,7 @@ function serializeForm(form){
  * Perform fetch call to the backend, 
  * authenticating with the various cookies.
  */
-function callBackend(endpoint, method, body, callback, errorCallback = reportError){
+function callBackend(endpoint, method, body, callback, errorCallback = reportError, params){
 
     // Gather the tokens
     var access_token = getCookie("access_token-cookie");
@@ -71,7 +71,7 @@ function callBackend(endpoint, method, body, callback, errorCallback = reportErr
         return res;
     })
     .then(res => res.json())
-    .then(data => callback(data))
+    .then(data => callback(data, params))
     .catch(errorCallback);  /* TODO: HANDLE BETTER */
 }
 

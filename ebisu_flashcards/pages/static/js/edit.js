@@ -20,7 +20,8 @@ function cardRender(data, card){
 function loadCards(){
     deckId = window.localStorage.getItem("deckId");
     callLoadBoxes('/api/decks/'+deckId+'/cards', cardRender);
-    //getNewCardAlgorithms();
+    getNewCardFields('question');
+    getNewCardFields('answer');
 }
 
 function createNewCard() {
@@ -38,55 +39,49 @@ function deleteCard(cardId){
     callDeleteBox(cardId, '/api/decks/'+deckId+'/cards/'+cardId);
 }
 
-
-
-
-
-
-
-
-
-function getNewCardAlgorithms(){
+function getNewCardFields(prefix){
     callBackend(
-        endpoint = '/api/algorithms',
+        endpoint = '/api/templates',
         method = "GET",
         body = null, 
-        callback = renderNewCardAlgorithms
+        callback = renderNewCardFields,
+        errorCallback = reportError,
+        params = prefix
     )
 }
 
-function renderNewCardAlgorithms(data){
+function renderNewCardFields(data, prefix){
+    console.log(data);
 
     // Get the necessary element
     newBox = document.getElementById("create-box");
-    extraFieldsTemplate = newBox.getElementsByClassName("extra-fields")[0];
-    dropdown = newBox.getElementsByClassName("card-type-form")[0];
+    fieldTypeFormTemplate = newBox.getElementsByClassName(""+prefix+"-fields")[0];
+    dropdown = newBox.getElementsByClassName(""+prefix+"-field-type-form")[0];
 
-    for (const algorithm of data) {
+    for (const fieldType of data) {
 
-        // Append algorithm name to the dropdown
+        // Append fieldType name to the dropdown
         var option = document.createElement("option");
-        option.text = algorithm.name;
+        option.text = fieldType.name;
         dropdown.add(option); 
 
         // Append hidden extra fields block
-        extraFields = extraFieldsTemplate.cloneNode(true);
-        extraFields.id = "extra-fields-"+algorithm.name;
-        extraFields.innerHTML = algorithm.extra_fields;
-        extraFields.classList.add("hidden");
+        fieldTypeForm = fieldTypeFormTemplate.cloneNode(true);
+        fieldTypeForm.id = ""+prefix+"-fields-"+fieldType.name;
+        fieldTypeForm.innerHTML = fieldType.html;
+        fieldTypeForm.classList.add("hidden");
         // Append right after the template
-        extraFieldsTemplate.parentNode.insertBefore(extraFields, extraFieldsTemplate.nextSibling);
+        fieldTypeFormTemplate.parentNode.insertBefore(fieldTypeForm, fieldTypeFormTemplate.nextSibling);
     }
 }
 
 
-function switchAlgorithmFields(){
+function switchFieldType(prefix){
     box = document.getElementById("create-box");
-    algorithm = box.getElementsByClassName("card-type-form")[0].value;
+    fieldType = box.getElementsByClassName(""+prefix+"-field-type-form")[0].value;
 
-    for (extraFields of box.getElementsByClassName("extra-fields")) {
+    for (extraFields of box.getElementsByClassName(""+prefix+"-field-type")) {
         extraFields.classList.add("hidden");
     }
-
-    document.getElementById("extra-fields-"+algorithm).classList.remove("hidden");
+    document.getElementById(""+prefix+"-fields-"+fieldType).classList.remove("hidden");
 }

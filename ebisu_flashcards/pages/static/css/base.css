@@ -110,13 +110,13 @@ input[type=submit]:disabled {
   display: none !important;
 }
 
-#loading {
+.loading {
   padding: 4rem;
   text-align: center;
   color: black;
 }
 
-#loading svg {
+.loading svg {
   font-size: 30pt;
   transform: rotate(-20deg);
   animation: pulse;

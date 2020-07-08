@@ -5,3 +5,13 @@
     flex-direction: column;
     justify-content: space-between;
 }
+
+hr {
+    margin: 1rem 0;
+    border: 0;
+    border-top: 1px dashed var(--dark-gray);
+}
+
+.field, select {
+    margin: 0.5rem;
+}

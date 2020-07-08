@@ -18,7 +18,7 @@
 
 {% block page %}
 
-{% include "loading.html" %}
+<div id="loading">{% include "loading.html"%}</div>
 
 <section id="boxes-container">
 
@@ -57,13 +57,21 @@
         <button type="button" onclick="showNewFormInDOM()">New Card...</button>
         <form class="hidden">
             <div>
-                <input class="question-form" type="text" name="question" placeholder="Question"></input>
-                <input class="hidden" type="text" name="question_template" value="Text Renderer"></input>
 
-                <input class="answer-form" type="text" name="answer" placeholder="Answer"></input>
-                <input class="hidden" type="text" name="answer_template" value="Text Renderer"></input>
+                <div class="field question-fields">
+                </div>
+                <select class="question-field-type-form" name="question_template" onchange="switchFieldType('question')" required>
+                    <option disabled selected value> -- select an option -- </option>
+                </select>
 
-                <div class="extra-fields"></div>
+               <hr />
+
+                <div class="field answer-fields">
+                </div>
+                <select class="answer-field-type-form" name="answer_template" onchange="switchFieldType('answer')" required>
+                    <option disabled selected value> -- select an option -- </option>
+                </select>
+                
             </div>
             <div class="buttons">
                 <button type="button" class="positive" onclick="createNewCard('_box_id_')">Save</button>

@@ -1,3 +1,24 @@
+/*
+ * Displays the loading icon before performing an AJAX call 
+ */
+function showLoadingIcon(boxId){
+    box = document.getElementById(boxId);
+    loading_icons = box.getElementsByClassName('loading');
+    for (const element of loading_icons) {
+        element.classList.remove("hidden");
+    }
+}
+
+/*
+ * Remove the loading icon after receiving the data from an AJAX call 
+ */
+function hideLoadingIcon(box){
+    loading_icons = box.getElementsByClassName('loading');
+    for (const element of loading_icons) {
+        element.classList.remove("hidden");
+    }
+}
+
 /* 
  * Given a box data and a box,
  * returns a box with the updated data rendered in.
@@ -22,6 +43,15 @@ function renderBox(data, box, renderCallback){
             element.setAttribute("onclick", oldValue.replace("_box_id_", data._id.$oid ));
         }
     }
+    for (const element of box.getElementsByClassName('loading')) {
+        const oldValue = element.id;
+        if (oldValue) {
+            element.id = oldValue.replace("_box_id_", data._id.$oid );
+        }
+        // Also hide loading icons
+        element.classList.add("hidden");
+    }
+
     // Return rendered box
     return box;
 }

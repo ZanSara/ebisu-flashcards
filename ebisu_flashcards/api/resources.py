@@ -1,4 +1,5 @@
 import os
+import time
 import json
 
 from flask import Response, request, jsonify, render_template
@@ -6,7 +7,7 @@ from flask_restful import Resource
 import flask_jwt_extended as jwt
 
 from ebisu_flashcards.database import algorithms, models
-from ebisu_flashcards.operations import auth, serialization, study, decks, cards
+from ebisu_flashcards.operations import auth, serialization, study, decks, cards, templates
 
 
 class SignupApi(Resource):
@@ -170,6 +171,7 @@ class DeckApi(decks.DeckMixin, Resource):
 
     @jwt.jwt_required
     def put(self, deck_id):
+        time.sleep(3)
         user_id = jwt.get_jwt_identity()
         data = request.get_json()
         try:
@@ -259,6 +261,27 @@ class CardApi(cards.CardMixin, Resource):
 
 
 
+class TemplatesApi(templates.TemplatesMixin, Resource):
+    @jwt.jwt_required
+    def get(self):
+        try:
+            db_card = self.get_card(user_id, deck_id, card_id)
+            card = self.serialize_one(db_card, self.server_side_rendering)
+
+            templates = models.Template.objects().to_json()
+            return Response(templates, mimetype="application/json", status=200)
+        except models.Template.DoesNotExist:
+            return Response(json.dumps(None), mimetype="application/json", status=200)
+
+
+class TemplateApi(Resource):
+    @jwt.jwt_required
+    def get(self, template_id):
+        try:
+            template = models.Template.objects.get(id=template_id).to_json()
+            return Response(template.to_json(), mimetype="application/json", status=200)
+        except models.Template.DoesNotExist:
+            return Response(json.dumps(None), mimetype="application/json", status=200)
 
 
 class AlgorithmsApi(Resource):
@@ -273,46 +296,3 @@ class AlgorithmsApi(Resource):
             }
             names.append(algorithm)
         return Response(json.dumps(names), mimetype="application/json", status=200)
-
-
-
-
-
-class TemplatesApi(Resource):
-    @jwt.jwt_required
-    def get(self):
-        try:
-            templates = models.Template.objects().to_json()
-            return Response(templates, mimetype="application/json", status=200)
-        except models.Template.DoesNotExist:
-            return Response(json.dumps(None), mimetype="application/json", status=200)
-
-    @jwt.jwt_required
-    def post(self):
-        body = request.get_json()
-        template = models.Template(**body)
-        template.save()
-        template.reload()
-        return Response(template.to_json(), mimetype="application/json", status=200)
-
-
-class TemplateApi(Resource):
-    @jwt.jwt_required
-    def get(self, template_id):
-        template = models.Template.objects.get(id=template_id).to_json()
-        return Response(template.to_json(), mimetype="application/json", status=200)
-            
-    @jwt.jwt_required
-    def put(self, template_id):
-        body = request.get_json()
-        template = models.Template.objects.get(id=template_id)
-        template.update(**body)
-        template.reload()
-        return Response(template.to_json(), mimetype="application/json", status=200)
-    
-    @jwt.jwt_required
-    def delete(self, template_id):
-        card = models.Template.objects.get(id=template_id)
-        card.delete()
-        return Response(template.to_json(), mimetype="application/json", status=200)
-
