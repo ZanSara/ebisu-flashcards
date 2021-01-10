@@ -21,7 +21,8 @@ api.add_resource(resources.CardsApi, '/api/decks/<deck_id>/cards')
 api.add_resource(resources.CardApi, '/api/decks/<deck_id>/cards/<card_id>')
 
 # Templates CRUD API
-api.add_resource(resources.TemplatesApi, '/api/templates')
+api.add_resource(resources.QuestionTemplatesApi, '/api/question-templates')
+api.add_resource(resources.AnswerTemplatesApi, '/api/answer-templates')
 api.add_resource(resources.TemplateApi, '/api/templates/<template_id>')
 
 # Algorithms GET API

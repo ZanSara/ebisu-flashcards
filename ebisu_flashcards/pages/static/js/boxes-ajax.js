@@ -47,7 +47,6 @@ function callDeleteBox(boxId, endpoint) {
         method = 'DELETE',
         body = null,
         callback = function(data){
-            //hideFormInDOM(boxId);
             updateBoxInDOM(data, boxId);
         }
     )

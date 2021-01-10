@@ -75,6 +75,8 @@ function createNewDeck() {
 
 function updateDeck(deckId) {
     showLoadingIcon(deckId);
+    deck = document.getElementById(deckId);
+    deck.getElementsByTagName("form")[0].classList.add("hidden");
     
     if (validateDeckForm(deckId)) {
         callUpdateBox(deckId, '/api/decks/'+deckId, deckRender);
@@ -84,9 +86,10 @@ function updateDeck(deckId) {
 }
 
 function deleteDeck(deckId){
-    if(confirm("Are you sure you want to delete this deck?")){
+    confirmation = confirm("Are you sure you want to delete this deck?");
+    if(confirmation){
         deck = document.getElementById("create-box");
-        showLoadingIcon(deck);
+        //showLoadingIcon(deck);
         callDeleteBox(deckId, '/api/decks/'+deckId);
     }
 }

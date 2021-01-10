@@ -25,9 +25,9 @@ class SerializationMixin:
         """
         json_list = []
         for entity in entities:
-            entity = server_side_rendering(entity)
-            entity = entity.to_mongo()
-            json_list.append(entity)
+            entity_rendered = server_side_rendering(entity)
+            entity_mongo = entity_rendered.to_mongo()
+            json_list.append(entity_mongo)
         return bson.json_util.dumps(json_list)
 
 
@@ -39,5 +39,5 @@ class SerializationMixin:
             :param entity: database entity to serialize
             :returns: a JSON string representation of the input entity.
         """
-        entity = server_side_rendering(entity)
-        return entity.to_json()
+        entity_rendered = server_side_rendering(entity)
+        return entity_rendered.to_json()

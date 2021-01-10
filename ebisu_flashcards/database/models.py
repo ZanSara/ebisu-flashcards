@@ -17,7 +17,11 @@ class Tag(db.EmbeddedDocument):
         return self.name
 
 
-class Template(db.Document):
+class Template(db.DynamicDocument):
+    # FIXME: Even though it seems not to be a DynamicDocument, 
+    # there are some fields added at runtime (form_html and static_html)
+    # which would be filtered by to_mongo() on a regular Document 
+    # for some reason. Until this is not understood, keep DynamicDocument.
     name = db.StringField(max_length=200, required=True, unique=True)
     description = db.StringField(max_length=2000, required=True)
     path = db.StringField(required=True)

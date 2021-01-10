@@ -70,7 +70,10 @@ function callBackend(endpoint, method, body, callback, errorCallback = reportErr
         }
         return res;
     })
-    .then(res => res.json())
+    .then(res => {
+        console.log(res);
+        return res.json();
+    })
     .then(data => callback(data, params))
     .catch(errorCallback);  /* TODO: HANDLE BETTER */
 }

@@ -41,7 +41,7 @@ function deleteCard(cardId){
 
 function getNewCardFields(prefix){
     callBackend(
-        endpoint = '/api/templates',
+        endpoint = '/api/'+prefix+'-templates',
         method = "GET",
         body = null, 
         callback = renderNewCardFields,
@@ -51,8 +51,6 @@ function getNewCardFields(prefix){
 }
 
 function renderNewCardFields(data, prefix){
-    console.log(data);
-
     // Get the necessary element
     newBox = document.getElementById("create-box");
     fieldTypeFormTemplate = newBox.getElementsByClassName(""+prefix+"-fields")[0];
@@ -68,7 +66,7 @@ function renderNewCardFields(data, prefix){
         // Append hidden extra fields block
         fieldTypeForm = fieldTypeFormTemplate.cloneNode(true);
         fieldTypeForm.id = ""+prefix+"-fields-"+fieldType.name;
-        fieldTypeForm.innerHTML = fieldType.html;
+        fieldTypeForm.innerHTML = fieldType.form_html;
         fieldTypeForm.classList.add("hidden");
         // Append right after the template
         fieldTypeFormTemplate.parentNode.insertBefore(fieldTypeForm, fieldTypeFormTemplate.nextSibling);
@@ -80,7 +78,7 @@ function switchFieldType(prefix){
     box = document.getElementById("create-box");
     fieldType = box.getElementsByClassName(""+prefix+"-field-type-form")[0].value;
 
-    for (extraFields of box.getElementsByClassName(""+prefix+"-field-type")) {
+    for (extraFields of box.getElementsByClassName(""+prefix+"-fields")) {
         extraFields.classList.add("hidden");
     }
     document.getElementById(""+prefix+"-fields-"+fieldType).classList.remove("hidden");

@@ -39,19 +39,19 @@ class CardRenderingMixin:
             :returns: a partially pre-rendered Card object.
         """
         # Static view of question
-        question_path = os.path.join("card-templates", card.question_template.path)
+        question_path = os.path.join("templates-static", card.question_template.path)
         card.question_display = render_template(question_path, content=card.question)
 
         # Static view of answer
-        answer_path = os.path.join("card-templates", card.answer_template.path)
+        answer_path = os.path.join("templates-static", card.answer_template.path)
         card.answer_display = render_template(answer_path, content=card.answer)
 
         # Form view of question
-        question_form_path = os.path.join("card-form-templates", card.question_template.path)
+        question_form_path = os.path.join("templates-form", card.question_template.path)
         card.question_form = render_template(question_form_path, name="question", content=card.question)
 
         # Form view of answer
-        answer_form_path = os.path.join("card-form-templates", card.answer_template.path)
+        answer_form_path = os.path.join("templates-form", card.answer_template.path)
         card.answer_form = render_template(answer_form_path, name="answer", content=card.answer)
 
         return card
@@ -68,3 +68,23 @@ class CardRenderingMixin:
         data["question_template"] = models.Template.objects.get(name=data["question_template"])
         data["answer_template"] = models.Template.objects.get(name=data["answer_template"])
         return data
+
+
+class TemplateRenderingMixin:
+    """
+        Mixin for the Server Side Rendering of a Template.
+    """
+
+    def server_side_rendering(self, template: 'Template', name: str) -> 'Template':
+        """
+            Perform server-side rendering of the templated fields of a Template.
+
+            :param db_template: the Template object which fields will be pre-rendered.
+            :returns: a partially pre-rendered Template object.
+        """
+        template_form_path = os.path.join("templates-form", template.path)
+        template.form_html = render_template(template_form_path, name=name)
+
+        template_static_path = os.path.join("templates-static", template.path)
+        template.static_html = render_template(template_static_path, name=name)
+        return template

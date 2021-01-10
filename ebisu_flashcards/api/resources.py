@@ -1,6 +1,7 @@
 import os
 import time
 import json
+from functools import partial
 
 from flask import Response, request, jsonify, render_template
 from flask_restful import Resource
@@ -171,7 +172,6 @@ class DeckApi(decks.DeckMixin, Resource):
 
     @jwt.jwt_required
     def put(self, deck_id):
-        time.sleep(3)
         user_id = jwt.get_jwt_identity()
         data = request.get_json()
         try:
@@ -260,32 +260,40 @@ class CardApi(cards.CardMixin, Resource):
             return Response(json.dumps(None), mimetype="application/json", status=404)
 
 
-
-class TemplatesApi(templates.TemplatesMixin, Resource):
-    @jwt.jwt_required
-    def get(self):
+class _TemplatesApi:
+    def get(self, name: str):
         try:
-            db_card = self.get_card(user_id, deck_id, card_id)
-            card = self.serialize_one(db_card, self.server_side_rendering)
-
-            templates = models.Template.objects().to_json()
+            db_templates = self.get_template('all')
+            templates = self.serialize_list(db_templates, partial(self.server_side_rendering, name=name))
             return Response(templates, mimetype="application/json", status=200)
         except models.Template.DoesNotExist:
             return Response(json.dumps(None), mimetype="application/json", status=200)
 
+class QuestionTemplatesApi(_TemplatesApi, templates.TemplateMixin, Resource):
+    @jwt.jwt_required
+    def get(self):
+        return super().get(name="question")
 
-class TemplateApi(Resource):
+class AnswerTemplatesApi(_TemplatesApi, templates.TemplateMixin, Resource):
+    @jwt.jwt_required
+    def get(self):
+        return super().get(name="answer")
+
+
+class TemplateApi(templates.TemplateMixin, Resource):
+    
     @jwt.jwt_required
     def get(self, template_id):
         try:
-            template = models.Template.objects.get(id=template_id).to_json()
+            db_template = self.get_template(template_id)
+            template = self.serialize_one(db_template, self.server_side_rendering)
             return Response(template.to_json(), mimetype="application/json", status=200)
         except models.Template.DoesNotExist:
             return Response(json.dumps(None), mimetype="application/json", status=200)
 
 
 class AlgorithmsApi(Resource):
-
+    
     @jwt.jwt_required
     def get(self):
         names = []
