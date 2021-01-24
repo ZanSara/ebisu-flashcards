@@ -44,14 +44,14 @@ function serializeForm(form){
  * Perform fetch call to the backend, 
  * authenticating with the various cookies.
  */
-function callBackend(endpoint, method, body, callback, errorCallback = reportError, params){
+function callBackend(endpoint, method, body, callback, errorCallback = reportError, params, prefix="/ebisu"){
 
     // Gather the tokens
     var access_token = getCookie("access_token-cookie");
     var csrf_token = getCookie("csrf_access_token");
 
     // Fetch decks data
-    fetch(endpoint, 
+    fetch(prefix+endpoint, 
         {   
             method: method,
             headers:  new Headers({

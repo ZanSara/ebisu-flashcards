@@ -300,7 +300,7 @@ class AlgorithmsApi(Resource):
         for name, klass in algorithms.ALGORITHM_MAPPING.items():
             algorithm = {
                 'name': name,
-                'extra_fields': render_template(os.path.join("deck-templates", name+".html"), deck={})    
+                'extra_fields': render_template(os.path.join("components", "decks", name+".html"), deck={})    
             }
             names.append(algorithm)
         return Response(json.dumps(names), mimetype="application/json", status=200)
