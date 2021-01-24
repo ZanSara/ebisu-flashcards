@@ -12,7 +12,7 @@
 
 <main class="wrapper">
 
-  <form id="login" method="POST" action="/login">
+  <form id="login" method="POST" action="{{ url_for('pages.login') }}">
     <h1>Login</h1>
 
     <div><input type="text" name="username" placeholder="Username" aria-describedby="usernameHelp" required></div>
@@ -22,8 +22,8 @@
   </form>
 
   <footer>
-    <a href="/reset-password">Forgot Password?</a>
-    <a href="/register">Create an Account!</a>
+    <a href="{{ url_for('pages.reset_password') }}">Forgot Password?</a>
+    <a href="{{ url_for('pages.register') }}">Create an Account!</a>
   </footer>
 
 </main>

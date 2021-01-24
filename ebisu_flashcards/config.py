@@ -1,3 +1,5 @@
+import os
+
 class Config(object):
 
     # Configure application to store JWTs in cookies. Whenever you make
@@ -24,6 +26,8 @@ class Config(object):
     # with various app.config options. Check the options page for details.
     JWT_COOKIE_CSRF_PROTECT = True
 
+    # Prefix to add to every API request for them to work
+    URL_PREFIX = os.environ.get("EBISU_URL_PREFIX", "")
 
     # Mail - unused
     MAIL_SERVER = "localhost"

@@ -1,4 +1,4 @@
-from flask import render_template, redirect, request, url_for
+from flask import render_template, redirect, request, url_for, abort
 import flask_jwt_extended as jwt
 
 from ebisu_flashcards import errors 
@@ -35,8 +35,10 @@ def login(feedback=None, feedback_type=None):
     return render_template('login.html', feedback=feedback, feedback_type=feedback_type)
 
 
-"""@pages_blueprint.route('/register', methods=['GET', 'POST'])
+@pages_blueprint.route('/register', methods=['GET', 'POST'])
 def register():
+    return abort(404)  # FIXME remove when opening the site
+
     if request.method == "POST":
         
         username = request.form.get('username')
@@ -51,7 +53,14 @@ def register():
             return render_template('register.html', feedback="Registration failed! Please try again", feedback_type="negative")
 
     return render_template('register.html')
-"""
+
+
+
+@pages_blueprint.route('/reset-password', methods=['GET', 'POST'])
+def reset_password():
+    return abort(404)  # TODO implement me!
+
+
 
 @pages_blueprint.route('/logout')
 def logout():

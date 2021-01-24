@@ -22,21 +22,15 @@ def home():
 @jwt.jwt_optional
 @unauth_goes_to_login
 def study(deck_id):
-    try:
-        user_id = jwt.get_jwt_identity()
-        deck = Deck.objects.only("name").get(id=deck_id, author=user_id)
-        return render_template('study.html', navbar_title=deck.name, navbar_home=True)
-    except Exception:
-        abort(500)
+    user_id = jwt.get_jwt_identity()
+    deck = Deck.objects.only("name").get(id=deck_id, author=user_id)
+    return render_template('study.html', navbar_title=deck.name, navbar_home=True)
 
 
 @pages_blueprint.route('/edit/<deck_id>')
 @jwt.jwt_optional
 @unauth_goes_to_login
 def edit(deck_id):
-    try:
-        user_id = jwt.get_jwt_identity()
-        deck = Deck.objects.only("name").get(id=deck_id, author=user_id)
-        return render_template('edit.html', navbar_title="\"{}\" Cards List".format(deck.name), navbar_home=True)
-    except Exception:
-        abort(500)
+    user_id = jwt.get_jwt_identity()
+    deck = Deck.objects.only("name").get(id=deck_id, author=user_id)
+    return render_template('edit.html', navbar_title="\"{}\" Cards List".format(deck.name), navbar_home=True)

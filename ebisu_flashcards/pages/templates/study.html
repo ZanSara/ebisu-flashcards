@@ -59,15 +59,15 @@
         <h1>No Cards!</h1>
         <p>Seems like you have no cards to review.<br><br>
            Some deck types have limits on the cards to review for specific timespans:
-           check your deck configuration, and make sure your deck contains any card.</p>
-        <a href="/edit/_deck_id_">Browse Deck Cards</a>
+           check your deck configuration, and make sure your deck contains any card.
+        </p>
     </div>
 
     <div id="server-error" class="card problem-card hidden">  
         <h1>Server Error!</h1>
         <p>Seems like something went wrong on our servers.<br><br>
            Please retry in a few minutes and, if the problem persists, contact the developers. It's a bug!</p>
-        <a href="/home">Go Back</a>
+        <a href="{{ url_for('pages.home') }}">Go Back</a>
     </div>
 
 </section>

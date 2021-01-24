@@ -44,7 +44,7 @@ function serializeForm(form){
  * Perform fetch call to the backend, 
  * authenticating with the various cookies.
  */
-function callBackend(endpoint, method, body, callback, errorCallback = reportError, params, prefix="/ebisu"){
+function callBackend(endpoint, method, body, callback, errorCallback = reportError, params, prefix=""){
 
     // Gather the tokens
     var access_token = getCookie("access_token-cookie");

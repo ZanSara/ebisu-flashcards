@@ -8,3 +8,7 @@
 
 # Datasets
 **/*.csv
+
+# Server
+**/.htpasswd
+**/mongodb

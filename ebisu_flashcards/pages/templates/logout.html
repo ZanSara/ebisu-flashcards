@@ -1,14 +1,14 @@
 <html>
 <head>
   <noscript>
-      <meta http-equiv="refresh" content="0; url=http://localhost:5000/" />
+      <meta http-equiv="refresh" content="0; url={{ url_for('pages.static') }}" />
   </noscript>
   <script>
       window.localStorage.removeItem('token');
       //window.location.replace("/");
       window.addEventListener('load', function(event) {
           // all resources finished loading
-          window.location = 'http://localhost:5000/';
+          window.location = "{{ url_for('pages.static') }}";
       });
   </script>
 </head>
