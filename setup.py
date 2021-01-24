@@ -21,7 +21,9 @@ REQUIREMENTS: dict = {
         "flask_jwt_extended",
         "flask_restful",
         "flask_mail",
+        "flask_mongoengine",
         "mongoengine",
+        "pillow",  # Somehow required by mongoengine?
         "ebisu",
     ],
     'test': [

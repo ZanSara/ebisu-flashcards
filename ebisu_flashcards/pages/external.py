@@ -35,7 +35,7 @@ def login(feedback=None, feedback_type=None):
     return render_template('login.html', feedback=feedback, feedback_type=feedback_type)
 
 
-@pages_blueprint.route('/register', methods=['GET', 'POST'])
+"""@pages_blueprint.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == "POST":
         
@@ -51,7 +51,7 @@ def register():
             return render_template('register.html', feedback="Registration failed! Please try again", feedback_type="negative")
 
     return render_template('register.html')
-
+"""
 
 @pages_blueprint.route('/logout')
 def logout():
