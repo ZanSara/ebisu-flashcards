@@ -20,7 +20,7 @@ class DeckRenderingMixin:
             :param db_deck: the Deck object which fields will be pre-rendered.
             :returns: a partially pre-rendered Deck object.
         """
-        template_path = os.path.join("deck-templates", deck.algorithm+".html")
+        template_path = os.path.join("components", "decks", deck.algorithm+".html")
         deck.extra_fields = render_template(template_path, deck=deck)
 
         return deck
@@ -39,19 +39,19 @@ class CardRenderingMixin:
             :returns: a partially pre-rendered Card object.
         """
         # Static view of question
-        question_path = os.path.join("templates-static", card.question_template.path)
+        question_path = os.path.join("components", "cards", "static", card.question_template.path)
         card.question_display = render_template(question_path, content=card.question)
 
         # Static view of answer
-        answer_path = os.path.join("templates-static", card.answer_template.path)
+        answer_path = os.path.join("components", "cards", "static", card.answer_template.path)
         card.answer_display = render_template(answer_path, content=card.answer)
 
         # Form view of question
-        question_form_path = os.path.join("templates-form", card.question_template.path)
+        question_form_path = os.path.join("components", "cards", "editable", card.question_template.path)
         card.question_form = render_template(question_form_path, name="question", content=card.question)
 
         # Form view of answer
-        answer_form_path = os.path.join("templates-form", card.answer_template.path)
+        answer_form_path = os.path.join("components", "cards", "editable", card.answer_template.path)
         card.answer_form = render_template(answer_form_path, name="answer", content=card.answer)
 
         return card
@@ -82,9 +82,9 @@ class TemplateRenderingMixin:
             :param db_template: the Template object which fields will be pre-rendered.
             :returns: a partially pre-rendered Template object.
         """
-        template_form_path = os.path.join("templates-form", template.path)
+        template_form_path = os.path.join("components", "cards", "editable",  template.path)
         template.form_html = render_template(template_form_path, name=name)
 
-        template_static_path = os.path.join("templates-static", template.path)
+        template_static_path = os.path.join("components", "cards", "static",  template.path)
         template.static_html = render_template(template_static_path, name=name)
         return template

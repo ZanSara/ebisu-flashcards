@@ -1,7 +1,10 @@
-**/*.csv
+# Python stuff
+**/venv/
+**/__pycache__/
+**/*.egg-info/
 
-**/venv/**
-**/__pycache__/*
-**/.vscode/*
-**/template-original/**
-**/*.egg-info/**
+# VSCode
+**/.vscode/
+
+# Datasets
+**/*.csv
