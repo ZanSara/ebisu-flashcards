@@ -1,11 +1,3 @@
-# Python stuff
-**/venv/
-**/__pycache__/
-**/*.egg-info/
-
-# VSCode
-**/.vscode/
-
 # Datasets
 **/*.csv
 
