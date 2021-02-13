@@ -1,8 +1,9 @@
-import {FunctionComponent} from "react";
+import { NextPage } from "next";
 
-const Index: FunctionComponent = () =>
-    <div className="flex h-screen bg-indigo-500">
-        <span>Yiss!</span>
-    </div>
+const IndexPage: NextPage = () => (
+  <div className="flex h-screen bg-indigo-500">
+    <span>Yiss!</span>
+  </div>
+);
 
-export default Index;
+export default IndexPage;

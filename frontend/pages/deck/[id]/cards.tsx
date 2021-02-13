@@ -1,12 +1,14 @@
 import { useRouter } from "next/router";
 import { NextPage, NextPageContext } from "next";
 
-const EditDeckPage: NextPage = () => {
+const DeckCardsPage: NextPage = () => {
   const router = useRouter();
   const { id } = router.query;
 
   return (
-    <div className="container max-w-2xl flex flex-col sm:my-10 sm:mx-auto sm:rounded-xl sm:shadow sm:overflow-hidden"></div>
+    <span>
+      Oh yes, <b>editing</b> {id} very hard!...
+    </span>
   );
 };
 
@@ -18,4 +20,4 @@ export async function getServerSideProps(context: NextPageContext) {
   };
 }
 
-export default EditDeckPage;
+export default DeckCardsPage;
