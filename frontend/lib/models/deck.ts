@@ -1,3 +1,5 @@
+import * as url from "url";
+
 export interface DeckModel {
   id: number;
   name: string;
@@ -6,6 +8,14 @@ export interface DeckModel {
 }
 
 export interface DeckCard {
-  question: string;
-  answer: string;
+  question: {
+    type: "text" | "image";
+    tags: string[];
+    content: string;
+  };
+  answer: {
+    type: "text" | "image";
+    tags: string[];
+    content: string;
+  };
 }

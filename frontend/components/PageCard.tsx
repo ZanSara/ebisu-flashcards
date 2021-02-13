@@ -28,7 +28,7 @@ function createBreadcrumb(breacrumb: Breadcrumb) {
 
 const PageCardProps: FunctionComponent<PageCardProps> = (props) => {
   return (
-    <div key="" className={`${props.className} container md:mx-auto md:rounded-xl md:shadow overflow-hidden`}>
+    <div className={`${props.className} container md:mx-auto md:rounded-xl md:shadow overflow-hidden`}>
       <nav className="flex items-center justify-between bg-white border-b border-dashed border-gray-400 p-4">
         <div className="text-2xl font-medium ml-4">{props.breadcrumbs.map(createBreadcrumb)}</div>
         <div className="flex gap-4">{props.headerButtons}</div>

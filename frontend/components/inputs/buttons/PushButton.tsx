@@ -2,8 +2,7 @@ import { FunctionComponent } from "react";
 
 export interface PageButtonProps {
   color: string;
-  title: string;
-  onClick(): any;
+  onClick(): any | undefined;
 }
 
 const PushButton: FunctionComponent<PageButtonProps> = (props) => {

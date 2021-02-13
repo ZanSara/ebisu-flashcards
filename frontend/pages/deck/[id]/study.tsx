@@ -1,68 +1,137 @@
 import { NextPage, NextPageContext } from "next";
 import { useEffect, useState } from "react";
 import { DeckCard, DeckModel } from "../../../lib/models/deck";
-import PageCard, { Breadcrumb } from "../../../components/page/PageCard";
-import Card from "../../../components/Card";
-import Selector, { SelectorOption } from "../../../components/inputs/Selector";
+import PageCard, { Breadcrumb } from "../../../components/PageCard";
 import { faFish } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getNextCard } from "../../../lib/api";
 
-interface StudyProps {
+export interface StudyProps {
   deck: DeckModel;
 }
 
-const onRecallAnswer = (anwer: string) => {
-  console.log(anwer);
-};
+enum CardState {
+  UNINITIALIZED,
+  LOADING,
+  HIDDEN,
+  REVEALED,
+  ANSWERED_OK,
+  ANSWERED_NOK,
+}
 
-const loadingComponent = () => {
+/**
+ * Function responsible rendering the inner loading screen
+ */
+const renderLoading = () => {
   return (
     <div className="flex flex-col items-center">
+      {/* Let's take this fish out for a swimming */}
       <FontAwesomeIcon icon={faFish} size="3x" color="gray" className="animate-swim" />
       <span className="text-2xl">Loading next card...</span>
     </div>
   );
 };
 
-const cardComponent = (card: DeckCard, p: () => void) => {
-  const buttons: SelectorOption[] = [
-    { name: "Yes", color: "green" },
-    { name: "No", color: "red" },
-  ];
+/**
+ * Function responsible rendering the current card
+ */
+const renderCard = (card: DeckCard, state: CardState, setState: (state: CardState) => void) => {
+  /**
+   * Inner function responsible for rendering the buttons, depending on the current state
+   */
+  const renderButtons = () => {
+    switch (state) {
+      case CardState.HIDDEN:
+        return (
+          <button
+            className="leading-10 font-bold bg-green-300 hover:bg-green-400 transition-colors w-full"
+            onClick={() => setState(CardState.REVEALED)}
+          >
+            SHOW ANSWER
+          </button>
+        );
+      case CardState.REVEALED:
+        return (
+          <>
+            <button
+              key="answer-ok"
+              className="leading-10 font-bold bg-green-300 hover:bg-green-400 transition-colors w-1/2"
+              onClick={() => setState(CardState.ANSWERED_OK)}
+            >
+              REMEMBERED
+            </button>
+            <button
+              key="answer-nok"
+              className="leading-10 font-bold bg-red-300 hover:bg-red-400 transition-colors w-1/2"
+              onClick={() => setState(CardState.ANSWERED_NOK)}
+            >
+              FORGOT
+            </button>
+          </>
+        );
+      default:
+        return null;
+    }
+  };
 
   return (
-    <Card className="flex flex-col items-center border border-gray-500 md:w-1/3 m-4 p-8">
-      <span className="text-4xl">A</span>
-      <div className="border-b border-dashed border-gray-500 w-full my-4" />
-      <span className="text-2xl">Did you recall your answer?</span>
-      <Selector className="w-full mt-4 text-2xl" options={buttons} onChange={p} />
-    </Card>
+    <main className="flex-grow flex flex-col md:justify-center text-center items-stretch w-full">
+      <div className="flex-grow flex flex-col p-6">
+        <div className="flex gap-x-4 justify-center">
+          {card.answer.tags.map((tag) => (
+            <span className="border border-gray-500 bg-gray-100 rounded p-2">{tag}</span>
+          ))}
+        </div>
+        <div className="flex-grow flex flex-col justify-center">
+          <span className="text-4xl">{card.question.content}</span>
+        </div>
+        <hr className="border-dashed border-gray-500 mx-4 my-6" />
+        <div className="flex gap-x-4 justify-center">
+          {card.question.tags.map((tag) => (
+            <span className="border border-gray-500 bg-gray-100 rounded p-2">{tag}</span>
+          ))}
+        </div>
+        <div className="flex-grow flex flex-col justify-center gap-y-4">
+          <span className={`transition-opacity text-4xl ${state === CardState.HIDDEN ? "opacity-0" : ""}`}>
+            {card.answer.content}
+          </span>
+        </div>
+      </div>
+
+      <div className="flex">{renderButtons()}</div>
+    </main>
   );
 };
 
 const StudyDeckPage: NextPage<StudyProps> = (props) => {
+  const breadcrumbs: Breadcrumb[] = [{ name: "DECKS", href: "/decks" }, { name: props.deck?.name || "TEST DECK" }];
+
   useEffect(() => {
     document.querySelector("body")?.classList.add("bg-indigo-200");
   });
 
-  const breadcrumbs: Breadcrumb[] = [{ name: "DECKS", href: "/decks" }, { name: props.deck?.name || "TEST DECK" }];
-
   const [card, setCard] = useState<DeckCard | null>(null);
+  const [state, setState] = useState(CardState.UNINITIALIZED);
+
   useEffect(() => {
-    if (card === null) {
-      getNextCard().then((c) => {
-        setCard(c);
-        console.log(c);
-      });
+    switch (state) {
+      case CardState.ANSWERED_OK:
+      case CardState.ANSWERED_NOK:
+      case CardState.UNINITIALIZED:
+        setState(CardState.LOADING);
+        getNextCard().then((c) => {
+          setState(CardState.HIDDEN);
+          setCard(c);
+        });
+        return;
     }
-  }, [card]);
+  }, [state]);
 
   return (
     <PageCard className="flex-grow flex flex-col bg-white" breadcrumbs={breadcrumbs}>
-      <main className="flex-grow flex flex-col items-center justify-center">
-        {card === null ? loadingComponent() : cardComponent(card, () => setCard(null))}
-      </main>
+      <div className="flex-grow flex flex-col sm:items-stretch md:items-center justify-center">
+        {state === CardState.LOADING ? renderLoading() : card === null ? null : renderCard(card, state, setState)}
+      </div>
     </PageCard>
   );
 };

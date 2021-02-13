@@ -4,6 +4,7 @@ module.exports = {
   theme: {
     boxShadow: {
       sm: "0.25rem 0.25rem rgba(107, 114, 128)",
+      md: "0.5rem 0.5rem rgba(107, 114, 128)",
       DEFAULT: "1.5rem 1.5rem #5a5c69",
     },
     extend: {

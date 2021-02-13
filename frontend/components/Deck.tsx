@@ -8,12 +8,13 @@ interface DeckProps {
   deck: DeckModel;
 }
 
+// FIXME: When title is too long, the text will overflow
 const Deck: FunctionComponent<DeckProps> = (props) => {
   return (
-    <div className="flex flex-col shadow-sm rounded-xl overflow-hidden border border-gray-500">
+    <div className="flex flex-col border border-gray-500 shadow-md rounded-xl overflow-hidden">
       <main className="flex-grow flex flex-col gap-4 p-4">
-        <header className="flex items-center justify-between border-b border-dashed border-gray-800 pb-2">
-          <h1 className="uppercase text-2xl font-medium overflow-ellipse">{props.deck.name}</h1>
+        <header className="flex items-center justify-between border-b border-dashed border-gray-800 pb-2 max-w-full">
+          <h1 className="uppercase text-2xl font-medium">{props.deck.name}</h1>
           <div className="flex gap-4">
             {/* TODO: Add tooltips */}
             <a href={`/deck/${props.deck.id}/cards`}>

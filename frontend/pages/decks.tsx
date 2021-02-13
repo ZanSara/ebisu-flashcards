@@ -2,12 +2,12 @@ import Deck from "../components/Deck";
 import { DeckModel } from "../lib/models/deck";
 import { useEffect } from "react";
 import { NextPage } from "next";
-import PageCard, { Breadcrumb } from "../components/page/PageCard";
+import PageCard, { Breadcrumb } from "../components/PageCard";
 import LinkButton from "../components/inputs/buttons/LinkButton";
 
 function generateModel(id: number): DeckModel {
-  const nameRand = Math.floor(Math.random() * 3 + 1);
-  const name: string = Array.from({ length: nameRand }, () => `Deck ${id}`).join(" - ");
+  const nameRand = Math.floor(Math.random() * 5 + 1);
+  const name: string = Array.from({ length: nameRand }, () => `Deck${id}`).join("");
 
   const tagRand = Math.floor(Math.random() * 10 + 1);
   const tags: string[] = Array.from({ length: tagRand }, () => "hello");

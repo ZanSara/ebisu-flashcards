@@ -2,7 +2,7 @@ import { NextPage } from "next";
 import { FunctionComponent, useEffect, useState } from "react";
 import Selector, { SelectorOption } from "../../components/inputs/Selector";
 import TextField from "../../components/inputs/TextField";
-import PageCard, { Breadcrumb } from "../../components/page/PageCard";
+import PageCard, { Breadcrumb } from "../../components/PageCard";
 import EbisuForm from "../../components/forms/EbisuForm";
 import TypeAForm from "../../components/forms/TypeAForm";
 
