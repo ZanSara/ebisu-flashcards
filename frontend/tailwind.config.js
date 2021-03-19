@@ -33,5 +33,6 @@ module.exports = {
   variants: {
     extend: {},
   },
+  purge: ["./components/**/*.tsx", "./pages/**/*.tsx"],
   plugins: [],
 };

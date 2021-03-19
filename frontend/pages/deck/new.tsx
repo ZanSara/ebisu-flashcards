@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 import { FunctionComponent, useEffect, useState } from "react";
 import Selector, { SelectorOption } from "../../components/inputs/Selector";
-import TextField from "../../components/inputs/TextField";
+import ValidatingTextField from "../../components/inputs/ValidatingTextField";
 import PageCard, { Breadcrumb } from "../../components/PageCard";
 import EbisuForm from "../../components/forms/EbisuForm";
 import TypeAForm from "../../components/forms/TypeAForm";
@@ -57,7 +57,7 @@ const NewDeckPage: NextPage = () => {
     <PageCard className="flex flex-col max-w-2xl" breadcrumbs={breadcrumbs}>
       <form className="flex-grow flex flex-col bg-white">
         <div className="p-8">
-          <TextField className="text-4xl w-full" placeholder="New deck name" validate={validateDeckName} />
+          <ValidatingTextField className="text-4xl w-full" placeholder="New deck name" validate={validateDeckName} />
           <Selector className="mt-4" options={algorithmOptions} onChange={setAlgorithm} />
         </div>
 
