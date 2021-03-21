@@ -1,35 +1,32 @@
 {
-  "name": "ebisu-web",
-  "version": "0.1.0",
-  "private": true,
+  "name": "frontend",
+  "version": "0.0.1",
   "scripts": {
-    "dev": "next dev -p 3001",
-    "build": "next build",
-    "start": "next start"
-  },
-  "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.15.2",
-    "@fortawesome/fontawesome-svg-core": "^1.2.34",
-    "@fortawesome/free-brands-svg-icons": "^5.15.2",
-    "@fortawesome/free-solid-svg-icons": "^5.15.2",
-    "@fortawesome/react-fontawesome": "^0.1.14",
-    "autoprefixer": "^10.2.3",
-    "lorem-ipsum": "^2.0.3",
-    "next": "^10.0.0",
-    "postcss": "^8.2.4",
-    "react": "17.0.1",
-    "react-dom": "17.0.1",
-    "tailwindcss": "^2.0.2"
+    "dev": "svelte-kit dev",
+    "build": "svelte-kit build",
+    "start": "svelte-kit start"
   },
   "devDependencies": {
-    "@types/node": "^14.14.22",
-    "@types/react": "^17.0.0",
-    "@typescript-eslint/eslint-plugin": "^4.15.0",
-    "@typescript-eslint/parser": "^4.15.0",
-    "eslint": "^7.18.0",
-    "eslint-plugin-jsx-a11y": "^6.4.1",
-    "eslint-plugin-react-hooks": "^4.2.0",
-    "prettier": "^2.2.1",
-    "typescript": "^4.1.3"
+    "@fortawesome/fontawesome-common-types": "^0.2.35",
+    "@fortawesome/free-solid-svg-icons": "^5.15.3",
+    "@sveltejs/adapter-node": "next",
+    "@sveltejs/kit": "next",
+    "autoprefixer": "^10.2.5",
+    "cssnano": "^4.1.10",
+    "lorem-ipsum": "^2.0.3",
+    "postcss": "^8.2.7",
+    "postcss-load-config": "^3.0.1",
+    "prettier": "2.2.1",
+    "sass": "^1.0.0",
+    "svelte": "^3.29.0",
+    "svelte-preprocess": "^4.6.9",
+    "tailwindcss": "^2.0.3",
+    "tslib": "^2.0.0",
+    "typescript": "^4.0.0",
+    "vite": "^2.1.0"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">= 12.17.0"
   }
 }

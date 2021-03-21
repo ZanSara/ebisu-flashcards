@@ -1,0 +1,12 @@
+root = true
+
+[*]
+indent_style = space
+ij_visual_guides = 80, 100
+ij_html_line_comment_at_first_column = false
+
+[{*.html}]
+indent_size = 2
+
+[{*.svelte, *.js, *.ts}]
+indent_size = 4
