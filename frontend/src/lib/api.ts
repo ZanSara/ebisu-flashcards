@@ -1,4 +1,5 @@
-import type { CardModel, DeckModel } from "./models/deck";
+import type { DeckModel } from "./models/deck";
+import type {CardModel} from "./models/card";
 import { LoremIpsum } from "lorem-ipsum";
 
 // ============================================================================
@@ -26,14 +27,14 @@ const deckCards = Array.from({ length: decks.length }, () =>
 );
 
 function generateCard(id: number): CardModel {
-  const questionTagNum = Math.floor(Math.random() * 5 + 1);
+  const questionTagNum = Math.floor(Math.random() * 5);
   const questionTags: string[] = Array.from({ length: questionTagNum }, () =>
-    lorem.generateWords(1)
+    lorem.generateWords(2)
   );
 
-  const answerTagNum = Math.floor(Math.random() * 5 + 1);
+  const answerTagNum = Math.floor(Math.random() * 5);
   const answerTags: string[] = Array.from({ length: answerTagNum }, () =>
-    lorem.generateWords(1)
+    lorem.generateWords(2)
   );
 
   return {
@@ -107,7 +108,7 @@ export async function getNextCard(
 
   const cards = deckCards[deckIdNum];
 
-  if (cardId === null) {
+  if (!cardId) {
     return cards[0];
   } else {
     const cardIdNum = parseInt(cardId);

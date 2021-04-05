@@ -3,9 +3,9 @@
     import FaIcon from "./FaIcon.svelte";
 </script>
 
-<div class="flex flex-col items-center">
+<div class="flex flex-col items-center text-gray-700">
     <!--Let's take this fish out for a swimming -->
-    <FaIcon icon={faFish} size="75px" />
+    <FaIcon icon={faFish} class="animate-swim" size="75px" />
     <span class="text-2xl">
         <slot />
     </span>

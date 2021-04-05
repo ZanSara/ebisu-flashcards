@@ -2,10 +2,11 @@
 
     import Page from "../../lib/components/Page.svelte";
     import ValidatingInput from "../../lib/components/inputs/ValidatingInput.svelte";
-    import { parameterDetails } from "../../lib/components/form/algo";
+    import {parameterDetails} from "../../lib/components/page/deck/new/algos";
     import Toggle from "../../lib/components/inputs/Toggle.svelte";
-    import { SvelteComponent } from "svelte";
+    import {SvelteComponent} from "svelte";
     import FlatButton from "../../lib/components/inputs/buttons/FlatButton.svelte";
+    import SectionHeader from "../../lib/components/utility/SectionHeader.svelte";
 
     // Parameters ----------------------------------------------------------------
 
@@ -31,7 +32,6 @@
 </script>
 
 <Page small={true}>
-
     <!-- Breadcrumbs content -->
     <div slot="breadcrumbs" class="breadcrumbs">
         <a class="underline text-gray-600" href="/decks">DECKS</a>
@@ -49,11 +49,10 @@
         <div class="flex-col-container align-top px-6 py-4 gap-y-6">
 
             <!-- Deck name -->
-            <div class="flex flex-col gap-y-2">
-                <label class="flex items-center gap-4" for="deck-name">
-                    <span class="font-medium text-xl">DECK NAME</span>
-                    <hr class="flex-grow border-b" />
-                </label>
+            <div class="flex flex-col gap-y-4">
+                <SectionHeader class="font-bold text-xl">
+                    DECK NAME
+                </SectionHeader>
                 <ValidatingInput
                     id="deck-name"
                     placeholder="Give the deck a name!"
@@ -65,9 +64,16 @@
 
             <!-- Algorithm selector -->
             <div class="flex flex-col gap-y-2">
-                <div class="flex items-center gap-4">
-                    <span class="font-medium text-xl">ALGORITHMS</span>
-                    <hr class="flex-grow border-b" />
+                <SectionHeader class="font-bold text-xl">
+                    ALGORITHMS
+                </SectionHeader>
+                <div>
+                    <p class="text-base text-gray-800">
+                        Select your algorithm, which will select the new cards for you!
+                    </p>
+                    <p class="text-gray-500">
+                        (Don't worry about this too much, you can edit it later!)
+                    </p>
                 </div>
                 <div class="flex items-stretch rounded-2xl shadow-sm overflow-hidden">
                     {#each parameterDetails as param}
@@ -79,7 +85,9 @@
             </div>
 
             <!-- Algorithm options -->
-            <svelte:component this={selectedAlgorithm} />
+            <div class="flex-col-container">
+                <svelte:component this={selectedAlgorithm}/>
+            </div>
         </div>
 
         <!-- Save button -->

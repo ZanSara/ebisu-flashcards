@@ -4,7 +4,11 @@
 </script>
 
 <button on:click
-        class="leading-10 font-bold text-gray-800 bg-{color}-400 hover:bg-{color}-500 transition-colors w-full"
+        class="leading-10 
+            font-bold text-gray-800 
+            bg-{color}-300 hover:bg-{color}-400 
+            transition-colors 
+            w-full"
         class:barberpole={inprogress}
 >
     <slot />

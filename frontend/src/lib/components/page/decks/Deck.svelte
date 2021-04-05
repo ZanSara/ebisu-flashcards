@@ -1,5 +1,7 @@
 <script lang="typescript">
-    import type {DeckModel} from '../models/deck';
+    import type {DeckModel} from '../../../models/deck';
+    import FaIcon from "../../utility/FaIcon.svelte";
+    import {faLayerGroup, faWrench} from "@fortawesome/free-solid-svg-icons";
 
     export let deck: DeckModel;
 </script>
@@ -7,14 +9,11 @@
 <div class="flex flex-col border border-gray-500 shadow-md rounded-xl overflow-hidden">
     <main class="flex-grow flex flex-col gap-4 p-4">
         <header class="flex items-center justify-between border-b border-dashed border-gray-800 gap-4 pb-2 max-w-full">
-            <h1 class="uppercase text-2xl font-medium truncate">{deck.name}</h1>
-            <div class="flex gap-4">
+            <h1 class="text-2xl font-medium truncate">{deck.name}</h1>
+            <div class="flex gap-3">
                 <!-- TODO: Add tooltips-->
-                <a href="/deck/{deck.id}/cards">
-                    Cards
-                </a>
-                <a href="/deck/{deck.id}/cards">
-                    Edit
+                <a class="text-gray-500" href="/deck/{deck.id}/cards">
+                    <FaIcon icon={faLayerGroup} size="1.25rem"/>
                 </a>
             </div>
         </header>

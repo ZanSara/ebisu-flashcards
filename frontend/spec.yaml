@@ -1,0 +1,99 @@
+openapi: 3.0.3
+info:
+  title: Ebisu Flashcard
+  description: Ebisu Flashcard
+  version: 0.0.1
+servers:
+  - url: 'https'
+
+tags:
+  - name: decks
+    description: Deck operations
+
+paths:
+  /decks:
+    get:
+      description: Gets all the decks
+      responses:
+        200:
+          description: List of all decks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Deck'
+  /deck/{deckId}/cards:
+    get:
+      description: Gets all cards in a deck
+      responses: 
+        200:
+          description: List of all the cards in deck `id`
+          content: 
+            application/json:
+              schema: 
+                type: array
+                items:
+                  $ref: '#/components/schemas/Card'
+    parameters:
+      - name: deckId
+        in: path
+        description: The ID of the Deck, whose cards are queried for
+        required: true
+        schema: 
+          type: string
+
+components:
+  schemas:
+    # DECK OBJECTS -------------------------------------------------------------
+    Deck:
+      type: object
+      properties:
+        id:
+          type: string
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeckTag'        
+    DeckTag:
+      type: object
+      description: A tag attachable to a Deck
+      properties:
+        name:
+          type: string
+    # CARD OBJECTS -------------------------------------------------------------
+    Card:
+      type: object
+      properties: 
+        id:
+          type: string
+        question:
+          $ref: '#/components/schemas/CardQuestion'
+        answer:
+          $ref: '#/components/schemas/CardAnswer'
+    CardQuestion:
+      type: object
+      properties: 
+        content: 
+          type: string
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/CardTag'
+    CardAnswer:
+      type: object
+      properties:
+        content:
+          type: string
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/CardTag'
+    CardTag:
+      type: object
+      description: A tag attachable to a Card question/answer
+      properties:
+        name:
+          type: string
+
+      
