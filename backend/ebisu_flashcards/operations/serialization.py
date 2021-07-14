@@ -1,19 +1,16 @@
-from typing import Any, Callable
+from typing import Any
 
-import os
 import json 
 import bson
 import mongoengine as mongo
 
-from ebisu_flashcards.database import models
 
-
-class SerializationMixin:
+class Serializer:
     """
         Serializes database entities into JSON.
     """
 
-    def serialize_list(self, entities: Any, server_side_rendering: Callable = lambda e: e) -> str:
+    def serialize_list(self, entities: Any) -> str:
         """
             Given a list of entities, returns a JSON containing
             all the data of the list of entities.
@@ -25,13 +22,12 @@ class SerializationMixin:
         """
         json_list = []
         for entity in entities:
-            entity_rendered = server_side_rendering(entity)
-            entity_mongo = entity_rendered.to_mongo()
+            entity_mongo = entity.to_mongo()
             json_list.append(entity_mongo)
         return bson.json_util.dumps(json_list)
 
 
-    def serialize_one(self, entity: Any, server_side_rendering: Callable = lambda e: e) -> str:
+    def serialize_one(self, entity: Any) -> str:
         """
             Given a database entity, returns a JSON containing
             all the data of the specified entity.
@@ -39,5 +35,4 @@ class SerializationMixin:
             :param entity: database entity to serialize
             :returns: a JSON string representation of the input entity.
         """
-        entity_rendered = server_side_rendering(entity)
-        return entity_rendered.to_json()
+        return entity.to_json()

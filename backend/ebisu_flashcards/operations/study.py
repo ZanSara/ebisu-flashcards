@@ -3,7 +3,7 @@ from typing import Any, Mapping
 from ebisu_flashcards.database import models, algorithms
 
 
-class StudyMixin:
+class StudyOps:
     """
         Mixin for study related functions.
         Bridges the gap bewteen the API and the Database.

@@ -1,16 +1,10 @@
 from typing import Any, List, Mapping, Union
 
-import os
-
-from flask import render_template
-
 from ebisu_flashcards.database import models
-from ebisu_flashcards.operations.serialization import SerializationMixin
-from ebisu_flashcards.operations.server_side_rendering import CardRenderingMixin
 
 
 
-class CardMixin(CardRenderingMixin, SerializationMixin):
+class CardOps:
     """
         Mixin for card management related functions.
         Bridges the gap bewteen the API and the Database.

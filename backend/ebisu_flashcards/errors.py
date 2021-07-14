@@ -12,11 +12,14 @@ class SchemaValidationError(HTTPException):
 class UsernameAlreadyExistsError(HTTPException):
     pass
 
+
 class UsernameDoesnotExistsError(HTTPException):
     pass
 
+
 class BadTokenError(HTTPException):
     pass
+
 
 class UnauthorizedError(HTTPException):
     pass
@@ -28,34 +31,37 @@ class NoCardsToReviewError(HTTPException):
 
 errors = {
     "InternalServerError": {
-        "message": "Something went wrong",
+        "message": "Something went wrong on the server! Please retry later.",
         "status": 500
     },
 
      "SchemaValidationError": {
-         "message": "Request is missing required fields",
-         "status": 400
-     },
+        "message": "Your request is missing some required fields.",
+        "status": 400
+    },
 
      "UsernameAlreadyExistsError": {
-         "message": "User with given email address already exists",
-         "status": 400
-     },
+        "message": "A user with this email address already exists.",
+        "status": 400
+    },
+
      "UsernameDoesnotExistsError": {
-         "message": "Couldn't find the user with given email address",
-         "status": 400
-     },
+        "message": "Couldn't find the user with this email address.",
+        "status": 400
+    },
+
      "BadTokenError": {
-         "message": "Invalid token",
-         "status": 403
-     },
+        "message": "Invalid token",
+        "status": 403
+    },
+
      "UnauthorizedError": {
-         "message": "Invalid username or password",
-         "status": 401
-     },
+        "message": "Invalid username or password",
+        "status": 401
+    },
 
      "NoCardsToReviewError": {
-         "message": "No cards to review available for this deck",
-         "status": 404
-     },
+        "message": "No cards to review for this deck.",
+        "status": 404
+    },
 }

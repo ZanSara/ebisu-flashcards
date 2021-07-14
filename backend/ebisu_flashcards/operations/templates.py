@@ -1,16 +1,10 @@
-from typing import Any, List, Mapping, Union
-
-import os
-
-from flask import render_template
+from typing import List, Union
 
 from ebisu_flashcards.database import models
-from ebisu_flashcards.operations.server_side_rendering import TemplateRenderingMixin
-from ebisu_flashcards.operations.serialization import SerializationMixin
 
 
 
-class TemplateMixin(TemplateRenderingMixin, SerializationMixin):
+class TemplateOps:
     """
         Mixin for deck management related functions.
         Bridges the gap bewteen the API and the Database.

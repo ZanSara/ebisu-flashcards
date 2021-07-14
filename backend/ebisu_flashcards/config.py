@@ -7,8 +7,8 @@ class Config(object):
     # access or refresh JWT via a cookie.
     JWT_TOKEN_LOCATION = ['cookies', 'json']
 
-    JWT_ACCESS_COOKIE_NAME = 'access_token-cookie'
-    JWT_REFRESH_COOKIE_NAME = 'refresh_token-cookie'
+    JWT_ACCESS_COOKIE_NAME = 'access_token_cookie'
+    JWT_REFRESH_COOKIE_NAME = 'refresh_token_cookie'
 
     # Set the cookie paths, so that you are only sending your access token
     # cookie to the access endpoints, and only sending your refresh token
@@ -25,15 +25,6 @@ class Config(object):
     # CSRF token in the 'X-CSRF-TOKEN' header. You can modify all of these
     # with various app.config options. Check the options page for details.
     JWT_COOKIE_CSRF_PROTECT = True
-
-    # Prefix to add to every API request for them to work
-    URL_PREFIX = os.environ.get("EBISU_URL_PREFIX", "")
-
-    # Mail - unused
-    MAIL_SERVER = "localhost"
-    MAIL_PORT = "1025"
-    MAIL_USERNAME = "support@ebisu-flashcards.com"
-    MAIL_PASSWORD = ""
 
     # The secret key to sign the JWTs with
     JWT_SECRET_KEY = 't1NP63m4wnBg6nyHYKfmc2TpCOGI4nss'
@@ -53,6 +44,7 @@ class ProductionConfig(Config):
 
 class DevelopmentConfig(Config):
     DEBUG = True
+    TESTING = False
 
     # DB Settings
     MONGODB_SETTINGS = {
@@ -62,7 +54,7 @@ class DevelopmentConfig(Config):
 
 
 class TestingConfig(Config):
-    # TESTING = True
+    TESTING = True
     DEBUG = True
 
     # DB Settings

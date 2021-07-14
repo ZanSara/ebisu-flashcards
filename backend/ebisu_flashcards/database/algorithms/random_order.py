@@ -14,18 +14,21 @@ from ebisu_flashcards.database.algorithms.algorithm import Algorithm
 
 class RandomOrder(Algorithm):
 
-    dynamic_fields = ["prioritize_unseen", "consecutive_never_identical"]
+    dynamic_fields = [
+        "prioritize_unseen", 
+        "consecutive_never_identical"
+    ]
 
     def __init__(self, deck: 'Deck'):
-        logging.debug("Instantiating RandomOrder Algorithm")
-
-        # Validate
+        """
+        Make sure we're using an appropriate deck, then init.
+        """
         if deck.algorithm != "Random Order":
-            raise ValueError("Deck algorithm does not match Random Order: {}".format(deck.algorithm))
+            raise ValueError("This deck is not a Random Order Deck: {}".format(deck.algorithm))
 
         for field in RandomOrder.dynamic_fields:
             if field not in deck._dynamic_fields:
-                raise ValueError("Deck is missing Random Order's dynamic field: {}".format(field))
+                raise ValueError("This deck is missing at least one of Random Order decks' dynamic fields: {}".format(field))
 
         super(Algorithm, self).__init__()
         self.deck = deck
@@ -33,16 +36,15 @@ class RandomOrder(Algorithm):
 
     def add_fields_to_deck(self, value):
         """
-            Add the new cards count to the deck
+        Add the new cards count to the deck
         """
-        logging.debug("Adding New Cards count to the deck values")
         value["new_cards"] = len(self.new_cards())
         return value
 
 
     def add_fields_to_card(self, card, value):
         """
-            No extra metadata is required for cards
+        No extra metadata is required for cards
         """
         logging.debug("No extra metadata is required for cards - return value unmodified")
         return value
@@ -50,14 +52,14 @@ class RandomOrder(Algorithm):
 
     def export_to_file(self) -> str:
         """ 
-            Returns the path to a zipped file containing all the information needed to recreate a deck. 
+        Returns the path to a zipped file containing all the information needed to recreate a deck. 
         """
         raise NotImplementedError("TODO in Random Order")
     
 
     def process_result(self, user_id: int, results: bool) -> None:
         """ 
-            Saves a review with the test results (for statistics) 
+        Saves a review with the test results (for statistics) 
         """
         if not isinstance(results, bool):
             raise ValueError("Invalid test result for Random Order: {}".format(results))
@@ -85,9 +87,9 @@ class RandomOrder(Algorithm):
 
     def next_card_to_review(self) -> 'Card':
         """ 
-            Picks a random card. 
-            Avoids repeating the same card twice if so required and possible (i.e there is more than 1 card). 
-            Gives priority to unseen cards if so required.
+        Picks a random card. 
+        Avoids repeating the same card twice if so required and possible (i.e there is more than 1 card). 
+        Gives priority to unseen cards if so required.
         """
         logging.debug("Finding next card to review")
 
@@ -122,7 +124,7 @@ class RandomOrder(Algorithm):
 
     def new_cards(self) -> List['Card']:
         """ 
-            Returns the list of unseen cards 
+        Returns the list of unseen cards 
         """
         cards = Card.objects(deck=self.deck.id).all()
         return [card for card in cards if not card.last_review]

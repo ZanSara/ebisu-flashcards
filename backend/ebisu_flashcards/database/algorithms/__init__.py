@@ -1,4 +1,4 @@
-from ebisu_flashcards.database.algorithms.algorithm import Algorithm
+from ebisu_flashcards.database.algorithms._algorithm import _Algorithm
 from ebisu_flashcards.database.algorithms.random_order import RandomOrder
 from ebisu_flashcards.database.algorithms.ebisu import Ebisu
 

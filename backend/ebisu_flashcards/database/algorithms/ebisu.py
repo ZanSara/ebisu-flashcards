@@ -19,12 +19,19 @@ class Ebisu(Algorithm):
     DEFAULT_T = 3.0
     DEFAULT_HALF_LIFE_UNIT = timedelta(hours=1)
 
-    dynamic_fields = ['initial_alpha', 'initial_beta', 'initial_t', 'half_life_unit']
+    dynamic_fields = [
+        'initial_alpha', 
+        'initial_beta', 
+        'initial_t', 
+        'half_life_unit'
+    ]
     
     def __init__(self, deck: 'Deck'):
-        # Validate
+        """
+        Make sure we're using an appropriate deck, then init.
+        """
         if deck.algorithm != "Ebisu":
-            raise ValueError("Deck algorithm does not match Ebisu: {}".format(deck.algorithm))
+            raise ValueError("This deck is not an Ebisu Deck: {}".format(deck.algorithm))
 
         for field in Ebisu.dynamic_fields:
             if field not in deck._dynamic_fields:
@@ -33,30 +40,31 @@ class Ebisu(Algorithm):
         super(Algorithm, self).__init__()
         self.deck = deck
 
+
     def add_fields_to_deck(self, value):
+        """
+        Add the new cards to the new_cards field and mark them as To Review
+        """
         value["cards_to_review"] = len(self.cards_to_review())
         value["new_cards"] = len(self.new_cards())
         return value
 
+
     def add_fields_to_card(self, card, value):
-        value["recall_probability"] = self.recall_probability(card)
+        """
+        Add Recall Probability to the cards
+        """
+        value["recall_probability"] = self._recall_probability(card)
         return value
     
-    def recall_probability(self, card, exact=True):
-        if card.last_review is None:
-            return 0
-
-        model, time_from_last_review = self.get_card_model(card)
-
-        recall_probability = ebisu.predictRecall(prior=model,
-                                                tnow=time_from_last_review, 
-                                                exact=exact) # Normalizes the output to a real probability.
-        return recall_probability*100
 
     def export_to_file(self) -> str:
-        """ Returns the path to a zipped file containing all the information needed to recreate a deck. """
+        """ 
+        Returns the path to a zipped file containing all the information needed to recreate a deck. 
+        """
         raise NotImplementedError("TODO in Ebisu")
     
+
     def cards_to_review(self) -> List["Card"]:
         """ 
         Returns the number of cards with less than 50% recall and at least one review 
@@ -64,12 +72,6 @@ class Ebisu(Algorithm):
         cards = Card.objects(deck=self.deck.id).all()
         return [card for card in cards if card.last_review and self.recall_probability(card) < 0.5]
 
-    def new_cards(self) -> List["Card"]:
-        """ 
-        Returns the number of unseen cards 
-        """
-        cards = Card.objects(deck=self.deck.id).all()
-        return [card for card in cards if not card.last_review]
 
     def process_result(self, user_id: int, results: bool) -> None:
         """ 
@@ -84,7 +86,7 @@ class Ebisu(Algorithm):
         alpha, beta, t = None, None, None
         try:
             if self.deck.reviewing_card.last_review:
-                previous_model, time_from_last_review = self.get_card_model(self.deck.reviewing_card)
+                previous_model, time_from_last_review = self._get_card_model(self.deck.reviewing_card)
                 alpha, beta, t = ebisu.updateRecall(prior=previous_model, 
                                                     successes=int(results), 
                                                     total=1, 
@@ -122,6 +124,7 @@ class Ebisu(Algorithm):
         cards = Card.objects(deck=self.deck.id).all()
         try:
             next_card = min(cards, key=lambda card: self.recall_probability(card) )
+        
         except ValueError:
             raise errors.NoCardsToReviewError("There are no cards in this deck")
 
@@ -137,14 +140,22 @@ class Ebisu(Algorithm):
         self.deck.save()
 
         return next_card
+    
 
-
-    def get_card_model(self, card: 'Card') -> Tuple[Tuple[float, float, float], float]:
+    def new_cards(self) -> List["Card"]:
+        """ 
+        Returns the number of unseen cards 
         """
-            Given a card, computes its Ebisu model.
-            :param card: the card we need the model of
-            :returns: a nested tuple ((alpha:float, beta:float, t:float), tnow:float)
-            :raises ValueError if the card has never been reviewed before
+        cards = Card.objects(deck=self.deck.id).all()
+        return [card for card in cards if not card.last_review]
+
+
+    def _get_card_model(self, card: 'Card') -> Tuple[Tuple[float, float, float], float]:
+        """
+        Given a card, computes its Ebisu model.
+        :param card: the card we need the model of
+        :returns: a nested tuple ((alpha:float, beta:float, t:float), tnow:float)
+        :raises ValueError if the card has never been reviewed before
         """
         half_life_timedelta = timedelta(minutes=float(self.deck.half_life_unit))
 
@@ -157,6 +168,23 @@ class Ebisu(Algorithm):
         tnow = (datetime.now() - card.last_review.review_time) / half_life_timedelta
         
         return (alpha, beta, t), tnow
+
+
+    def _recall_probability(self, card, exact=True):
+        """
+        Use the Ebisu algorithm to calculate the recall probability for a card.
+        """
+        if card.last_review is None:
+            return 0
+
+        model, time_from_last_review = self._get_card_model(card)
+
+        recall_probability = ebisu.predictRecall(prior=model,
+                                                tnow=time_from_last_review, 
+                                                exact=exact) # Normalizes the output to a real probability.
+        return recall_probability*100
+
+
         
 
 
