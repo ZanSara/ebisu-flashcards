@@ -1,5 +1,13 @@
-import { DeckCard } from "./models/deck";
+import { CardModel, DeckModel } from "./models/deck";
 import { LoremIpsum } from "lorem-ipsum";
+
+// ============================================================================
+// PROTOTYPE UTILITIES
+// ============================================================================
+
+function wait(ms: number) {
+  return new Promise((trigger) => setTimeout(trigger, ms));
+}
 
 const lorem = new LoremIpsum({
   sentencesPerParagraph: {
@@ -12,21 +20,10 @@ const lorem = new LoremIpsum({
   },
 });
 
-export function login(username: string, password: string): Promise<Response> {
-  return fetch("/api/login", {
-    method: "POST",
-    body: JSON.stringify({
-      username: username,
-      password: password,
-    }),
-  });
-}
+const decks = Array.from({ length: 50 }, (v, k) => generateDeck(k));
+const deckCards = Array.from({ length: decks.length }, () => Array.from({ length: 50 }, (v, k) => generateCard(k)));
 
-export async function getNextCard(): Promise<DeckCard> {
-  const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
-  await wait(1000);
-
+function generateCard(id: number): CardModel {
   const questionTagNum = Math.floor(Math.random() * 5 + 1);
   const questionTags: string[] = Array.from({ length: questionTagNum }, () => lorem.generateWords(1));
 
@@ -34,6 +31,7 @@ export async function getNextCard(): Promise<DeckCard> {
   const answerTags: string[] = Array.from({ length: answerTagNum }, () => lorem.generateWords(1));
 
   return {
+    id: id,
     question: {
       type: "text",
       tags: questionTags,
@@ -45,4 +43,56 @@ export async function getNextCard(): Promise<DeckCard> {
       content: lorem.generateSentences(1),
     },
   };
+}
+
+function generateDeck(id: number): DeckModel {
+  const nameLength = Math.floor(Math.random() * 5 + 1);
+
+  const tagRand = Math.floor(Math.random() * 10 + 1);
+  const tags: string[] = Array.from({ length: tagRand }, () => "hello");
+
+  return {
+    id: id,
+    name: lorem.generateWords(nameLength),
+    description: `This is the description for Deck ${id}`,
+    tags: tags,
+  };
+}
+
+// ============================================================================
+// API FUNCTIONS
+// ============================================================================
+
+export function login(username: string, password: string): Promise<Response> {
+  return fetch("/api/login", {
+    method: "POST",
+    body: JSON.stringify({
+      username: username,
+      password: password,
+    }),
+  });
+}
+
+export async function getDecks(): Promise<DeckModel[]> {
+  await wait(1000);
+  return decks;
+}
+
+export async function getCards(deckId: string): Promise<CardModel[]> {
+  await wait(1000);
+  return deckCards[parseInt(deckId)];
+}
+
+export async function getNextCard(deckId: string, cardId: string): Promise<CardModel> {
+  await wait(1000);
+
+  const deckIdNum = parseInt(deckId);
+  const cardIdNum = parseInt(cardId);
+
+  const cards = deckCards[deckIdNum];
+  if (cardIdNum >= cards.length) {
+    return cards[0];
+  } else {
+    return cards[cardIdNum];
+  }
 }

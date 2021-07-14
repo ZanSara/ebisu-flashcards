@@ -1,10 +1,9 @@
-import { NextPage, NextPageContext } from "next";
+import { NextPage } from "next";
 import { useEffect, useState } from "react";
-import { DeckCard, DeckModel } from "../../../lib/models/deck";
+import { CardModel, DeckModel } from "../../../lib/models/deck";
 import PageCard, { Breadcrumb } from "../../../components/PageCard";
-import { faFish } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getNextCard } from "../../../lib/api";
+import Loading from "../../../components/Loading";
 
 export interface StudyProps {
   deck: DeckModel;
@@ -23,19 +22,13 @@ enum CardState {
  * Function responsible rendering the inner loading screen
  */
 const renderLoading = () => {
-  return (
-    <div className="flex flex-col items-center">
-      {/* Let's take this fish out for a swimming */}
-      <FontAwesomeIcon icon={faFish} size="3x" color="gray" className="animate-swim" />
-      <span className="text-2xl">Loading next card...</span>
-    </div>
-  );
+  return <Loading message="Loading next card..." />;
 };
 
 /**
  * Function responsible rendering the current card
  */
-const renderCard = (card: DeckCard, state: CardState, setState: (state: CardState) => void) => {
+const renderCard = (card: CardModel, state: CardState, setState: (state: CardState) => void) => {
   /**
    * Inner function responsible for rendering the buttons, depending on the current state
    */
@@ -110,7 +103,7 @@ const StudyDeckPage: NextPage<StudyProps> = (props) => {
     document.querySelector("body")?.classList.add("bg-indigo-200");
   });
 
-  const [card, setCard] = useState<DeckCard | null>(null);
+  const [card, setCard] = useState<CardModel | null>(null);
   const [state, setState] = useState(CardState.UNINITIALIZED);
 
   useEffect(() => {
@@ -135,13 +128,5 @@ const StudyDeckPage: NextPage<StudyProps> = (props) => {
     </PageCard>
   );
 };
-
-export async function getServerSideProps(context: NextPageContext) {
-  return {
-    props: {
-      id: context.query.id,
-    }, // will be passed to the page component as props
-  };
-}
 
 export default StudyDeckPage;

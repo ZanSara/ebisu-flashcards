@@ -7,7 +7,8 @@ export interface DeckModel {
   tags: string[];
 }
 
-export interface DeckCard {
+export interface CardModel {
+  id: number;
   question: {
     type: "text" | "image";
     tags: string[];

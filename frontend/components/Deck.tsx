@@ -1,8 +1,8 @@
 import { FunctionComponent } from "react";
-import { DeckModel } from "../lib/models";
 
-import { faEdit, faList } from "@fortawesome/free-solid-svg-icons";
+import { faList, faWrench } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { DeckModel } from "../lib/models/deck";
 
 interface DeckProps {
   deck: DeckModel;
@@ -13,15 +13,15 @@ const Deck: FunctionComponent<DeckProps> = (props) => {
   return (
     <div className="flex flex-col border border-gray-500 shadow-md rounded-xl overflow-hidden">
       <main className="flex-grow flex flex-col gap-4 p-4">
-        <header className="flex items-center justify-between border-b border-dashed border-gray-800 pb-2 max-w-full">
-          <h1 className="uppercase text-2xl font-medium">{props.deck.name}</h1>
+        <header className="flex items-center justify-between border-b border-dashed border-gray-800 gap-4 pb-2 max-w-full">
+          <h1 className="uppercase text-2xl font-medium truncate">{props.deck.name}</h1>
           <div className="flex gap-4">
             {/* TODO: Add tooltips */}
             <a href={`/deck/${props.deck.id}/cards`}>
               <FontAwesomeIcon icon={faList} />
             </a>
             <a href={`/deck/${props.deck.id}/edit`}>
-              <FontAwesomeIcon icon={faEdit} />
+              <FontAwesomeIcon icon={faWrench} />
             </a>
           </div>
         </header>
