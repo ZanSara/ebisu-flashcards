@@ -1,5 +1,9 @@
-.DS_Store
-node_modules
+# Ignore IDE specific directories
+/.idea
+
+# Ignore Node modules
+/node_modules
+
+# Ignore Svelte[-kit] artifacts
 /.svelte
-/build
-/functions
+/.svelte-kit
