@@ -4,7 +4,7 @@
 
 <main>
 	<Page>
-		<span>Wow, it managed!</span>		
+		<span>(Insert homepage here)</span>		
 		<a href="/decks">Decks</a>
 	</Page>
 </main>

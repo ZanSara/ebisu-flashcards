@@ -1,9 +1,8 @@
-const sveltePreprocess = require("svelte-preprocess");
-const nodeAdapter = require('@sveltejs/adapter-node');
-const pkg = require("./package.json");
+import sveltePreprocess from "svelte-preprocess";
+import nodeAdapter from "@sveltejs/adapter-node";
 
 /** @type {import('@sveltejs/kit').Config} */
-module.exports = {
+const config = {
     // Consult https://github.com/sveltejs/svelte-preprocess
     // for more information about preprocessors
     preprocess: [
@@ -24,3 +23,5 @@ module.exports = {
         target: "#svelte",
     },
 };
+
+export default config;

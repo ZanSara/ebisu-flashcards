@@ -19,7 +19,7 @@
     import {getNextCard} from "../../../lib/api";
     import type {DeckModel} from "../../../lib/models/deck";
     import FlatButton from "../../../lib/components/inputs/buttons/FlatButton.svelte";
-    import LinkButton from "../../../lib/components/inputs/buttons/LinkButton.svelte";
+    import LinkButton from "../../../lib/components/inputs/buttons/RoundLinkButton.svelte";
     import FaIcon from "../../../lib/components/utility/FaIcon.svelte";
     import {faLayerGroup, faStickyNote} from "@fortawesome/free-solid-svg-icons";
 

@@ -7,7 +7,7 @@
     export let icon: IconDefinition;
     export let size: string;
     
-    const [width, height, ligatures, unicode, svgPath] = icon?.icon;
+    const [width, height, svgPath] = icon?.icon;
 </script>
 
 <svg class="fill-current {extraClasses}" viewBox="0 0 {width} {height}" height={size}>
